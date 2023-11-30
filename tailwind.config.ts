@@ -20,8 +20,10 @@ const config: Config = {
         themecolor: "#00a884",
         primaryText: "#54656F",
         secondry: "#005c4b",
-        bgGray: "#e9e5de",
-
+        bgGray: "#f0f2f5",
+        yellow: "#ffeecd",
+        myG: "#717d82",
+        
         btn: {
           background: "hsl(var(--btn-background))",
           "background-hover": "hsl(var(--btn-background-hover))",
