@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <body className="flex flex-col h-screen absolute w-[100vw] items-center">
-      <div className="h-[32vh] w-full bg-themecolor absolute top-0"></div>
+    <body className="flex flex-col h-screen absolute w-[100vw] bigScreen:p-10 items-center">
+      <div className="h-[25vh] w-full bg-themecolor absolute top-0"></div>
       <div className=" flex flex-col items-center w-full mx-auto relative ">
         {children}
       </div>

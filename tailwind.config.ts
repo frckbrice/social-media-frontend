@@ -17,9 +17,10 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         greenMessage: "#8EFD8E",
-        themecolor: "#01a884",
+        themecolor: "#00a884",
+        primaryText: "#54656F",
         secondry: "#005c4b",
-        bgGray: "#f0f2f5",
+        bgGray: "#e9e5de",
 
         btn: {
           background: "hsl(var(--btn-background))",
@@ -28,6 +29,7 @@ const config: Config = {
       },
       screens: {
         mobile: "0px",
+        bigScreen: "#1700",
       },
     },
   },
