@@ -1,12 +1,11 @@
-import React from 'react';
-import Avatar from '@/component/atoms/Avatar';
-import { FaSearch, FaEllipsisV, FaPlus, FaMicrophone } from 'react-icons/fa';
-import { AiOutlineSmile } from 'react-icons/ai';
+import React from "react";
+import Avatar from "@/component/atoms/Avatar";
+import { FaSearch, FaEllipsisV, FaPlus, FaMicrophone } from "react-icons/fa";
+import { AiOutlineSmile } from "react-icons/ai";
 
 const Chats = () => {
   return (
     <div className="relative flex flex-col h-screen bg-gray-600">
-
       <div className="flex items-center justify-between p-4 bg-bgGray border-l-2">
         <div className="flex items-center">
           <Avatar
@@ -21,29 +20,28 @@ const Chats = () => {
         </div>
       </div>
 
-      <div className="bg-yellow-200 p-2">
-        <p className="text-xs text-gray-800">Welcome to the chat!</p>
-      </div>
-
-      <div className="flex flex-1 justify-center items-center">
-        <h2 className="text-2xl font-bold bg-purple-400 text-gray-500">Chats Page</h2>
-      </div>
+      <div
+        className="w-full h-full bg-cover bg-no-repeat bg-center "
+        style={{
+          backgroundImage: "url('https://i.pinimg.com/564x/e0/0b/9a/e00b9a6bce8958583185fd2b49dd6c74.jpg')",
+          backgroundSize: "",
+        }}
+      ></div>
 
       <div className="flex items-center justify-between p-4 text-2xl text-gray-500 bg-bgGray">
         {/* <div className="flex items-center"> */}
-          <AiOutlineSmile className="mr-5 text-gray-500 text-4xl" />
-          <FaPlus className="mr-2 text-gray-500" />
-          <input
-            type="text"
-            placeholder="Type a message"
-            className="w-full p-3 bg-white border-0 rounded-md focus:outline-none mx-6 text-lg"
-          />
+        <AiOutlineSmile className="mr-5 text-gray-500 text-4xl" />
+        <FaPlus className="mr-2 text-gray-500" />
+        <input
+          type="text"
+          placeholder="Type a message"
+          className="w-full p-3 bg-white border-0 rounded-md focus:outline-none mx-6 text-lg"
+        />
         {/* </div> */}
         {/* <div className="flex items-center"> */}
-          <FaMicrophone className="text-gray-600" />
+        <FaMicrophone className="text-gray-600" />
         {/* </div> */}
       </div>
-
     </div>
   );
 };
