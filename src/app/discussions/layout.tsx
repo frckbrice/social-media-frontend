@@ -31,7 +31,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </div>
-      <div className="w-full bg-green-500">{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   );
 }
