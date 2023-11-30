@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState, ChangeEvent } from "react";
 import Avatar from "@/component/atoms/Avatar";
 import { FaSearch, FaEllipsisV, FaPlus, FaMicrophone, FaLock, FaPaperPlane } from "react-icons/fa";
@@ -48,7 +49,7 @@ const Chats = () => {
       </div>
 
       <div className="flex items-center justify-between p-4 text-2xl text-gray-500 bg-bgGray">
-        <AiOutlineSmile className="mr-5 text-gray-500 text-4xl" />
+        <AiOutlineSmile className="mr-5 text-myG text-4xl" />
         <FaPlus className="mr-2 text-gray-500" />
         <input
           type="text"
