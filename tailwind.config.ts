@@ -18,8 +18,9 @@ const config: Config = {
         foreground: "hsl(var(--foreground))",
         greenMessage: "#8EFD8E",
         themecolor: "#00a884",
+        primaryText: "#54656F",
         secondry: "#005c4b",
-        bgGray: "#f0f2f5",
+        bgGray: "#e9e5de",
 
         btn: {
           background: "hsl(var(--btn-background))",
