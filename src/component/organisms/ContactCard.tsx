@@ -22,8 +22,8 @@ const ContactCard = ({ id, name, email }: User) => {
 
         <div className="px-4 w-full">
           <div className="flex justify-between w-full">
-            <span className="">{name}</span>
-            <p>11/30/2023</p>
+            <span className="text-green-600">{name}</span>
+            <span>11/30/2023</span>
           </div>
           <div className="flex justify-between w-full">
             <p className=" text-xl">{email}</p>
