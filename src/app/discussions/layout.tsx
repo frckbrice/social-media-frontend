@@ -47,7 +47,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             <BiMenuAltRight size={20} />
           </button>
         </div>
-        <div className="h-[80vh] overflow-auto" style={{}}>
+        <div className="h-[80vh] overflow-auto">
           {UserData.map((user) => (
             <ContactCard
               id={user.id}

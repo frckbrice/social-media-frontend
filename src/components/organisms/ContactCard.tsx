@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+// import { usePathname } from "next/navigation";
+
 import Avatar from "../atoms/Avatar";
 
 interface User {
@@ -11,10 +13,12 @@ interface User {
 }
 
 const ContactCard = ({ id, name, email, onClick }: User) => {
+  // const pathname = usePathname();
+  // const paramName = pathname.split("/").slice(-1)[0];
   return (
     <div
       onClick={onClick}
-      className="flex p-2 justify-between w-[28vw] border-b hover:bg-bgGray items-center hover:cursor-pointer gap-5"
+      className={`flex  p-2 justify-between w-[28vw] border-b hover:bg-bgGray items-center hover:cursor-pointer gap-5`}
     >
       <div className="flex items-center gap-5">
         <Avatar
