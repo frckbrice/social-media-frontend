@@ -1,5 +1,5 @@
 "use client";
-import Avatar from "@/component/atoms/Avatar";
+import Avatar from "@/components/atoms/Avatar";
 
 // icons import
 import { IoEllipsisVertical } from "react-icons/io5";

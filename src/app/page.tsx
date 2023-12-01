@@ -1,10 +1,11 @@
-import Signnuppage from "@/component/organisms/signnuppage";
-import Image from "next/image";
+import Signnuppage from "@/components/organisms/signnuppage";
+import Signupb from "@/components/organisms/signupb";
 
 export default function Home() {
   return (
     <div>
-      <Signnuppage />
+      {/* <Signnuppage /> */}
+      <Signupb />
     </div>
   );
 }

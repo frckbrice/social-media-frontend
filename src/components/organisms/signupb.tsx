@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import PulseLoader from "../atoms/pulseLoader";
@@ -20,7 +21,7 @@ const Signupb = () => {
       setSuccess("Welcome back 🙂");
       router.push("/discussions");
       setIsLoading(false);
-      return; 
+      return;
     }
     if (res?.length === 0) {
       LOCAL_STORAGE.save("email", googleUser.user.email);
@@ -39,7 +40,7 @@ const Signupb = () => {
 
   return (
     <div className=" mt-56 items-center justify-center text-center">
-      <h1 className="text-3xl font-extrabold text-white font-serif">
+      <h1 className="text-3xl font-extrabold text-themecolor font-serif">
         Welcome to <span className="text-4xl"> WAXCHAT</span> WEB
       </h1>
       <h4 className="mt-8 mb-6 font-bold text-xl text-gray-950">
