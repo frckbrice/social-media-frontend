@@ -19,7 +19,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   return (
     <div className="flex w-full">
-      <div className="bg-white w-[30vw] h-full">
+      <div className=" bg-white w-[30vw] h-full bigScreen:h-[95vh]">
         <div className="flex items-center justify-between bg-bgGray p-2 text-primaryText">
           <Avatar
             onClick={handleImageclick}
@@ -47,7 +47,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             <BiMenuAltRight size={20} />
           </button>
         </div>
-        <div className="h-[80vh] overflow-auto">
+        <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
           {UserData.map((user) => (
             <ContactCard
               id={user.id}
