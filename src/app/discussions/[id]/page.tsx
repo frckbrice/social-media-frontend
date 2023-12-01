@@ -2,7 +2,6 @@
 
 import React, { useState, ChangeEvent } from "react";
 import Avatar from "@/components/atoms/Avatar";
-<<<<<<< HEAD
 import {
   FaSearch,
   FaEllipsisV,
@@ -11,10 +10,9 @@ import {
   FaLock,
   FaPaperPlane,
 } from "react-icons/fa";
-=======
-import { FaSearch, FaEllipsisV, FaPlus, FaMicrophone, FaLock, FaPaperPlane } from "react-icons/fa";
->>>>>>> 1617920 (working on the profile/avater information)
 import { AiOutlineSmile } from "react-icons/ai";
+
+
 import InfoCard from "@/components/organisms/InfoCard"
 
 const Chats = () => {
@@ -52,7 +50,6 @@ const Chats = () => {
         </div>
       </div>
 
-<<<<<<< HEAD
       <div
         className="w-full h-full bg-cover bg-no-repeat bg-center flex flex-col"
         style={{
@@ -71,27 +68,6 @@ const Chats = () => {
         </p>
 
         {/* Render chat messages here */}
-=======
-      <div className={`flex flex-1`} style={{ transition: "transform 0.3s ease-in-out" }}>
-        <div
-          className={`w-full h-full bg-cover bg-no-repeat bg-center flex flex-col ${
-            showInfocard ? "transform translate-x-1/2" : ""
-          }`}
-          style={{
-            backgroundImage: "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
-            backgroundSize: "cover",
-            transition: "transform 0.3s ease-in-out",
-          }}
-        >
-          <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">Today</p>
-          <p className="text-myG w-[48vw] ml-[15%] font-semibold p-2 rounded-md mt-5 flex text-sm text-center bg-yellow justify-center"><FaLock className="mr-2"/> Messages are end-to-end encryted. No one outside of this chat, not even WaxChat, can read or listen to them. Click to learn more</p>
-
-          {/* Render chat messages here */}
-
-        </div>
-
-        {showInfocard && <InfoCard />}
->>>>>>> 1617920 (working on the profile/avater information)
       </div>
 
       <div className="flex items-center justify-between p-4 text-2xl text-gray-500 bg-bgGray">
