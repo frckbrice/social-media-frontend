@@ -29,7 +29,6 @@ const config: Config = {
       },
       screens: {
         mobile: "0px",
-        bigScreen: "#1700",
       },
     },
   },

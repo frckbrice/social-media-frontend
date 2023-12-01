@@ -1,24 +1,25 @@
 "use client";
-import Avatar from "@/component/atoms/Avatar";
-
-import { useRouter } from "next/navigation";
+import Avatar from "@/components/atoms/Avatar";
 
 // icons import
 import { IoEllipsisVertical } from "react-icons/io5";
 import { BiSolidMessageAdd } from "react-icons/bi";
-import SearchInput from "@/component/atoms/SearchInput";
+import SearchInput from "@/components/atoms/SearchInput";
 import { BiMenuAltRight } from "react-icons/bi";
-import ContactCard from "@/component/organisms/ContactCard";
+import ContactCard from "@/components/organisms/ContactCard";
 import { UserData } from "../../../mock-data";
+
+import { useRouter } from "next/navigation";
 
 const handleImageclick = () => {
   console.log("clicked on the image");
 };
 
 function Discussion({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   return (
     <div className="flex w-full">
-      <div className="bg-white w-[40vw] h-full">
+      <div className="bg-white w-[30vw] h-full">
         <div className="flex items-center justify-between bg-bgGray p-2 text-primaryText">
           <Avatar
             onClick={handleImageclick}
@@ -38,21 +39,22 @@ function Discussion({ children }: { children: React.ReactNode }) {
         </div>
         <div className="flex items-center px-4 py-2 gap-5 border-b border-b-bgGray">
           <SearchInput
-            handleFilter={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            handleFilter={(e: { target: { value: any } }) =>
+              console.log(e.target.value)
+            }
           />
           <button className="text-slate-400">
             <BiMenuAltRight size={20} />
           </button>
         </div>
-        <div className="h-[80vh] overflow-auto">
+        <div className="h-[80vh] overflow-auto" style={{}}>
           {UserData.map((user) => (
             <ContactCard
               id={user.id}
               name={user.name}
               email={user.email}
               key={user.id}
+              onClick={() => router.push(`/discussions/${user.id}`)}
             />
           ))}
         </div>

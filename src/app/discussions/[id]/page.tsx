@@ -1,8 +1,15 @@
-"use client"
+"use client";
 
 import React, { useState, ChangeEvent } from "react";
-import Avatar from "@/component/atoms/Avatar";
-import { FaSearch, FaEllipsisV, FaPlus, FaMicrophone, FaLock, FaPaperPlane } from "react-icons/fa";
+import Avatar from "@/components/atoms/Avatar";
+import {
+  FaSearch,
+  FaEllipsisV,
+  FaPlus,
+  FaMicrophone,
+  FaLock,
+  FaPaperPlane,
+} from "react-icons/fa";
 import { AiOutlineSmile } from "react-icons/ai";
 
 const Chats = () => {
@@ -37,15 +44,21 @@ const Chats = () => {
       <div
         className="w-full h-full bg-cover bg-no-repeat bg-center flex flex-col"
         style={{
-          backgroundImage: "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
+          backgroundImage:
+            "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
           backgroundSize: "cover",
         }}
       >
-        <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">Today</p>
-        <p className="text-myG w-[48vw] ml-[15%] font-semibold p-2 rounded-md mt-5 flex text-sm text-center bg-yellow justify-center"><FaLock className="mr-2"/> Messages are end-to-end encryted. No one outside of this chat, not even WaxChat, can read or listen to them. Click to learn more</p>
+        <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">
+          Today
+        </p>
+        <p className="text-myG w-[48vw] ml-[15%] font-semibold p-2 rounded-md mt-5 flex text-sm text-center bg-yellow justify-center">
+          <FaLock className="mr-2" /> Messages are end-to-end encryted. No one
+          outside of this chat, not even WaxChat, can read or listen to them.
+          Click to learn more
+        </p>
 
         {/* Render chat messages here */}
-
       </div>
 
       <div className="flex items-center justify-between p-4 text-2xl text-gray-500 bg-bgGray">
