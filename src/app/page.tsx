@@ -1,5 +1,11 @@
-import Image from "next/image";
+import Signnuppage from "@/components/organisms/signnuppage";
+import Signupb from "@/components/organisms/signupb";
 
 export default function Home() {
-  return <div className="">home page</div>;
+  return (
+    <div>
+      {/* <Signnuppage /> */}
+      <Signupb />
+    </div>
+  );
 }
