@@ -10,7 +10,7 @@ const Signupb = () => {
       </h1>
       <h4 className="mt-8 mb-6 font-bold text-xl text-gray-950">
         Read our <span className="text-themecolor">Privacy Policy</span>. Tap
-        'Agree and Continue' to accept the{" "}
+        &apos;Agree and Continue&apos; to accept the{" "}
         <span className="text-themecolor">Terms of Service</span>
       </h4>
       <button className="border p-4 px-5 text-base font-extrabold text-black rounded">
