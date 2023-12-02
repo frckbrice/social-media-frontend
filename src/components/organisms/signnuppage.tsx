@@ -16,7 +16,7 @@ const Signnuppage = () => {
             Log Into WaxChat Using Just your <br />
             Google Account
           </h2>
-          <p className="text-center text-slate-500 mb-6 italic font-bold text-[17px]">
+          <p className="text-center text-slate-400 mb-6 font-bold text-[17px]">
             Cross plateform web messaging with friends and family all over the
             Globe.
           </p>

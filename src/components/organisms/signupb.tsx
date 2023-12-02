@@ -4,7 +4,7 @@ import PulseLoader from "../atoms/pulseLoader";
 
 const Signupb = () => {
   return (
-    <div className=" mt-56 items-center justify-center text-center">
+    <div className="bg-white rounded mt-20 border border-gray-200 py-8 w-[75vw] items-center justify-center text-center ">
       <h1 className="text-3xl font-extrabold text-themecolor font-serif">
         Welcome to <span className="text-4xl"> WAXCHAT</span> WEB
       </h1>
