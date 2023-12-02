@@ -12,12 +12,11 @@ import {
 } from "react-icons/fa";
 import { AiOutlineSmile } from "react-icons/ai";
 
-
-import InfoCard from "@/components/organisms/InfoCard"
+import InfoCard from "@/components/organisms/InfoCard";
 
 const Chats = () => {
   const [message, setMessage] = useState("");
-  const [showInfocard, setShowInfocard] = useState(false);
+  const [showInfoCard, setShowInfoCard] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -30,11 +29,12 @@ const Chats = () => {
   };
 
   const handleAvatarClick = () => {
-    setShowInfocard(!showInfocard);
+    setShowInfoCard(!showInfoCard);
   };
 
   return (
     <div className="relative flex flex-col h-screen bg-gray-600">
+      {/* header with avater search and eclipse  */}
       <div className="flex items-center justify-between p-2 bg-bgGray border-l-2">
         <div className="flex items-center">
           <Avatar
@@ -50,27 +50,39 @@ const Chats = () => {
         </div>
       </div>
 
-      <div
-        className="w-full h-full bg-cover bg-no-repeat bg-center flex flex-col"
-        style={{
-          backgroundImage:
-            "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
-          backgroundSize: "cover",
-        }}
-      >
-        <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">
-          Today
-        </p>
-        <p className="text-myG w-[48vw] ml-[15%] font-semibold p-2 rounded-md mt-5 flex text-sm text-center bg-yellow justify-center">
-          <FaLock className="mr-2" /> Messages are end-to-end encryted. No one
-          outside of this chat, not even WaxChat, can read or listen to them.
-          Click to learn more
-        </p>
+      {/* background and chats  */}
+      <div className="flex flex-1">
+        <div
+          className={`w-${
+            showInfoCard ? "1/2" : "full"
+          } h-full bg-cover bg-no-repeat bg-center flex flex-col`}
+          style={{
+            backgroundImage:
+              "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
+            backgroundSize: "cover",
+            transition: "width 0.3s ease-in-out",
+          }}
+        >
+          <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">
+            Today
+          </p>
+          <p className="text-myG w-[48vw] ml-[15%] font-semibold p-2 rounded-md mt-5 flex text-sm text-center bg-yellow justify-center">
+            <FaLock className="mr-2" /> Messages are end-to-end encrypted. No
+            one outside of this chat, not even WaxChat, can read or listen to
+            them.
+          </p>
+          {/* Render chat messages here */}
+        </div>
 
-        {/* Render chat messages here */}
+        {showInfoCard && (
+          <div className="w-1/2">
+            <InfoCard />
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center justify-between p-4 text-2xl text-gray-500 bg-bgGray">
+      {/* botton with the input and icons  */}
+      <div className="flex items-center justify-between p-4 text-2xl bottom-0 text-gray-500 bg-bgGray">
         <AiOutlineSmile className="mr-5 text-myG text-4xl" />
         <FaPlus className="mr-2 text-gray-500" />
         <input
