@@ -17,18 +17,25 @@ import ProfileCard from "@/components/organisms/ProfileCard";
 import EditProfile from "@/components/organisms/EditProfile";
 import Overlay from "@/components/atoms/Overlay";
 import DropdownModal from "@/components/atoms/DropdownModal";
+import DisplayUsers from "@/components/organisms/DisplayUsers";
+import AddGroupMembers from "@/components/organisms/AddGroupMembers";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const paramName = pathname.split("/").slice(-1)[0];
   const [openProfile, setOpenProfile] = useState(false);
+  const [showAllContacts, setShowAllContacts] = useState(false);
   const [showDropDown, setShowDropdown] = useState(false);
+  const [showCreateGrp, setShowCreateGrp] = useState(false);
 
   const dropDownLIst = [
     {
       label: "New group",
-      function: () => {},
+      function: () => {
+        setShowCreateGrp((prev) => !prev);
+        setShowDropdown((prev) => !prev);
+      },
     },
     {
       label: "Logout",
@@ -37,6 +44,11 @@ function Discussion({ children }: { children: React.ReactNode }) {
   ];
 
   console.log("paramName", paramName);
+
+  // filter all users
+  const filterUsers = (e: { target: { value: any } }) => {
+    console.log("keyword", e.target.value);
+  };
 
   return (
     <>
@@ -58,7 +70,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
             />
 
             <div className="flex  items-center gap-5 ">
-              <button className="">
+              <button
+                onClick={() => setShowAllContacts((prev) => !prev)}
+                className=""
+              >
                 <BiSolidMessageAdd size={23} />
               </button>
 
@@ -104,10 +119,14 @@ function Discussion({ children }: { children: React.ReactNode }) {
                 onClick={() => router.push(`/discussions/${user.id}`)}
                 notification={""}
                 active={false}
+                updatedAt={"11/30/2023"}
               />
             ))}
           </div>
-          <button className="fixed z-20 bottom-0 right-0 bg-themecolor p-4 mx-4 my-5 text-white sm:hidden mobile:max-sm:visible rounded-[10px]">
+          <button
+            onClick={() => setShowAllContacts((prev) => !prev)}
+            className="fixed z-20 bottom-0 right-0 bg-themecolor p-4 mx-4 my-5 text-white sm:hidden mobile:max-sm:visible rounded-[10px]"
+          >
             <MdMessage size={20} />
           </button>
         </div>
@@ -117,6 +136,35 @@ function Discussion({ children }: { children: React.ReactNode }) {
             clickToClose={() => setOpenProfile((prev) => !prev)}
           >
             <EditProfile />
+          </ProfileCard>
+        )}
+        {showAllContacts && (
+          <ProfileCard
+            title="New chat"
+            clickToClose={() => setShowAllContacts((prev) => !prev)}
+          >
+            <div className="p-3">
+              <SearchInput handleFilter={filterUsers} />
+            </div>
+            <DisplayUsers
+              users={UserData}
+              contactClick={function (userId: string): void {
+                alert(userId);
+              }}
+              goToCreateGrt={() => {
+                setShowAllContacts((prev) => !prev);
+                setShowCreateGrp((prev) => !prev);
+              }}
+            />
+          </ProfileCard>
+        )}
+
+        {showCreateGrp && (
+          <ProfileCard
+            title="Add group members"
+            clickToClose={() => setShowCreateGrp((prev) => !prev)}
+          >
+            <AddGroupMembers users={UserData} />
           </ProfileCard>
         )}
         <div

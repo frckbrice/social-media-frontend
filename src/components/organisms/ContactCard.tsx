@@ -4,13 +4,14 @@ import React from "react";
 
 import Avatar from "../atoms/Avatar";
 
-interface User {
+interface CardProps {
   id: number | string;
   name: string;
   email: string;
   onClick: () => void;
   notification: string | "";
   active: boolean;
+  updatedAt: string;
 }
 
 const ContactCard = ({
@@ -20,7 +21,8 @@ const ContactCard = ({
   notification,
   active,
   onClick,
-}: User) => {
+  updatedAt,
+}: CardProps) => {
   // const pathname = usePathname();
   // const paramName = pathname.split("/").slice(-1)[0];
   return (
@@ -38,7 +40,7 @@ const ContactCard = ({
         <div className="pb-2 flex flex-col gap-2">
           <div className="flex justify-between w-[21vw] mobile:max-sm:w-[77vw] bigScreen:w-[18vw] gap-10">
             <p className="">{name}</p>
-            <span className="text-primaryText text-xs">11/30/2023</span>
+            <span className="text-primaryText text-xs">{updatedAt}</span>
           </div>
           <div className="flex justify-between w-full">
             <span className=" text-xs text-primaryText">{email}</span>
