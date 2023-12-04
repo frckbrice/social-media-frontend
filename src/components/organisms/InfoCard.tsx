@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
@@ -6,43 +6,37 @@ import { AiFillStar } from "react-icons/ai";
 import { FaDigitalOcean } from "react-icons/fa";
 import { BsFillBookmarkFill, BsX } from "react-icons/bs";
 import { TbBellFilled } from "react-icons/tb";
-import Card from "../molecules/Card"
-import ContactAction from "../molecules/ContactAction"
+import Dp from "../molecules/Dp";
+import ContactAction from "../molecules/ContactAction";
 
 // import { RxSwitch } from "react-icons/rx";
 // import SwitchButton from "./SwitchButton";
 // import Image from "next/image";
 import { MdLock } from "react-icons/md";
 
-type Props = {}
-
+type Props = {};
 
 const Profile = (props: Props) => {
-  
-
-  
   return (
-    <div className={` flex flex-col space-y-2  h-[80%] overflow-auto w-[25vw] z-40`}>
-       <div className="flex items-center justify-between p-2 h-16 bg-bgGray border-l-2 w-full">
-          <BsX />
-          <p>Contact Info</p>
-        </div>
-      <Card image="" />
+    <div className={` flex flex-col space-y-2 overflow-auto w-[25vw] z-40`}>
+      <div className="flex items-center p-2 h-16 bg-bgGray border-l-2 w-full">
+        <BsX className="text-myG text-4xl font-extrabold mr-6 cursor-pointer" />
+        <p>Contact Info</p>
+      </div>
 
       <>
-        <div className=" flex flex-col gap-2 w-full px-7 py-5 border-y border-y-gray-200 shadow-zinc-200 bg-white">
-          <span className=" text-[#667781]">Infos</span>
-          <span className=" text-[#111b21]">
-            Enlightened mind{" "}
-            <span className=" italic text-[10px] font-thin text-black">
-              (user description){" "}
-            </span>
+        {/* <div className=" flex flex-col gap-2 w-full px-7 py-5 shadow-zinc-200"> */}
+
+        <Dp />
+        <div className=" w-full px-7 pr-6 py-4 text-[#667781] border-y border-y-gray-200 flex flex-col">
+          <span className=" text-[#667781] border-y-gray-200 mb-3">About</span>
+          <span className=" text-[#111b21] text-xl">
+            Hey there! I am using whatsapp{" "}
           </span>
         </div>
-        <div className=" w-full px-7 pr-6 py-4 text-[#667781] bg-white border-y border-y-gray-200 text-[14px] flex justify-between cursor-pointer">
+        <div className=" w-full px-7 pr-6 py-4 text-[#667781] border-y border-y-gray-200 text-[14px] flex justify-between cursor-pointer">
           <span> Media, links and docs</span>
           <span>
-            {" "}
             <IoIosArrowForward />
           </span>
         </div>
@@ -104,7 +98,7 @@ const Profile = (props: Props) => {
           <div className="flex flex-col item-start text-[15px] py-3 cursor-pointer">
             <div className=" flex items-center justify-between">
               <div className=" flex justify-center items-center gap-2">
-                <FaDigitalOcean className="font-extralight mr-2 text-lg text-gray-500"/>
+                <FaDigitalOcean className="font-extralight mr-2 text-lg text-gray-500" />
                 <span className="text-[#111b21]">Disappearing messages</span>
               </div>
               <span>
