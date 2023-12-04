@@ -34,7 +34,7 @@ const Chats = () => {
 
   return (
     <div className="relative flex flex-col h-screen">
-      
+
       <div className="flex items-center justify-between p-2 bg-bgGray border-l-2">
         <div className="flex items-center">
           <div
@@ -48,7 +48,7 @@ const Chats = () => {
               onClick={handleAvatarClick}
             />
           </div>
-          <h1 className="ml-4 text-lg">John Doe</h1>
+          <h1 className="text-lg">John Doe</h1>
         </div>
         <div className="flex items-center text-gray-500 text-xl">
           <FaSearch className="mr-8" />
@@ -59,8 +59,8 @@ const Chats = () => {
       <div className="flex flex-1">
         <div
           className={`${
-            showInfoCard ? "w-60" : "w-full"
-          } h-full bg-cover bg-no-repeat bg-center flex flex-col transition-all duration-300`}
+            showInfoCard ? "w-full" : "w-full"
+          } bg-cover bg-no-repeat bg-center flex flex-col transition-all duration-300`}
           style={{
             backgroundImage:
               "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
