@@ -32,6 +32,7 @@ const Chats = () => {
 
   return (
     <div className="w-full flex justify-between">
+      
       <div className="relative flex flex-col h-full w-full">
         <div className="flex items-center justify-between p-2 h-16 bg-bgGray border-l-2 w-full">
           <div className="flex items-center">
@@ -51,7 +52,7 @@ const Chats = () => {
           </div>
         </div>
 
-        <div className="w-full relative flex-grow overflow-auto h-[80vh]">
+        <div className=" relative flex-grow overflow-auto h-[80vh]">
           <div
             className="bg-fixed w-[71.2%] h-[80%] fixed z-0"
             style={{
@@ -107,7 +108,7 @@ const Chats = () => {
       </div>
 
 
-   {showInfoCard && (  <div className="flex bg-white z-40 w-[30vw]">
+   {showInfoCard && (  <div className=" bg-white z-40 w-[30vw]">
      <InfoCard /> 
      </div>)}
     </div>
