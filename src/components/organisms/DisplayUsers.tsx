@@ -5,12 +5,16 @@ import ContactCard from "./ContactCard";
 type Props = {
   users: any;
   contactClick: (userId: string) => void;
+  goToCreateGrt: () => void;
 };
 
-const DisplayUsers = ({ users, contactClick }: any) => {
+const DisplayUsers = ({ users, contactClick, goToCreateGrt }: Props) => {
   return (
     <div className=" h-[calc(100vh-161px)] overflow-x-hidden overflow-y-scroll">
-      <button className="flex items-center gap-4 w-full px-3 py-2 hover:bg-bgGray border-b border-b-slate-200">
+      <button
+        onClick={goToCreateGrt}
+        className="flex items-center gap-4 w-full px-3 py-2 hover:bg-bgGray border-b border-b-slate-200"
+      >
         <span className="bg-themecolor p-3 text-white rounded-full">
           <FaUserGroup size={20} />
         </span>

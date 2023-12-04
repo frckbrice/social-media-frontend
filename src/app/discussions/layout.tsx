@@ -18,6 +18,7 @@ import EditProfile from "@/components/organisms/EditProfile";
 import Overlay from "@/components/atoms/Overlay";
 import DropdownModal from "@/components/atoms/DropdownModal";
 import DisplayUsers from "@/components/organisms/DisplayUsers";
+import AddGroupMembers from "@/components/organisms/AddGroupMembers";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -26,11 +27,15 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [openProfile, setOpenProfile] = useState(false);
   const [showAllContacts, setShowAllContacts] = useState(false);
   const [showDropDown, setShowDropdown] = useState(false);
+  const [showCreateGrp, setShowCreateGrp] = useState(false);
 
   const dropDownLIst = [
     {
       label: "New group",
-      function: () => {},
+      function: () => {
+        setShowCreateGrp((prev) => !prev);
+        setShowDropdown((prev) => !prev);
+      },
     },
     {
       label: "Logout",
@@ -64,11 +69,11 @@ function Discussion({ children }: { children: React.ReactNode }) {
               profilePicture="https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
             />
 
-            <div
-              onClick={() => setShowAllContacts((prev) => !prev)}
-              className="flex  items-center gap-5 "
-            >
-              <button className="">
+            <div className="flex  items-center gap-5 ">
+              <button
+                onClick={() => setShowAllContacts((prev) => !prev)}
+                className=""
+              >
                 <BiSolidMessageAdd size={23} />
               </button>
 
@@ -141,7 +146,25 @@ function Discussion({ children }: { children: React.ReactNode }) {
             <div className="p-3">
               <SearchInput handleFilter={filterUsers} />
             </div>
-            <DisplayUsers users={UserData} />
+            <DisplayUsers
+              users={UserData}
+              contactClick={function (userId: string): void {
+                alert(userId);
+              }}
+              goToCreateGrt={() => {
+                setShowAllContacts((prev) => !prev);
+                setShowCreateGrp((prev) => !prev);
+              }}
+            />
+          </ProfileCard>
+        )}
+
+        {showCreateGrp && (
+          <ProfileCard
+            title="Add group members"
+            clickToClose={() => setShowCreateGrp((prev) => !prev)}
+          >
+            <AddGroupMembers users={UserData} />
           </ProfileCard>
         )}
         <div

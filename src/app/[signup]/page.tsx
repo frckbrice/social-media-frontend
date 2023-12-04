@@ -22,6 +22,7 @@ const Signupb = () => {
     if (res?.length === 1) {
       LOCAL_STORAGE.save("email", googleUser.user.email);
       LOCAL_STORAGE.save("userObject", googleUser.user);
+
       setSuccess("Welcome back 🙂");
       router.push("/discussions");
       setIsLoading(false);
