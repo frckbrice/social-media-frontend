@@ -72,12 +72,12 @@ const Chats = () => {
               <div className="flex flex-col mt-5 mx-[5%]">
                 <div className="flex items-start justify-start mb-2">
                   <div className="bg-white rounded-lg p-3 max-w-[60%]">
-                    <p>Receiver's message</p>
+                    <p>Receiver&aposs message</p>
                   </div>
                 </div>
                 <div className="flex items-start justify-end mb-2">
                   <div className="bg-greenMgs rounded-lg p-3 max-w-[60%]">
-                    <p>Sender's message should not exceed some width and it should wrap when it get too long please do you understand susan that is what am talking about. Thanks bruh you should now get break</p>
+                    <p>Sender&aposs message should not exceed some width and it should wrap when it get too long please do you understand susan that is what am talking about. Thanks bruh you should now get break</p>
                   </div>
                 </div>
                 {/* ... more messages */}
