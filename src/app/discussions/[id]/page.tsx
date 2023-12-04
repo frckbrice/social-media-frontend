@@ -34,14 +34,19 @@ const Chats = () => {
 
   return (
     <div className="relative flex flex-col h-screen bg-gray-600">
-      {/* header with avater search and eclipse  */}
       <div className="flex items-center justify-between p-2 bg-bgGray border-l-2">
         <div className="flex items-center">
-          <Avatar
-            size={4}
-            profilePicture="https://i.pinimg.com/564x/17/f7/ba/17f7baaff77ee55d8807fcd7b2d2f47a.jpg"
-            onClick={handleAvatarClick}
-          />
+          <div
+            className={`${
+              showInfoCard ? "w-40" : "w-60"
+            } transition-all duration-300`}
+          >
+            <Avatar
+              size={4}
+              profilePicture="https://i.pinimg.com/564x/17/f7/ba/17f7baaff77ee55d8807fcd7b2d2f47a.jpg"
+              onClick={handleAvatarClick}
+            />
+          </div>
           <h1 className="ml-4 text-lg">John Doe</h1>
         </div>
         <div className="flex items-center text-gray-500 text-xl">
@@ -50,17 +55,15 @@ const Chats = () => {
         </div>
       </div>
 
-      {/* background and chats  */}
       <div className="flex flex-1">
         <div
-          className={`w-${
-            showInfoCard ? "1/2" : "full"
-          } h-full bg-cover bg-no-repeat bg-center flex flex-col`}
+          className={`${
+            showInfoCard ? "w-60" : "w-full"
+          } h-full bg-cover bg-no-repeat bg-center flex flex-col transition-all duration-300`}
           style={{
             backgroundImage:
               "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
             backgroundSize: "cover",
-            transition: "width 0.3s ease-in-out",
           }}
         >
           <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">
@@ -75,14 +78,13 @@ const Chats = () => {
         </div>
 
         {showInfoCard && (
-          <div className="w-[30%]">
+          <div className="w-40">
             <InfoCard />
           </div>
         )}
       </div>
 
-      {/* botton with the input and icons  */}
-      <div className="flex items-center justify-between p-4 text-2xl bottom-0 text-gray-500 bg-bgGray">
+      <div className="flex items-center justify-between p-4 text-2xl text-gray-500 bg-bgGray">
         <AiOutlineSmile className="mr-5 text-myG text-4xl" />
         <FaPlus className="mr-2 text-gray-500" />
         <input
@@ -92,14 +94,7 @@ const Chats = () => {
           onChange={handleChange}
           className="w-full p-3 bg-white border-0 rounded-md focus:outline-none mx-6 text-lg"
         />
-        {message.length === 0 ? (
-          <FaMicrophone className="text-gray-600" />
-        ) : (
-          <FaPaperPlane
-            className="mr-2 text-gray-500 cursor-pointer"
-            onClick={handleSendMessage}
-          />
-        )}
+        <FaMicrophone className="text-gray-600" />
       </div>
     </div>
   );
