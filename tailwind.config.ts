@@ -19,9 +19,11 @@ const config: Config = {
         darkgreen: "#008069",
         primaryText: "#54656F",
         secondry: "#005c4b",
-        bgGray: "#f0f2f5",
+        bgGray: "#dedfdd",
+        chatGray: "#f0f2f5",
         yellow: "#ffeecd",
         myG: "#717d82",
+        greenMgs: "#d9fdd3",
 
         btn: {
           background: "hsl(var(--btn-background))",
