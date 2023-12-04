@@ -95,7 +95,14 @@ const Chats = () => {
           onChange={handleChange}
           className="w-full p-3 bg-white border-0 rounded-md focus:outline-none mx-6 text-lg"
         />
-        <FaMicrophone className="text-gray-600" />
+         {message.length === 0 ? (
+          <FaMicrophone className="text-gray-600" />
+        ) : (
+          <FaPaperPlane
+            className="mr-2 text-gray-500 cursor-pointer"
+            onClick={handleSendMessage}
+          />
+        )}
       </div>
     </div>
   );
