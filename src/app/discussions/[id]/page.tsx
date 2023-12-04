@@ -29,17 +29,18 @@ const Chats = () => {
   };
 
   const handleAvatarClick = () => {
-    setShowInfoCard(!showInfoCard);
+    setShowInfoCard(true);
   };
 
   return (
+
+    <div className="w-full ">
+
+      
+
+
     <div className="relative flex flex-col h-full">
 
-      <div
-        className={`${
-          showInfoCard ? "w-full" : "w-full"
-        } transition-all duration-300`}
-      >
         <div className="flex items-center justify-between p-2 bg-bgGray border-l-2 w-full ">
           <div className="flex items-center">
             <Avatar
@@ -53,19 +54,14 @@ const Chats = () => {
             <FaSearch className="mr-8" />
             <FaEllipsisV className="mr-2" />
           </div>
-        </div>
       </div>
 
       <div className="w-full relative flex-grow overflow-auto h-[80vh]">
         <div
-          // className={`${
-          //   showInfoCard ? "w-full" : "w-full"
-          // } bg-cover bg-no-repeat bg-center flex flex-col transition-all duration-300`}
           className="bg-fixed  w-[71.2%] h-[80%] fixed z-0"
           style={{
             backgroundImage:
               "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
-            // backgroundSize: "cover",
           }}
         >
           <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">
@@ -78,15 +74,9 @@ const Chats = () => {
           </p>
           {/* Render chat messages here */}
         </div>
-
-        {showInfoCard && (
-          <div className="w-40">
-            <InfoCard />
-          </div>
-        )}
       </div>
 
-      <div className="flex items-center justify-between p-4 text-2xl text-gray-500 bg-bgGray bg-purple-500">
+      <div className="flex items-center justify-between p-4 text-2xl text-gray-500  bg-purple-500">
         <AiOutlineSmile className="mr-5 text-myG text-4xl" />
         <FaPlus className="mr-2 text-gray-500" />
         <input
@@ -105,6 +95,14 @@ const Chats = () => {
           />
         )}
       </div>
+    </div>
+
+
+
+    <div>
+      {/* <InfoCard /> */}
+    </div>
+
     </div>
   );
 };

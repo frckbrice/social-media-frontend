@@ -3,9 +3,7 @@ import { HiOutlineTrash } from "react-icons/hi";
 import { IoBan } from "react-icons/io5";
 import { BiSolidDislike } from "react-icons/bi";
 // import { Room, User } from "@/type";
-// import Deletepopup from "../popups/deletepopup";
-// import Reportpopup from "../popups/reportpopup";
-// import BlockContactPopup from "../popups/blockContactPopup";
+
 
 type Props = {
   // roomObject?: Room
