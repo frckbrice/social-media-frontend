@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { AiFillStar } from "react-icons/ai";
 import { FaDigitalOcean } from "react-icons/fa";
-import { BsFillBookmarkFill } from "react-icons/bs";
+import { BsFillBookmarkFill, BsX } from "react-icons/bs";
 import { TbBellFilled } from "react-icons/tb";
 import Card from "../molecules/Card"
 import ContactAction from "../molecules/ContactAction"
@@ -23,6 +23,10 @@ const Profile = (props: Props) => {
   
   return (
     <div className={` flex flex-col space-y-2  h-[80%] overflow-auto w-[25vw] z-40`}>
+       <div className="flex items-center justify-between p-2 h-16 bg-bgGray border-l-2 w-full">
+          <BsX />
+          <p>Contact Info</p>
+        </div>
       <Card image="" />
 
       <>

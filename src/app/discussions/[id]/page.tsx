@@ -24,12 +24,10 @@ const Chats = () => {
 
   const handleSendMessage = () => {
     // Handle sending message logic here
-    console.log("Sending message:", message);
-    setMessage("");
   };
 
   const handleAvatarClick = () => {
-    setShowInfoCard(prev => !prev);
+    setShowInfoCard(!showInfoCard);
   };
 
   return (
