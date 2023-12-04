@@ -29,13 +29,13 @@ const Chats = () => {
   };
 
   const handleAvatarClick = () => {
-    setShowInfoCard(true);
+    setShowInfoCard(prev => !prev);
   };
 
   return (
-    <div className="w-full ">
-      <div className="relative flex flex-col h-full">
-        <div className="flex items-center justify-between p-2 h-16 bg-bgGray border-l-2 w-full ">
+    <div className="w-full flex justify-between">
+      <div className="relative flex flex-col h-full w-full">
+        <div className="flex items-center justify-between p-2 h-16 bg-bgGray border-l-2 w-full">
           <div className="flex items-center">
             <Avatar
               size={4}
@@ -55,24 +55,35 @@ const Chats = () => {
 
         <div className="w-full relative flex-grow overflow-auto h-[80vh]">
           <div
-            className="bg-fixed  w-[71.2%] h-[80%] fixed z-0"
+            className="bg-fixed w-[71.2%] h-[80%] fixed z-0"
             style={{
               backgroundImage:
                 "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
             }}
           >
-            <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">
-              Today
-            </p>
-            <p className="text-myG w-[48vw] ml-[15%] font-semibold p-2 rounded-md mt-5 flex text-sm text-center bg-yellow justify-center">
-              <FaLock className="mr-2" /> Messages are end-to-end encrypted. No
-              one outside of this chat, not even WaxChat, can read or listen to
-              them.
-            </p>
-            {/* Render chat messages here */}
-
-            <p>Sender</p>
-            <p>Reciever</p>
+            <div className="absolute bottom-5 left-0 right-0 overflow-auto h-[calc(80% - 4rem)]">
+              <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">
+                Today
+              </p>
+              <p className="text-myG w-[48vw] ml-[15%] font-semibold p-2 rounded-md mt-5 flex text-sm text-center bg-yellow justify-center">
+                <FaLock className="mr-2" /> Messages are end-to-end encrypted.
+                No one outside of this chat, not even WaxChat, can read or
+                listen to them.
+              </p>
+              <div className="flex flex-col mt-5 mx-[5%]">
+                <div className="flex items-start justify-start mb-2">
+                  <div className="bg-white rounded-lg p-3 max-w-[60%]">
+                    <p>Receiver's message</p>
+                  </div>
+                </div>
+                <div className="flex items-start justify-end mb-2">
+                  <div className="bg-greenMgs rounded-lg p-3 max-w-[60%]">
+                    <p>Sender's message should not exceed some width and it should wrap when it get too long please do you understand susan that is what am talking about. Thanks bruh you should now get break</p>
+                  </div>
+                </div>
+                {/* ... more messages */}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -97,7 +108,10 @@ const Chats = () => {
         </div>
       </div>
 
-      <div>{/* <InfoCard /> */}</div>
+
+   {showInfoCard && (  <div className="flex bg-white z-40 w-[30vw]">
+     <InfoCard /> 
+     </div>)}
     </div>
   );
 };

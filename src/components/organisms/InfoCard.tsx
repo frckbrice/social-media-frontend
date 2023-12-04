@@ -22,7 +22,7 @@ const Profile = (props: Props) => {
 
   
   return (
-    <div className={` flex flex-col space-y-2  h-[80%] overflow-auto w-full`}>
+    <div className={` flex flex-col space-y-2  h-[80%] overflow-auto w-[25vw] z-40`}>
       <Card image="" />
 
       <>

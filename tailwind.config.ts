@@ -22,6 +22,7 @@ const config: Config = {
         bgGray: "#f0f2f5",
         yellow: "#ffeecd",
         myG: "#717d82",
+        greenMgs: "#d9fdd3",
 
         btn: {
           background: "hsl(var(--btn-background))",
