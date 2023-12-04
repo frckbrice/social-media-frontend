@@ -34,7 +34,7 @@ const Chats = () => {
     <div className="w-full flex justify-between">
       
       <div className="relative flex flex-col h-full w-full">
-        <div className="flex items-center justify-between p-2 h-16 bg-bgGray border-l-2 w-full">
+        <div className="flex items-center justify-between p-2 h-16 bg-chatGray border-l-2 w-full">
           <div className="flex items-center">
             <Avatar
               size={4}
@@ -52,9 +52,9 @@ const Chats = () => {
           </div>
         </div>
 
-        <div className=" relative flex-grow overflow-auto h-[80vh]">
+        <div className="relative flex-grow overflow-auto h-[80vh]">
           <div
-            className="bg-fixed w-[71.2%] h-[80%] fixed z-0"
+            className="w-[71.2%] h-[80%] fixed z-0"
             style={{
               backgroundImage:
                 "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
@@ -86,7 +86,7 @@ const Chats = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-4 h-20 text-2xl text-gray-500  bg-purple-500">
+        <div className="flex items-center justify-between p-4 h-16 text-2xl text-gray-500  bg-chatGray">
           <AiOutlineSmile className="mr-5 text-myG text-4xl" />
           <FaPlus className="mr-2 text-gray-500" />
           <input
@@ -94,7 +94,7 @@ const Chats = () => {
             placeholder="Type a message"
             value={message}
             onChange={handleChange}
-            className="w-full p-3 bg-white border-0 rounded-md focus:outline-none mx-6 text-lg"
+            className="w-full p-2 bg-white border-0 rounded-md focus:outline-none mx-6 text-lg"
           />
           {message.length === 0 ? (
             <FaMicrophone className="text-gray-600" />
