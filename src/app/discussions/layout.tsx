@@ -12,16 +12,15 @@ import ContactCard from "@/components/organisms/ContactCard";
 import { UserData } from "../../../mock-data";
 
 import { useRouter, usePathname } from "next/navigation";
-
-const handleImageclick = () => {
-  console.log("clicked on the image");
-};
+import { useState } from "react";
+import ProfileCard from "@/components/organisms/ProfileCard";
+import EditProfile from "@/components/organisms/EditProfile";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-
   const pathname = usePathname();
   const paramName = pathname.split("/").slice(-1)[0];
+  const [openProfile, setOpenProfile] = useState(false);
 
   console.log("paramName", paramName);
 
@@ -34,7 +33,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
       >
         <div className="flex items-center justify-between mobile:max-sm:bg-themecolor mobile:max-sm:text-white bg-bgGray p-2 text-primaryText">
           <Avatar
-            onClick={handleImageclick}
+            onClick={() => setOpenProfile(true)}
             size={4}
             profilePicture="https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
           />
@@ -76,6 +75,14 @@ function Discussion({ children }: { children: React.ReactNode }) {
           <MdMessage size={20} />
         </button>
       </div>
+      {openProfile && (
+        <ProfileCard
+          title={"Profile"}
+          clickToClose={() => setOpenProfile((prev) => !prev)}
+        >
+          <EditProfile />
+        </ProfileCard>
+      )}
       <div
         className={`w-full ${
           paramName !== "discussions"

@@ -16,6 +16,7 @@ const config: Config = {
       colors: {
         greenMessage: "#8EFD8E",
         themecolor: "#00a884",
+        darkgreen: "#008069",
         primaryText: "#54656F",
         secondry: "#005c4b",
         bgGray: "#f0f2f5",

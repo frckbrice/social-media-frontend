@@ -4,8 +4,8 @@ import Signupb from "@/components/organisms/signupb";
 export default function Home() {
   return (
     <div>
-      {/* <Signnuppage /> */}
-      <Signupb />
+      <Signnuppage />
+      {/* <Signupb /> */}
     </div>
   );
 }
