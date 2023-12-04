@@ -4,7 +4,6 @@ import { AiFillStar } from "react-icons/ai";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { TbBellFilled } from "react-icons/tb";
 import Card from "../molecules/Card"
-import { Room, User } from "@/type";
 import ContactAction from "../molecules/ContactAction"
 
 // import { RxSwitch } from "react-icons/rx";
@@ -12,29 +11,17 @@ import ContactAction from "../molecules/ContactAction"
 // import Image from "next/image";
 import { MdLock } from "react-icons/md";
 
-type Props = {
-  children?: React.ReactElement[];
-  roomObject?: Room;
-};
+type Props = {}
 
-const Profile = ({ roomObject }: Props) => {
-  const reciever: User = JSON.parse(localStorage.getItem("reciever") || "{}");
-  const [isGroup, setIsGroup] = useState(roomObject?.status || false);
+
+const Profile = (props: Props) => {
+  
 
   
   return (
     <div className={` flex flex-col space-y-2  h-[80%] overflow-auto w-40`}>
-      <Card
-        image={
-          roomObject?.image ||
-          "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
-        }
-        phoneNumber={roomObject?.phone || "Edit Your profile"}
-        usernames={roomObject?.name || "Edite your profile"}
-      />
-      {isGroup ? (
-        <GroupDetials roomObject={roomObject} />
-      ) : (
+      {/* <Card /> */}
+     
         <>
           <div className=" flex flex-col gap-2 w-full px-7 py-5 border-y border-y-gray-200 shadow-zinc-200 bg-white">
             <span className=" text-[#667781]">Infos</span>
@@ -127,10 +114,10 @@ const Profile = ({ roomObject }: Props) => {
             </div>
           </div>
           <div className=" w-full px-7 py-5 bg-white border-y border-y-gray-200">
-            <ContactAction roomObject={roomObject} />
+            <ContactAction />
           </div>
         </>
-      )}
+      
     </div>
   );
 };
