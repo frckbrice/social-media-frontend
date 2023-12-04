@@ -33,7 +33,8 @@ const Chats = () => {
   };
 
   return (
-    <div className="relative flex flex-col h-screen bg-gray-600">
+    <div className="relative flex flex-col h-screen">
+      
       <div className="flex items-center justify-between p-2 bg-bgGray border-l-2">
         <div className="flex items-center">
           <div
