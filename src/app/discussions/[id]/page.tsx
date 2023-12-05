@@ -63,7 +63,7 @@ const Chats = () => {
             backgroundImage:
               "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
           }}
-          className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)]"
+          className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
         ></div>
         {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
