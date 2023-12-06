@@ -95,12 +95,6 @@ const Chats = () => {
         </form>
       </div>
 
-      {/* {showInfoCard && (
-        <div className=" bg-white z-40 w-[30vw]">
-          <InfoCard />
-        </div>
-      )} */}
-
       {showInfoCard && (
         <ContactInfo
           id={""}
@@ -119,42 +113,3 @@ const Chats = () => {
 };
 
 export default Chats;
-
-// <div className=" flex-grow overflow-auto h-[80vh]">
-// <div
-//   className="w-[71.2%] mobile:max-sm:w-[100%] h-[80%] fixed z-0 bg-white bg-image bg-blend-multiply"
-//   style={{
-//     backgroundImage:
-//       "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
-//   }}
-// >
-//   <div className="absolute bottom-5 left-0 right-0 overflow-auto h-[calc(80% - 4rem)]">
-//     <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">
-//       Today
-//     </p>
-//     <p className="text-myG w-[48vw] ml-[15%] font-semibold p-2 rounded-md mt-5 flex text-sm text-center bg-yellow justify-center">
-//       <FaLock className="mr-2" /> Messages are end-to-end encrypted.
-//       No one outside of this chat, not even WaxChat, can read or
-//       listen to them.
-//     </p>
-//     <div className="flex flex-col mt-5 mx-[5%]">
-//       <div className="flex items-start justify-start mb-2">
-//         <div className="bg-white rounded-lg p-3 max-w-[60%]">
-//           <p>Receiver&aposs message</p>
-//         </div>
-//       </div>
-//       <div className="flex items-start justify-end mb-2">
-//         <div className="bg-greenMgs rounded-lg p-3 max-w-[60%]">
-//           <p>
-//             Sender&aposs message should not exceed some width and it
-//             should wrap when it get too long please do you understand
-//             susan that is what am talking about. Thanks bruh you
-//             should now get break
-//           </p>
-//         </div>
-//       </div>
-//       {/* ... more messages */}
-//     </div>
-//   </div>
-// </div>
-// </div>
