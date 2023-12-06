@@ -60,6 +60,7 @@ const Chats = () => {
   }, [showDropdown]);
 
   return (
+    <>
     <div className="w-full flex justify-between">
       <div
         className={`relative flex flex-col h-full w-full mobile:max-sm:${
@@ -100,7 +101,7 @@ const Chats = () => {
           <AiOutlineSmile className="mr-5 text-myG text-4xl" />
           {showDropdown ? (
             <FaTimes
-              className="mr-2 text-gray-500 cursor-pointer"
+              className="mr-2 text-gray-500 border bg-gray-100 cursor-pointer"
               onClick={handlePlusIconClick}
             />
           ) : (
@@ -145,29 +146,33 @@ const Chats = () => {
         />
       )}
 
-      {showDropdown && (
+    
+    </div>
+
+    {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
-          <div className="p-3 rounded-md bg-white absolute bottom-6 left-1/2 transform -translate-x-1/2">
-            <div className="flex items-center space-x-2">
-              <FaFileInvoice className="text-purple-500" />
+          <div className="p-5 rounded-xl bg-white absolute bottom-16 left-[34%] transform -translate-x-1/2 shadow-lg">
+            <div className="flex items-center space-x-3 text-lg">
+              <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <FaPhotoVideo className="text-blue-600" />
+            <div className="flex items-center py-5 space-x-3 text-lg">
+              <FaPhotoVideo className="text-blue-600 text-2xl" />
               <span className="text-gray-600">Photos & Videos</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <FaCamera className="text-pink-600" />
+            <div className="flex items-center space-x-3 text-lg">
+              <FaCamera className="text-pink-600  text-2xl" />
               <span className="text-gray-600">Camera</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <FaUser className="text-blue-400" />
+            <div className="flex items-center pt-5 space-x-3 text-lg">
+              <FaUser className="text-blue-400 text-2xl" />
               <span className="text-gray-600">Contact</span>
             </div>
           </div>
         </DropdownModal>
       )}
-    </div>
+
+    </>
   );
 };
 
