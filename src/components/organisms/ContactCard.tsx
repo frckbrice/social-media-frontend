@@ -8,6 +8,7 @@ interface CardProps {
   id: number | string;
   name: string;
   email: string;
+  image: string | "";
   onClick: () => void;
   notification: string | "";
   active: boolean;
@@ -20,6 +21,7 @@ const ContactCard = ({
   email,
   notification,
   active,
+  image,
   onClick,
   updatedAt,
 }: CardProps) => {
@@ -33,6 +35,7 @@ const ContactCard = ({
       <div className="flex items-center gap-5">
         <Avatar
           profilePicture={
+            image ||
             "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
           }
           size={5}
