@@ -7,13 +7,18 @@ import {
   FaEllipsisV,
   FaPlus,
   FaMicrophone,
-  FaLock,
+  FaXing,
+  FaFileInvoice,
+  FaPhotoVideo,
+  FaUser,
+  FaCamera,
   FaPaperPlane,
 } from "react-icons/fa";
 import { AiOutlineSmile } from "react-icons/ai";
 
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
+
 
 const Chats = () => {
   const [message, setMessage] = useState("");
@@ -36,8 +41,17 @@ const Chats = () => {
   const handlePlusIconClick = () => {
     setShowDropdown(!showDropdown)
   }
+  const handleDropdownClose=() => {
+    setShowDropdown(false)
+  }
+  const handleDropdownCancel = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowDropdown(false);
+  };
 
   return (
+
+
     <div className="w-full flex justify-between">
       <div
         className={`relative flex flex-col h-full w-full mobile:max-sm:${
@@ -76,8 +90,17 @@ const Chats = () => {
           className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
         >
           <AiOutlineSmile className="mr-5 text-myG text-4xl" />
-          <FaPlus className="mr-2 text-gray-500" 
-          onClick={handlePlusIconClick}/>
+         {!showDropdown ? (
+            <FaPlus
+              className="mr-2 text-gray-500 cursor-pointer"
+              onClick={handlePlusIconClick}
+            />
+          ) : (
+            <FaXing
+              className="mr-2 text-gray-500 cursor-pointer"
+              onClick={handleDropdownCancel}
+            />
+          )}
           <input
             type="text"
             placeholder="Type a message"
@@ -116,21 +139,21 @@ const Chats = () => {
 
 {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
-          <div className="flex flex-col space-y-2">
+          <div className="p-3 h-[20vh] rounded-md">
             <div className="flex items-center space-x-2">
-              <FaLock className="text-blue-500" />
+              <FaFileInvoice className="text-purple-500" />
               <span className="text-gray-600">Document</span>
             </div>
             <div className="flex items-center space-x-2">
-              <FaLock className="text-red-500" />
+              <FaPhotoVideo className="text-blue-600" />
               <span className="text-gray-600">Photos & Videos</span>
             </div>
             <div className="flex items-centerspace-x-2">
-              <FaLock className="text-green-500" />
+              <FaCamera className="text-pink-600" />
               <span className="text-gray-600">Camera</span>
             </div>
             <div className="flex items-center space-x-2">
-              <FaLock className="text-yellow-500" />
+              <FaUser className="text-blue-400" />
               <span className="text-gray-600">Contact</span>
             </div>
           </div>
