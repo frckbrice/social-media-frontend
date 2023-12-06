@@ -19,6 +19,7 @@ import Overlay from "@/components/atoms/Overlay";
 import DropdownModal from "@/components/atoms/DropdownModal";
 import DisplayUsers from "@/components/organisms/DisplayUsers";
 import AddGroupMembers from "@/components/organisms/AddGroupMembers";
+import { useAppContext } from "../Context/AppContext";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -28,6 +29,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showAllContacts, setShowAllContacts] = useState(false);
   const [showDropDown, setShowDropdown] = useState(false);
   const [showCreateGrp, setShowCreateGrp] = useState(false);
+
+  const { currentUser } = useAppContext();
 
   const dropDownLIst = [
     {
@@ -66,7 +69,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
             <Avatar
               onClick={() => setOpenProfile(true)}
               size={4}
-              profilePicture="https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+              profilePicture={
+                currentUser.image ||
+                "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+              }
             />
 
             <div className="flex  items-center gap-5 ">

@@ -7,13 +7,16 @@ import Pulsation from "./component/PulseLoader";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { signUp } from "@/utils/service/queries";
 import { SITE_URL } from "@/utils/service/constant";
-import { json } from "stream/consumers";
+import { useAppContext } from "../Context/AppContext";
 
 const Signupb = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  // context data
+  const { currentUser, setCurrentUser } = useAppContext();
 
   const handleInputChange = async () => {
     setIsLoading(true);
@@ -25,14 +28,6 @@ const Signupb = () => {
     if (res?.length === 1) {
       LOCAL_STORAGE.save("email", googleUser.user.email);
       LOCAL_STORAGE.save("userObject", googleUser.user);
-
-      // signUp({
-      //   name: googleUser.user.user_metadata.name,
-      //   email: googleUser.user.email,
-      //   image: googleUser.user.user_metadata.picture,
-      // }).then((res) => {
-      //   console.log("response, ", res);
-      // });
 
       await fetch(SITE_URL + "/users", {
         method: "POST",
@@ -46,12 +41,17 @@ const Signupb = () => {
         },
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
-      // .then((data) => console.log("data", data));
+        .then((data) => {
+          if (data) {
+            setCurrentUser(data);
+            LOCAL_STORAGE.save("userId", data.id);
+            console.log(data);
+            setSuccess(`Welcome ${data.name}🙂`);
+            router.push("/discussions");
+            setIsLoading(false);
+          }
+        });
 
-      setSuccess("Welcome back 🙂");
-      // router.push("/discussions");
-      setIsLoading(false);
       return;
     }
     if (res?.length === 0) {
