@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Avatar from "@/components/atoms/Avatar";
 import {
   FaSearch,
@@ -10,10 +10,41 @@ import {
   FaLock,
   FaPaperPlane,
 } from "react-icons/fa";
+import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:3000", {
+  transports: ["websocket"],
+});
 
 const Chats = () => {
-  const [message, setMessage] = useState("");
+  const param = useParams();
+  const [message, setMessage] = useState<string>("");
+  // const [currentUser, setCurrentUser] = useState<User | null>(
+  //   (): User | null => {
+  //     if (typeof localStorage !== "undefined") {
+  //       const fromLocalStorage =
+  //         JSON.parse(localStorage.getItem("sender")) || {};
+  //       if (fromLocalStorage) return fromLocalStorage;
+  //     }
+  //     return null;
+  //   }
+  // );
+  const [currentUser, setCurrentUser] = useState<User | null>((): User => {
+    return { name: "avom", image: "", id: "10", phone: "142 125 365" };
+  });
+  const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
+
+  // useEffect(() => {
+  socket.on("message", (data) => {
+    console.log("received: ", data);
+    setReceivedMessages([...receivedMessages, data]);
+  });
+
+  useEffect(() => {
+    socket.emit("joinRoom", { name: currentUser?.name, room: param.id });
+  }, [param.id, currentUser?.name]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -21,8 +52,23 @@ const Chats = () => {
 
   const handleSendMessage = () => {
     // Handle sending message logic here
-    console.log("Sending message:", message);
+
+    const messageObject: Partial<Message> = {
+      content: message,
+      sender_id: currentUser?.id,
+      receiver_room_id: param.id as string,
+      sender_name: currentUser?.name,
+      sender_phone: currentUser?.phone,
+      reaction: "",
+      is_read: false,
+    };
+
+    socket.emit("sendMessage", messageObject);
     setMessage("");
+  };
+
+  const handleKeyDown = (e: any) => {
+    if (e.key === "Enter") handleSendMessage();
   };
 
   return (
@@ -57,8 +103,12 @@ const Chats = () => {
           outside of this chat, not even WaxChat, can read or listen to them.
           Click to learn more
         </p>
-
-        {/* Render chat messages here */}
+        <div>
+          <span> message here</span>
+          {receivedMessages?.map((message, i) => (
+            <div key={i}>{message} </div>
+          ))}
+        </div>
       </div>
 
       <div className="flex items-center justify-between p-4 text-2xl text-gray-500 bg-bgGray">
@@ -70,6 +120,7 @@ const Chats = () => {
           value={message}
           onChange={handleChange}
           className="w-full p-3 bg-white border-0 rounded-md focus:outline-none mx-6 text-lg"
+          onKeyDown={handleKeyDown}
         />
         {message.length === 0 ? (
           <FaMicrophone className="text-gray-600" />

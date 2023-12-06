@@ -14,7 +14,7 @@ import { UserData } from "../../../mock-data";
 import { useRouter, usePathname } from "next/navigation";
 
 const handleImageclick = () => {
-  console.log("clicked on the image");
+  // console.log("clicked on the image");
 };
 
 function Discussion({ children }: { children: React.ReactNode }) {
@@ -23,7 +23,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const paramName = pathname.split("/").slice(-1)[0];
 
-  console.log("paramName", paramName);
+  // console.log("paramName", paramName);
 
   return (
     <div className="flex w-full">
@@ -52,7 +52,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
         <div className="flex items-center px-4 py-2 gap-5 border-b border-b-bgGray">
           <SearchInput
             handleFilter={(e: { target: { value: any } }) =>
-              console.log(e.target.value)
+              // console.log(e.target.value)
+              {}
             }
           />
           <button className="text-slate-400">
