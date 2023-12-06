@@ -28,6 +28,7 @@ const AddGroupMembers = ({ users }: any) => {
             notification={""}
             active={false}
             updatedAt={""}
+            image={""}
           />
         ))}
       </div>
