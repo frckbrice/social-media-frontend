@@ -20,8 +20,10 @@ import DropdownModal from "@/components/atoms/DropdownModal";
 import DisplayUsers from "@/components/organisms/DisplayUsers";
 import AddGroupMembers from "@/components/organisms/AddGroupMembers";
 import { useAppContext } from "../Context/AppContext";
-import { createRoom } from "@/utils/service/queries";
+import { createRoom, getAllRooms } from "@/utils/service/queries";
 import { json } from "node:stream/consumers";
+import { LOCAL_STORAGE } from "@/utils/service/storage";
+import { SITE_URL } from "@/utils/service/constant";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -31,10 +33,11 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showAllContacts, setShowAllContacts] = useState(false);
   const [showDropDown, setShowDropdown] = useState(false);
   const [showCreateGrp, setShowCreateGrp] = useState(false);
-
+  // const [currentUserId, setCurrentUserId] = useState(
+  //   localStorage.getItem("userId")
+  // );
   const { currentUser, allUsers } = useAppContext();
-  const [filteredContacts, setFilteredContacts] = useState<Array<User>>();
-  const [chatRooms, setChatRooms] = useState();
+  const [chatRooms, setChatRooms] = useState<Array<ChatRoom>>([]);
 
   const dropDownLIst = [
     {
@@ -59,6 +62,12 @@ function Discussion({ children }: { children: React.ReactNode }) {
     console.log("keyword", e.target.value);
   };
   // FETCH CHAT ROOMS
+  useEffect(() => {
+    getAllRooms().then((res) => {
+      console.log(res);
+      setChatRooms(res);
+    });
+  }, []);
 
   // HANDLE START CHAT
   const handleStartChat = async (user: User) => {
@@ -77,7 +86,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
       }).then((res: any) => {
         if (!res.message) {
           router.push(`/discussions/${res.id}`);
+          setChatRooms((prev) => [res, ...prev]);
           setShowAllContacts((prev) => !prev);
+          LOCAL_STORAGE.save("activeChat", res);
           console.log("room created", res);
         }
       });
@@ -147,7 +158,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             </button>
           </div>
           <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
-            {UserData.map((user) => (
+            {chatRooms?.map((user) => (
               <ContactCard
                 id={user.id}
                 name={user.name}
@@ -157,7 +168,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                 notification={""}
                 active={false}
                 updatedAt={"11/30/2023"}
-                image={""}
+                image={user.image}
               />
             ))}
           </div>
