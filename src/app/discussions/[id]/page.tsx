@@ -18,7 +18,7 @@ import DropdownModal from "@/components/atoms/DropdownModal";
 const Chats = () => {
   const [message, setMessage] = useState("");
   const [showInfoCard, setShowInfoCard] = useState(false);
-  const [showDropDown, setShowDropDown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -33,6 +33,9 @@ const Chats = () => {
   const handleAvatarClick = () => {
     setShowInfoCard(!showInfoCard);
   };
+  const handlePlusIconClick = () => {
+    setShowDropdown(!showDropdown)
+  }
 
   return (
     <div className="w-full flex justify-between">
@@ -73,7 +76,8 @@ const Chats = () => {
           className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
         >
           <AiOutlineSmile className="mr-5 text-myG text-4xl" />
-          <FaPlus className="mr-2 text-gray-500" />
+          <FaPlus className="mr-2 text-gray-500" 
+          onClick={handlePlusIconClick}/>
           <input
             type="text"
             placeholder="Type a message"
@@ -108,6 +112,29 @@ const Chats = () => {
           about={"made of gold"}
           email={"calebmatins@gmail.com"}
         />
+      )}
+
+{showDropdown && (
+        <DropdownModal onClose={() => setShowDropdown(false)}>
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center space-x-2">
+              <FaLock className="text-blue-500" />
+              <span className="text-gray-600">Document</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <FaLock className="text-red-500" />
+              <span className="text-gray-600">Photos & Videos</span>
+            </div>
+            <div className="flex items-centerspace-x-2">
+              <FaLock className="text-green-500" />
+              <span className="text-gray-600">Camera</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <FaLock className="text-yellow-500" />
+              <span className="text-gray-600">Contact</span>
+            </div>
+          </div>
+        </DropdownModal>
       )}
     </div>
   );
