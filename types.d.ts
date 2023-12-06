@@ -2,6 +2,7 @@ type User = {
   name: string;
   image: string;
   phone: string;
+  email?: string;
   id?: string;
 };
 

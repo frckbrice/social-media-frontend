@@ -58,7 +58,7 @@ const Chats = () => {
 
     const messageObject: Partial<Message> = {
       content: message,
-      sender_id: currentUser?.id,
+      sender_id: currentUser?.id as string,
       receiver_room_id: param.id as string,
       sender_name: currentUser?.name,
       sender_phone: currentUser?.phone,
@@ -132,7 +132,14 @@ const Chats = () => {
                     </p>
                   </div>
                 </div>
-                {/* ... more messages */}
+                {
+                  <div>
+                    <span> message here</span>
+                    {receivedMessages?.map((message, i) => (
+                      <div key={i}>{message} </div>
+                    ))}
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -158,52 +165,6 @@ const Chats = () => {
           )}
         </div>
       </div>
-
-      <div
-        className="w-full h-full bg-cover bg-no-repeat bg-center flex flex-col"
-        style={{
-          backgroundImage:
-            "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
-          backgroundSize: "cover",
-        }}
-      >
-        <p className="rounded-md shadow-md text-gray-500 w-20 px-1 py-2 bg-white text-center text-lg ml-[45%]">
-          Today
-        </p>
-        <p className="text-myG w-[48vw] ml-[15%] font-semibold p-2 rounded-md mt-5 flex text-sm text-center bg-yellow justify-center">
-          <FaLock className="mr-2" /> Messages are end-to-end encryted. No one
-          outside of this chat, not even WaxChat, can read or listen to them.
-          Click to learn more
-        </p>
-        <div>
-          <span> message here</span>
-          {receivedMessages?.map((message, i) => (
-            <div key={i}>{message} </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between p-4 text-2xl text-gray-500 bg-bgGray">
-        <AiOutlineSmile className="mr-5 text-myG text-4xl" />
-        <FaPlus className="mr-2 text-gray-500" />
-        <input
-          type="text"
-          placeholder="Type a message"
-          value={message}
-          onChange={handleChange}
-          className="w-full p-3 bg-white border-0 rounded-md focus:outline-none mx-6 text-lg"
-          onKeyDown={handleKeyDown}
-        />
-        {message.length === 0 ? (
-          <FaMicrophone className="text-gray-600" />
-        ) : (
-          <FaPaperPlane
-            className="mr-2 text-gray-500 cursor-pointer"
-            onClick={handleSendMessage}
-          />
-        )}
-      </div>
-
       {showInfoCard && (
         <div className=" bg-white z-40 w-[30vw]">
           <InfoCard />
