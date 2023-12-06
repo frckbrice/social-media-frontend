@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex flex-col absolute w-[100vw] h-[100vh] items-center bg-bgGray bigScreen:overflow-hidden bigScreen:p-4">
+      <body className="flex flex-col absolute w-[100vw] h-[100vh] items-center bg-[#d5d9db] bigScreen:overflow-hidden bigScreen:p-4">
         <div className="h-[25vh] w-full bg-themecolor absolute top-0"></div>
         <div className=" flex flex-col items-center w-full bigScreen:w-[95vw]  bigScreen:h-[95vh] mx-auto relative ">
           {children}
