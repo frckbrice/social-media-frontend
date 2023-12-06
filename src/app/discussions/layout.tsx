@@ -36,6 +36,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [filteredContacts, setFilteredContacts] = useState<Array<User>>();
   const [chatRooms, setChatRooms] = useState();
 
+  const handleCloseModal = () => {
+    // Implement your logic to handle modal close here
+  };
+
   const dropDownLIst = [
     {
       label: "New group",
@@ -120,7 +124,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             </div>
             {showDropDown && (
               <div className="absolute z-40 top-10 right-4">
-                <DropdownModal>
+                <DropdownModal onClose={handleCloseModal}>
                   <ul className="py-2 w-full flex. flex-col gap-4">
                     {dropDownLIst.map((item, index) => (
                       <li
