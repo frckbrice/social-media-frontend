@@ -20,9 +20,8 @@ export const getAllUsers = async () => {
 
 // GET CURRENT USER
 export const getCurrentUser = async () => {
-  const res = await fetch(
-    SITE_URL + `/users/${localStorage.getItem("userId")}`
-  );
+  const id = LOCAL_STORAGE.get("userId");
+  const res = await fetch(SITE_URL + `/users/${id}`);
   return await res.json();
 };
 
