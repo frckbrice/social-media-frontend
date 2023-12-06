@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Avatar from "@/components/atoms/Avatar";
 import {
   FaSearch,
   FaEllipsisV,
   FaPlus,
   FaMicrophone,
-  FaXing,
+  FaTimes,
   FaFileInvoice,
   FaPhotoVideo,
   FaUser,
@@ -18,7 +18,6 @@ import { AiOutlineSmile } from "react-icons/ai";
 
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
-
 
 const Chats = () => {
   const [message, setMessage] = useState("");
@@ -38,20 +37,29 @@ const Chats = () => {
   const handleAvatarClick = () => {
     setShowInfoCard(!showInfoCard);
   };
+
   const handlePlusIconClick = () => {
-    setShowDropdown(!showDropdown)
-  }
-  const handleDropdownClose=() => {
-    setShowDropdown(false)
-  }
-  const handleDropdownCancel = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowDropdown(false);
+    setShowDropdown((prevState) => !prevState);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        showDropdown &&
+        !(event.target as HTMLElement)?.closest(".dropdown-content")
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showDropdown]);
+
   return (
-
-
     <div className="w-full flex justify-between">
       <div
         className={`relative flex flex-col h-full w-full mobile:max-sm:${
@@ -90,15 +98,15 @@ const Chats = () => {
           className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
         >
           <AiOutlineSmile className="mr-5 text-myG text-4xl" />
-         {!showDropdown ? (
-            <FaPlus
+          {showDropdown ? (
+            <FaTimes
               className="mr-2 text-gray-500 cursor-pointer"
               onClick={handlePlusIconClick}
             />
           ) : (
-            <FaXing
+            <FaPlus
               className="mr-2 text-gray-500 cursor-pointer"
-              onClick={handleDropdownCancel}
+              onClick={handlePlusIconClick}
             />
           )}
           <input
@@ -137,9 +145,9 @@ const Chats = () => {
         />
       )}
 
-{showDropdown && (
+      {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
-          <div className="p-3 h-[20vh] rounded-md">
+          <div className="p-3 rounded-md bg-white absolute bottom-6 left-1/2 transform -translate-x-1/2">
             <div className="flex items-center space-x-2">
               <FaFileInvoice className="text-purple-500" />
               <span className="text-gray-600">Document</span>
@@ -148,7 +156,7 @@ const Chats = () => {
               <FaPhotoVideo className="text-blue-600" />
               <span className="text-gray-600">Photos & Videos</span>
             </div>
-            <div className="flex items-centerspace-x-2">
+            <div className="flex items-center space-x-2">
               <FaCamera className="text-pink-600" />
               <span className="text-gray-600">Camera</span>
             </div>
