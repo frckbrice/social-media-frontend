@@ -157,21 +157,29 @@ function Discussion({ children }: { children: React.ReactNode }) {
               <BiMenuAltRight size={20} />
             </button>
           </div>
-          <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
-            {chatRooms?.map((user) => (
-              <ContactCard
-                id={user.id}
-                name={user.name}
-                email={user.email}
-                key={user.id}
-                onClick={() => router.push(`/discussions/${user.id}`)}
-                notification={""}
-                active={false}
-                updatedAt={"11/30/2023"}
-                image={user.image}
-              />
-            ))}
-          </div>
+          {chatRooms.length ? (
+            <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
+              {chatRooms?.map((user) => (
+                <ContactCard
+                  id={user.id}
+                  name={user.name}
+                  email={user.email}
+                  key={user.id}
+                  onClick={() => router.push(`/discussions/${user.id}`)}
+                  notification={""}
+                  active={false}
+                  updatedAt={"11/30/2023"}
+                  image={user.image}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto text-center relative">
+              <span className="w-full absulote mobile:max-sm:mt-[50%] mt-[70%]">
+                no chats
+              </span>
+            </div>
+          )}
           <button
             onClick={() => setShowAllContacts((prev) => !prev)}
             className="fixed z-20 bottom-0 right-0 bg-themecolor p-4 mx-4 my-5 text-white sm:hidden mobile:max-sm:visible rounded-[10px]"
