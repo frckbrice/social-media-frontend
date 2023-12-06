@@ -12,12 +12,13 @@ import {
 } from "react-icons/fa";
 import { AiOutlineSmile } from "react-icons/ai";
 
-import InfoCard from "@/components/organisms/InfoCard";
 import ContactInfo from "@/components/organisms/ContactInfo";
+import DropdownModal from "@/components/atoms/DropdownModal";
 
 const Chats = () => {
   const [message, setMessage] = useState("");
   const [showInfoCard, setShowInfoCard] = useState(false);
+  const [showDropDown, setShowDropDown] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
