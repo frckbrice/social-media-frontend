@@ -97,16 +97,17 @@ const Chats = () => {
         <form
           onSubmit={handleSendMessage}
           className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
+          style={{ transition: "none" }}
         >
           <AiOutlineSmile className="mr-5 text-myG text-4xl" />
           {showDropdown ? (
             <FaTimes
-              className="mr-2 text-gray-500 border bg-gray-100 cursor-pointer"
+              className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
               onClick={handlePlusIconClick}
             />
           ) : (
             <FaPlus
-              className="mr-2 text-gray-500 cursor-pointer"
+              className="text-gray-500 cursor-pointer"
               onClick={handlePlusIconClick}
             />
           )}
@@ -115,7 +116,7 @@ const Chats = () => {
             placeholder="Type a message"
             value={message}
             onChange={handleChange}
-            className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6 "
+            className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6"
           />
           {message.length === 0 ? (
             <button>
@@ -151,20 +152,20 @@ const Chats = () => {
 
     {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
-          <div className="p-5 rounded-xl bg-white absolute bottom-16 left-[34%] transform -translate-x-1/2 shadow-lg">
-            <div className="flex items-center space-x-3 text-lg">
+          <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[34%] transform -translate-x-1/2 shadow-lg">
+            <div className="flex items-center space-x-3 text-lg cursor-pointer">
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
             </div>
-            <div className="flex items-center py-5 space-x-3 text-lg">
+            <div className="flex items-center py-5 space-x-3 text-lg cursor-pointer">
               <FaPhotoVideo className="text-blue-600 text-2xl" />
               <span className="text-gray-600">Photos & Videos</span>
             </div>
-            <div className="flex items-center space-x-3 text-lg">
+            <div className="flex items-center space-x-3 text-lg cursor-pointer">
               <FaCamera className="text-pink-600  text-2xl" />
               <span className="text-gray-600">Camera</span>
             </div>
-            <div className="flex items-center pt-5 space-x-3 text-lg">
+            <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
               <FaUser className="text-blue-400 text-2xl" />
               <span className="text-gray-600">Contact</span>
             </div>
