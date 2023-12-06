@@ -1,6 +1,7 @@
 import React from "react";
 import { FaUserGroup } from "react-icons/fa6";
 import ContactCard from "./ContactCard";
+import { useAppContext } from "@/app/Context/AppContext";
 
 type Props = {
   users: any;
@@ -9,6 +10,8 @@ type Props = {
 };
 
 const DisplayUsers = ({ users, contactClick, goToCreateGrt }: Props) => {
+  const { allUsers } = useAppContext();
+
   return (
     <div className=" h-[calc(100vh-161px)] overflow-x-hidden overflow-y-scroll">
       <button
@@ -25,7 +28,7 @@ const DisplayUsers = ({ users, contactClick, goToCreateGrt }: Props) => {
         CONTACTS ON WAXCHAT
       </p>
 
-      {users.map((user: User) => (
+      {allUsers.map((user: User) => (
         <ContactCard
           key={user.id}
           id={user.id}
@@ -37,6 +40,7 @@ const DisplayUsers = ({ users, contactClick, goToCreateGrt }: Props) => {
           }}
           notification={""}
           active={false}
+          image={user?.image || ""}
         />
       ))}
     </div>

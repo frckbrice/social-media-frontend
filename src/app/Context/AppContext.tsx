@@ -1,10 +1,12 @@
 "use client";
+import { getAllUsers, getCurrentUser } from "@/utils/service/queries";
 import React, {
   createContext,
   useContext,
   useState,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from "react";
 
 interface DataType {
@@ -42,6 +44,18 @@ export const AppContextProvider = ({ children }: any) => {
     allUsers,
     setAllUsers,
   };
+
+  useEffect(() => {
+    getAllUsers().then((res) => {
+      setAllUsers(res);
+      console.log(res);
+    });
+
+    getCurrentUser().then((res) => {
+      setCurrentUser(res);
+      console.log(res);
+    });
+  }, []);
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

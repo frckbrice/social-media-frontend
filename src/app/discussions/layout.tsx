@@ -126,6 +126,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                 notification={""}
                 active={false}
                 updatedAt={"11/30/2023"}
+                image={""}
               />
             ))}
           </div>

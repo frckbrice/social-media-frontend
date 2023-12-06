@@ -3,19 +3,26 @@ import "./globals.css";
 import { AppContextProvider } from "./Context/AppContext";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { useAppContext } from "./Context/AppContext";
+import { SITE_URL } from "@/utils/service/constant";
 
 export const metadata: Metadata = {
   title: "WaxChat",
   description: "connect chat and chill",
 };
 
-// LOCAL_STORAGE.get("userId")
+const userId = LOCAL_STORAGE.get("userId");
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // FETCH AND POPULATE THE APPLICATION WITH ALL USERS
+
+  // fETCH AND UPDATE CURRENT USER
+  // const userID = localStorage.getItem("userId");
+  // console.log("userId", userID);
+
   return (
     <html lang="en">
       <body className="flex flex-col absolute w-[100vw] h-[100vh] items-center bg-[#d5d9db] bigScreen:overflow-hidden bigScreen:p-4">
