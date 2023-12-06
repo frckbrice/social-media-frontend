@@ -19,6 +19,7 @@ import { AiOutlineSmile } from "react-icons/ai";
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
 
+
 const Chats = () => {
   const [message, setMessage] = useState("");
   const [showInfoCard, setShowInfoCard] = useState(false);
