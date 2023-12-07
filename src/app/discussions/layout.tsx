@@ -165,7 +165,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
                   name={user.name}
                   email={user.email}
                   key={user.id}
-                  onClick={() => router.push(`/discussions/${user.id}`)}
+                  onClick={() => {
+                    LOCAL_STORAGE.save("activeChat", user);
+                    router.push(`/discussions/${user.id}`);
+                  }}
                   notification={""}
                   active={false}
                   updatedAt={"11/30/2023"}
