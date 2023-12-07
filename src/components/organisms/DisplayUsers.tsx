@@ -1,14 +1,16 @@
 import React from "react";
 import { FaUserGroup } from "react-icons/fa6";
 import ContactCard from "./ContactCard";
+import { useAppContext } from "@/app/Context/AppContext";
 
 type Props = {
-  users: any;
   contactClick: (userId: string) => void;
   goToCreateGrt: () => void;
 };
 
-const DisplayUsers = ({ users, contactClick, goToCreateGrt }: Props) => {
+const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
+  const { allUsers } = useAppContext();
+
   return (
     <div className=" h-[calc(100vh-161px)] overflow-x-hidden overflow-y-scroll">
       <button
@@ -25,18 +27,17 @@ const DisplayUsers = ({ users, contactClick, goToCreateGrt }: Props) => {
         CONTACTS ON WAXCHAT
       </p>
 
-      {users.map((user: User) => (
+      {allUsers.map((user: User) => (
         <ContactCard
           key={user.id}
-          id={user.id}
+          id={user.id as string}
           name={user.name}
-          email={user.email}
+          email={user.email as string}
           updatedAt={""}
-          onClick={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          onClick={() => contactClick(user.id as string)}
           notification={""}
           active={false}
+          image={user?.image || ""}
         />
       ))}
     </div>

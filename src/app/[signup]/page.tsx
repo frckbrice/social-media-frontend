@@ -5,12 +5,18 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/client";
 import Pulsation from "./component/PulseLoader";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
+import { signUp } from "@/utils/service/queries";
+import { SITE_URL } from "@/utils/service/constant";
+import { useAppContext } from "../Context/AppContext";
 
 const Signupb = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  // context data
+  const { currentUser, setCurrentUser } = useAppContext();
 
   const handleInputChange = async () => {
     setIsLoading(true);
@@ -23,12 +29,40 @@ const Signupb = () => {
       LOCAL_STORAGE.save("email", googleUser.user.email);
       LOCAL_STORAGE.save("userObject", googleUser.user);
 
-      setSuccess("Welcome back 🙂");
-      router.push("/discussions");
-      setIsLoading(false);
+      await fetch(SITE_URL + "/users", {
+        method: "POST",
+        body: JSON.stringify({
+          name: googleUser.user.user_metadata.name,
+          email: googleUser.user.email,
+          image: googleUser.user.user_metadata.picture,
+        }),
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            setCurrentUser(data);
+            LOCAL_STORAGE.save("userId", data.id);
+            console.log(data);
+            setSuccess(`Welcome ${data.name}🙂`);
+            router.push("/discussions");
+            setIsLoading(false);
+          }
+        });
+
       return;
     }
     if (res?.length === 0) {
+      // signUp({
+      //   name: googleUser.user.user_metadata.name,
+      //   email: googleUser.user.email,
+      //   image: googleUser.user.user_metadata.picture,
+      // }).then((res) => {
+      //   console.log("response, ", res);
+      // });
+
       LOCAL_STORAGE.save("email", googleUser.user.email);
       const { data, error } = await supabase.from("user").insert({
         email: googleUser.user.email,
@@ -38,7 +72,7 @@ const Signupb = () => {
       });
       if (error) console.log("an error occured while sending user", error);
       console.log("data from DB", data);
-      router.push("/discussions");
+      // router.push("/discussions");
       setIsLoading(false);
     }
   };

@@ -14,7 +14,7 @@ import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3000", {
+const socket = io("http://localhost:3001", {
   transports: ["websocket"],
 });
 
@@ -25,19 +25,17 @@ const Chats = () => {
   const param = useParams();
   const [showInfoCard, setShowInfoCard] = useState(false);
   const [message, setMessage] = useState<string>("");
-  // const [currentUser, setCurrentUser] = useState<User | null>(
-  //   (): User | null => {
-  //     if (typeof localStorage !== "undefined") {
-  //       const fromLocalStorage =
-  //         JSON.parse(localStorage.getItem("sender")) || {};
-  //       if (fromLocalStorage) return fromLocalStorage;
-  //     }
-  //     return null;
-  //   }
-  // );
-  const [currentUser, setCurrentUser] = useState<User | null>((): User => {
-    return { name: "avom", image: "", id: "10", phone: "142 125 365" };
-  });
+  const [currentUser, setCurrentUser] = useState<User | null>(
+    (): User | null => {
+      if (typeof localStorage !== "undefined") {
+        const fromLocalStorage =
+          JSON.parse(localStorage.getItem("sender") as string) || {};
+        if (fromLocalStorage) return fromLocalStorage;
+      }
+      return null;
+    }
+  );
+
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
 
   // useEffect(() => {
@@ -54,19 +52,31 @@ const Chats = () => {
     setMessage(e.target.value);
   };
 
-  const handleSendMessage = (e: { preventDefault: () => void }) => {
+  const handleSendMessage = (e?: any) => {
     e.preventDefault();
     // Handle sending message logic here
-    alert(`sending ${message}`);
+
+    const messageObject: Partial<Message> = {
+      content: message,
+      sender_id: currentUser?.id as string,
+      receiver_room_id: param.id as string,
+      sender_name: currentUser?.name,
+      sender_phone: currentUser?.phone,
+      reaction: "",
+      is_read: false,
+    };
+
+    socket.emit("sendMessage", messageObject);
+    setMessage("");
   };
 
   const handleAvatarClick = () => {
     setShowInfoCard(!showInfoCard);
   };
 
-  // const handleKeyDown = (e: any) => {
-  //   if (e.key === "Enter") handleSendMessage();
-  // };
+  const handleKeyDown = (e: any) => {
+    if (e.key === "Enter") handleSendMessage();
+  };
 
   return (
     <div className="w-full flex justify-between">
@@ -92,7 +102,9 @@ const Chats = () => {
             <FaEllipsisV className="mr-2" />
           </div>
         </div>
-        {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV BELLOW ########## */}
+        {/* {receivedMessages?.map((message, i) => (
+          <div key={i}>{message} </div>
+        ))} */}
         <div
           style={{
             backgroundImage:
@@ -102,7 +114,7 @@ const Chats = () => {
         ></div>
         {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
-        <form
+        <div
           onSubmit={handleSendMessage}
           className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
         >
@@ -114,6 +126,7 @@ const Chats = () => {
             value={message}
             onChange={handleChange}
             className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6 "
+            onKeyDown={handleKeyDown}
           />
           {message.length === 0 ? (
             <button>
@@ -127,7 +140,7 @@ const Chats = () => {
               />
             </button>
           )}
-        </form>
+        </div>
       </div>
 
       {/* {showInfoCard && (

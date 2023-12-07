@@ -21,13 +21,14 @@ const AddGroupMembers = ({ users }: any) => {
         {users.map((user: User) => (
           <ContactCard
             key={user.id}
-            id={user.id}
+            id={user.id as string}
             name={user.name}
-            email={user.email}
+            email={user.email as string}
             onClick={() => user.id}
             notification={""}
             active={false}
             updatedAt={""}
+            image={""}
           />
         ))}
       </div>

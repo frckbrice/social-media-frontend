@@ -4,6 +4,8 @@ type User = {
   phone: string;
   email?: string;
   id?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 type Message = {
