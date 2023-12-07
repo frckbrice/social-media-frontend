@@ -48,7 +48,7 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
   };
 
   // REMOVE A GROUP MEMBER
-  const removeMember = (id: string) => {
+  const removeMember = (id?: string) => {
     const filteredMembers = members.filter((member) => member.id !== id);
     setMembers(filteredMembers);
     LOCAL_STORAGE.save("group_members", filteredMembers);
@@ -76,26 +76,16 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
           className=" w-full outline-none p-2 text-sm border-b border-b-slate-300"
         />
       </div>
-      <div
-        className={`${
-          members.length
-            ? " h-[calc(100vh-167px-74px-80px)] bigScreen:h-[calc(100vh-167px-74px-4.5vh-80px)]"
-            : ""
-        }  h-[calc(100vh-167px-74px)] bigScreen:h-[calc(100vh-167px-74px-4.5vh)] overflow-y-scroll overflow-x-hidden`}
-      >
-        {userList.map((user: User) => (
+      <div className="h-[calc(100vh-171px-54px)] overflow-y-scroll overflow-x-hidden">
+        {users.map((user: User) => (
           <ContactCard
-            key={user.id}
-            id={user.id}
-            name={user.name}
-            email={user.email}
-            onClick={() => handelAddMembers(user)}
-            notification={""}
-            active={false}
-            updatedAt={""}
-            image={user.image || ""}
-            className={""}
-          />
+          user={user}
+          key={user.id}
+          onClick={() => user.id}
+          notification={""}
+          active={false}
+          className={""}
+        />
         ))}
       </div>
       <div className="bg-bgGray absolute w-full bottom-0 flex items-center py-3 ">
