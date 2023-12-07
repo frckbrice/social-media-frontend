@@ -29,6 +29,7 @@ const AddGroupMembers = ({ users }: any) => {
             active={false}
             updatedAt={""}
             image={""}
+            className={""}
           />
         ))}
       </div>
