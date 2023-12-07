@@ -13,13 +13,10 @@ function GroupSetup() {
   const [onEditAbout, setOnEditAbout] = useState(false);
   const [useName, setUserName] = useState("userName");
 
-  const handleUpdateName = () => {
+  const handleGroupName = () => {
     setOnEditName(false);
   };
 
-  const handleUpdateAbout = () => {
-    setOnEditAbout((prev) => !prev);
-  };
   const onClickNext = () => {};
 
   return (
@@ -35,6 +32,7 @@ function GroupSetup() {
         <div className="flex justify-between items-center text-primaryText border-b-2 border-b-themecolor">
           <input
             // defaultValue={useName}
+            onChange={handleGroupName}
             type="text"
             placeholder="Group Subject"
             className="outline-0 text-sm font-normal w-full mb-1"
