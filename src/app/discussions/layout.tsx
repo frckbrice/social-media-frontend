@@ -24,6 +24,7 @@ import { createRoom, getAllRooms } from "@/utils/service/queries";
 import { json } from "node:stream/consumers";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { SITE_URL } from "@/utils/service/constant";
+import GroupSetup from "@/components/organisms/GroupSetup";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -33,6 +34,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showAllContacts, setShowAllContacts] = useState(false);
   const [showDropDown, setShowDropdown] = useState(false);
   const [showCreateGrp, setShowCreateGrp] = useState(false);
+  const [openGroupSetup, setOpenGroupSetup] = useState(false);
   // const [currentUserId, setCurrentUserId] = useState(
   //   localStorage.getItem("userId")
   // );
@@ -228,13 +230,27 @@ function Discussion({ children }: { children: React.ReactNode }) {
             />
           </ProfileCard>
         )}
-
         {showCreateGrp && (
           <ProfileCard
             title="Add group members"
             clickToClose={() => setShowCreateGrp((prev) => !prev)}
           >
-            <AddGroupMembers users={allUsers} />
+            <AddGroupMembers
+              users={allUsers}
+              onClickNext={() => {
+                setShowCreateGrp((prev) => !prev);
+                setOpenGroupSetup((prev) => !prev);
+              }}
+            />
+          </ProfileCard>
+        )}
+
+        {openGroupSetup && (
+          <ProfileCard
+            title="New group"
+            clickToClose={() => setOpenGroupSetup((prev) => !prev)}
+          >
+            <GroupSetup />
           </ProfileCard>
         )}
         <div

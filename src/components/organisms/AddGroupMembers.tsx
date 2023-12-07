@@ -4,8 +4,14 @@ import SearchInput from "../atoms/SearchInput";
 import ContactCard from "./ContactCard";
 import AddedMember from "../molecules/AddedMember";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
+import { FaCircleArrowRight } from "react-icons/fa6";
 
-const AddGroupMembers = ({ users }: any) => {
+type Props = {
+  users: any;
+  onClickNext: () => void;
+};
+
+const AddGroupMembers = ({ users, onClickNext }: Props) => {
   const [userList, setUserList] = useState<Array<User>>(users);
   const [members, setMembers] = useState<Array<User>>(
     LOCAL_STORAGE.get("group_members") || []
@@ -50,9 +56,9 @@ const AddGroupMembers = ({ users }: any) => {
   };
 
   return (
-    <div className="relative ">
+    <div className="relative bigScreen:h-[calc(100vh-100px-4.5vh)] h-[calc(100vh-100px)]  ">
       <div className="p-4">
-        <div className="flex overflow-y-auto max-h-[80px] w-full flex-wrap gap-2">
+        <div className="flex overflow-y-auto  max-h-[80px] w-full flex-wrap gap-2">
           {members.map((member) => (
             <AddedMember
               key={member.id}
@@ -70,7 +76,13 @@ const AddGroupMembers = ({ users }: any) => {
           className=" w-full outline-none p-2 text-sm border-b border-b-slate-300"
         />
       </div>
-      <div className="h-[calc(100vh-253px-54px-20px)] overflow-y-scroll overflow-x-hidden">
+      <div
+        className={`${
+          members.length
+            ? " h-[calc(100vh-167px-74px-80px)] bigScreen:h-[calc(100vh-167px-74px-4.5vh-80px)]"
+            : ""
+        }  h-[calc(100vh-167px-74px)] bigScreen:h-[calc(100vh-167px-74px-4.5vh)] overflow-y-scroll overflow-x-hidden`}
+      >
         {userList.map((user: User) => (
           <ContactCard
             key={user.id}
@@ -86,8 +98,13 @@ const AddGroupMembers = ({ users }: any) => {
           />
         ))}
       </div>
-      <div className="bg-bgGray flex items-center min-h-[54px] ">
-        <button className="w-[20rem] bg-red-600 m-auto">create</button>
+      <div className="bg-bgGray absolute w-full bottom-0 flex items-center py-3 ">
+        <button
+          onClick={onClickNext}
+          className="w-[2.5rem] text-themecolor  m-auto"
+        >
+          <FaCircleArrowRight size={50} />
+        </button>
       </div>
     </div>
   );
