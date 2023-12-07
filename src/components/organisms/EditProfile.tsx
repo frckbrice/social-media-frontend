@@ -21,7 +21,13 @@ const EditProfile = () => {
   };
   return (
     <div>
-      <Dp />
+      <Dp
+        image={""}
+        content={""}
+        onClick={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
       <div className="px-5 py-2 flex flex-col gap-5">
         <span className="text-sm text-darkgreen">your name</span>
 

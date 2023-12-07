@@ -24,6 +24,7 @@ import { createRoom, getAllRooms } from "@/utils/service/queries";
 import { json } from "node:stream/consumers";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { SITE_URL } from "@/utils/service/constant";
+import GroupSetup from "@/components/organisms/GroupSetup";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -33,6 +34,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showAllContacts, setShowAllContacts] = useState(false);
   const [showDropDown, setShowDropdown] = useState(false);
   const [showCreateGrp, setShowCreateGrp] = useState(false);
+  const [openGroupSetup, setOpenGroupSetup] = useState(false);
   // const [currentUserId, setCurrentUserId] = useState(
   //   localStorage.getItem("userId")
   // );
@@ -90,7 +92,14 @@ function Discussion({ children }: { children: React.ReactNode }) {
       }).then((res: any) => {
         if (!res.message) {
           router.push(`/discussions/${res.id}`);
-          setChatRooms((prev) => [res, ...prev]);
+          const rooms = chatRooms;
+          if (!rooms.length) {
+            rooms.push(res);
+            setChatRooms(rooms);
+          } else {
+            setChatRooms((prev) => [res, ...prev]);
+          }
+
           setShowAllContacts((prev) => !prev);
           LOCAL_STORAGE.save("activeChat", res);
           console.log("room created", res);
@@ -111,7 +120,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             paramName !== "discussions" ? "mobile:max-sm:hidden" : "visible"
           } mobile:max-sm:w-screen h-full bigScreen:h-[95vh]`}
         >
-          <div className="flex relative items-center justify-between mobile:max-sm:bg-themecolor mobile:max-sm:text-white bg-bgGray p-2 text-primaryText">
+          <div className="flex relative  w-[30vw] items-center justify-between mobile:max-sm:bg-themecolor mobile:max-sm:text-white bg-bgGray p-2 text-primaryText">
             <Avatar
               onClick={() => setOpenProfile(true)}
               size={4}
@@ -221,13 +230,27 @@ function Discussion({ children }: { children: React.ReactNode }) {
             />
           </ProfileCard>
         )}
-
         {showCreateGrp && (
           <ProfileCard
             title="Add group members"
             clickToClose={() => setShowCreateGrp((prev) => !prev)}
           >
-            <AddGroupMembers users={allUsers} />
+            <AddGroupMembers
+              users={allUsers}
+              onClickNext={() => {
+                setShowCreateGrp((prev) => !prev);
+                setOpenGroupSetup((prev) => !prev);
+              }}
+            />
+          </ProfileCard>
+        )}
+
+        {openGroupSetup && (
+          <ProfileCard
+            title="New group"
+            clickToClose={() => setOpenGroupSetup((prev) => !prev)}
+          >
+            <GroupSetup />
           </ProfileCard>
         )}
         <div
