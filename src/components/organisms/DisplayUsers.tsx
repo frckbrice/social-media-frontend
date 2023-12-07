@@ -39,6 +39,7 @@ const DisplayUsers = ({ users, contactClick, goToCreateGrt }: Props) => {
           notification={""}
           active={false}
           image={user?.image || ""}
+          className={""}
         />
       ))}
     </div>

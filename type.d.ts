@@ -12,8 +12,8 @@ type ChatRoom = {
   id: string;
   image: string;
   isGroup: false;
-  my_id: bolean;
-  email: bolean;
+  my_id: string;
+  email: string;
   name: string;
   updatedAt: string;
   user_id: string;
