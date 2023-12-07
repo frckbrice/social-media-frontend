@@ -36,8 +36,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
   // const [currentUserId, setCurrentUserId] = useState(
   //   localStorage.getItem("userId")
   // );
+
   const { currentUser, allUsers } = useAppContext();
-  const [chatRooms, setChatRooms] = useState<Array<ChatRoom>>([]);
+  const [chatRooms, setChatRooms] = useState<Room[]>([]);
 
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
@@ -75,17 +76,17 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   // HANDLE START CHAT
   const handleStartChat = async (user: User) => {
-    const myID = JSON.parse(localStorage.getItem("userId") || "{}");
+    const myID = JSON.parse(localStorage.getItem("sender") || "{}");
     console.log(myID);
 
     console.log("start group with", user);
-    if (myID) {
+    if (myID.id) {
       await createRoom({
         name: user.name,
-        email: user.email,
+        email: user.email as string,
         image: user.image,
         isGroup: false,
-        user_id: user.id,
+        user_id: user.id as string,
         my_id: myID,
       }).then((res: any) => {
         if (!res.message) {
@@ -165,9 +166,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
             <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
               {chatRooms?.map((user) => (
                 <ContactCard
-                  id={user.id}
-                  name={user.name}
-                  email={user.email}
+                  // id={user?.id as string}
+                  // name={user.name}
+                  // email={user.email}
+                  user={user}
                   key={user.id}
                   onClick={() => {
                     LOCAL_STORAGE.save("activeChat", user);
@@ -175,8 +177,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
                   }}
                   notification={""}
                   active={false}
-                  updatedAt={"11/30/2023"}
-                  image={user.image}
+                  // updatedAt={"11/30/2023"}
+                  // image={user.image}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}
                 />
               ))}

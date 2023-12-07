@@ -29,8 +29,9 @@ const Chats = () => {
   const param = useParams();
   const [showInfoCard, setShowInfoCard] = useState(false);
   const [message, setMessage] = useState<string>("");
-  const [currentUser, setCurrentUser] = useState<User | null>(
-    (): User | null => {
+  const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
+  const [currentUser, setCurrentUser] = useState<Room | null>(
+    (): Room | null => {
       if (typeof localStorage !== "undefined") {
         const fromLocalStorage =
           JSON.parse(localStorage.getItem("sender") as string) || {};
@@ -39,8 +40,6 @@ const Chats = () => {
       return null;
     }
   );
-
-  const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
 
   // useEffect(() => {
   socket.on("message", (data) => {
@@ -129,16 +128,18 @@ const Chats = () => {
               <FaEllipsisV className="mr-2" />
             </div>
           </div>
-          {/* {receivedMessages?.map((message, i) => (
-          <div key={i}>{message} </div>
-        ))} */}
+
           <div
             style={{
               backgroundImage:
                 "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
             }}
             className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
-          ></div>
+          >
+            {receivedMessages?.map((message, i) => (
+              <div key={i}>{message} </div>
+            ))}
+          </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
           <div

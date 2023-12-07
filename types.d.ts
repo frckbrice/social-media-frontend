@@ -2,7 +2,7 @@ type User = {
   name: string;
   image: string;
   phone: string;
-  email?: string;
+  email: string;
   id?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -29,13 +29,14 @@ type RoomUser = {
 };
 
 type Room = {
-  createdAt: string;
   id?: string;
   image: string;
-  isGroup: false;
-  my_id: string;
-  email: string;
+  isGroup?: false;
+  my_id?: string;
   name: string;
   updatedAt?: string;
-  user_id: string;
+  createdAt?: string;
+  user_id?: string;
+  phone?: string;
+  email?: string;
 };

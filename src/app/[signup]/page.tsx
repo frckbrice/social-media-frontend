@@ -16,7 +16,7 @@ const Signupb = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // context data
-  const { currentUser, setCurrentUser } = useAppContext();
+  const { setCurrentUser } = useAppContext();
 
   const handleInputChange = async () => {
     setIsLoading(true);
@@ -44,7 +44,7 @@ const Signupb = () => {
         .then((data) => {
           if (data) {
             setCurrentUser(data);
-            LOCAL_STORAGE.save("userId", data.id);
+            LOCAL_STORAGE.save("sender", data);
             console.log(data);
             setSuccess(`Welcome ${data.name}🙂`);
             router.push("/discussions");
@@ -53,27 +53,6 @@ const Signupb = () => {
         });
 
       return;
-    }
-    if (res?.length === 0) {
-      // signUp({
-      //   name: googleUser.user.user_metadata.name,
-      //   email: googleUser.user.email,
-      //   image: googleUser.user.user_metadata.picture,
-      // }).then((res) => {
-      //   console.log("response, ", res);
-      // });
-
-      LOCAL_STORAGE.save("email", googleUser?.user.email);
-      const { data, error } = await supabase.from("user").insert({
-        email: googleUser?.user.email,
-        name: googleUser?.user.user_metadata.name,
-        image: googleUser?.user.user_metadata.picture,
-        phone: googleUser?.user.identities.phone,
-      });
-      if (error) console.log("an error occured while sending user", error);
-      console.log("data from DB", data);
-      // router.push("/discussions");
-      setIsLoading(false);
     }
   };
 
