@@ -170,6 +170,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                   active={false}
                   updatedAt={"11/30/2023"}
                   image={user.image}
+                  className={`${paramName === user.id ? "bg-bgGray" : ""}`}
                 />
               ))}
             </div>
@@ -219,7 +220,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             title="Add group members"
             clickToClose={() => setShowCreateGrp((prev) => !prev)}
           >
-            <AddGroupMembers users={UserData} />
+            <AddGroupMembers users={allUsers} />
           </ProfileCard>
         )}
         <div
