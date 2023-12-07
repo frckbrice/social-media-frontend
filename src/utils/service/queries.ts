@@ -21,8 +21,10 @@ export const getAllUsers = async () => {
 // GET CURRENT USER
 export const getCurrentUser = async () => {
   const id = LOCAL_STORAGE.get("userId");
-  const res = await fetch(SITE_URL + `/users/${id}`);
-  return await res.json();
+  if (id) {
+    const res = await fetch(SITE_URL + `/users/${id}`);
+    return await res.json();
+  }
 };
 
 // CREATE CHAT ROOM

@@ -90,7 +90,14 @@ function Discussion({ children }: { children: React.ReactNode }) {
       }).then((res: any) => {
         if (!res.message) {
           router.push(`/discussions/${res.id}`);
-          setChatRooms((prev) => [res, ...prev]);
+          const rooms = chatRooms;
+          if (!rooms.length) {
+            rooms.push(res);
+            setChatRooms(rooms);
+          } else {
+            setChatRooms((prev) => [res, ...prev]);
+          }
+
           setShowAllContacts((prev) => !prev);
           LOCAL_STORAGE.save("activeChat", res);
           console.log("room created", res);
@@ -111,7 +118,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             paramName !== "discussions" ? "mobile:max-sm:hidden" : "visible"
           } mobile:max-sm:w-screen h-full bigScreen:h-[95vh]`}
         >
-          <div className="flex relative items-center justify-between mobile:max-sm:bg-themecolor mobile:max-sm:text-white bg-bgGray p-2 text-primaryText">
+          <div className="flex relative  w-[30vw] items-center justify-between mobile:max-sm:bg-themecolor mobile:max-sm:text-white bg-bgGray p-2 text-primaryText">
             <Avatar
               onClick={() => setOpenProfile(true)}
               size={4}

@@ -32,7 +32,7 @@ const ContactCard = ({
   return (
     <div
       onClick={onClick}
-      className={`flex  p-2 justify-between w-[28vw] mobile:max-sm:w-full ${className} bigScreen:w-[23vw] border-b hover:bg-bgGray items-center hover:cursor-pointer gap-5`}
+      className={`flex  p-2 justify-between w-[100%] mobile:max-sm:w-full ${className} bigScreen:w-[100%] border-b hover:bg-bgGray items-center hover:cursor-pointer gap-5`}
     >
       <div className="flex items-center gap-5">
         <Avatar
@@ -43,7 +43,7 @@ const ContactCard = ({
           size={5}
         />
         <div className="pb-2 flex flex-col gap-2">
-          <div className="flex justify-between w-[21vw] mobile:max-sm:w-[77vw] bigScreen:w-[18vw] gap-10">
+          <div className="flex justify-between w-[23vw] mobile:max-sm:w-[77vw] bigScreen:w-[24vw] gap-10">
             <p className="">{name}</p>
             <span className="text-primaryText text-xs">{updatedAt}</span>
           </div>
