@@ -20,9 +20,8 @@ export const getAllUsers = async () => {
 
 // GET CURRENT USER
 export const getCurrentUser = async () => {
-  const res = await fetch(
-    SITE_URL + `/users/${localStorage.getItem("userId")}`
-  );
+  const id = LOCAL_STORAGE.get("userId");
+  const res = await fetch(SITE_URL + `/users/${id}`);
   return await res.json();
 };
 
@@ -36,4 +35,15 @@ export const createRoom = async (user: {
   my_id: string;
 }) => {
   return apiCall.POST(SITE_URL + "/rooms", user);
+};
+
+// GET ALL ROOMS
+
+export const getAllRooms = async () => {
+  const id = LOCAL_STORAGE.get("userId");
+  const res = await fetch(SITE_URL + `/rooms/my_dm/${id}`, {
+    next: { revalidate: 3000 },
+  });
+
+  return await res.json();
 };
