@@ -12,7 +12,7 @@ import ContactCard from "@/components/organisms/ContactCard";
 import { UserData } from "../../../mock-data";
 
 import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileCard from "@/components/organisms/ProfileCard";
 import EditProfile from "@/components/organisms/EditProfile";
 import Overlay from "@/components/atoms/Overlay";
@@ -20,6 +20,8 @@ import DropdownModal from "@/components/atoms/DropdownModal";
 import DisplayUsers from "@/components/organisms/DisplayUsers";
 import AddGroupMembers from "@/components/organisms/AddGroupMembers";
 import { useAppContext } from "../Context/AppContext";
+import { createRoom } from "@/utils/service/queries";
+import { json } from "node:stream/consumers";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -30,7 +32,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showDropDown, setShowDropdown] = useState(false);
   const [showCreateGrp, setShowCreateGrp] = useState(false);
 
-  const { currentUser } = useAppContext();
+  const { currentUser, allUsers } = useAppContext();
+  const [filteredContacts, setFilteredContacts] = useState<Array<User>>();
+  const [chatRooms, setChatRooms] = useState();
 
   const dropDownLIst = [
     {
@@ -49,8 +53,35 @@ function Discussion({ children }: { children: React.ReactNode }) {
   // console.log("paramName", paramName);
 
   // filter all users
-  const filterUsers = (e: { target: { value: any } }) => {
+  const filterAllUsers = (e: { target: { value: any } }) => {
+    const mainUserData = allUsers;
+
     console.log("keyword", e.target.value);
+  };
+  // FETCH CHAT ROOMS
+
+  // HANDLE START CHAT
+  const handleStartChat = async (user: User) => {
+    const myID = JSON.parse(localStorage.getItem("userId") || "{}");
+    console.log(myID);
+
+    console.log("start group with", user);
+    if (myID) {
+      await createRoom({
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        isGroup: false,
+        user_id: user.id,
+        my_id: myID,
+      }).then((res: any) => {
+        if (!res.message) {
+          router.push(`/discussions/${res.id}`);
+          setShowAllContacts((prev) => !prev);
+          console.log("room created", res);
+        }
+      });
+    }
   };
 
   return (
@@ -151,12 +182,11 @@ function Discussion({ children }: { children: React.ReactNode }) {
             clickToClose={() => setShowAllContacts((prev) => !prev)}
           >
             <div className="p-3">
-              <SearchInput handleFilter={filterUsers} />
+              <SearchInput handleFilter={filterAllUsers} />
             </div>
             <DisplayUsers
-              contactClick={function (userId: string): void {
-                alert(userId);
-              }}
+              users={allUsers}
+              contactClick={handleStartChat}
               goToCreateGrt={() => {
                 setShowAllContacts((prev) => !prev);
                 setShowCreateGrp((prev) => !prev);

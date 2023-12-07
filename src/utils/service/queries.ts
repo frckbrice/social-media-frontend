@@ -25,3 +25,15 @@ export const getCurrentUser = async () => {
   );
   return await res.json();
 };
+
+// CREATE CHAT ROOM
+export const createRoom = async (user: {
+  name: string;
+  email: string;
+  image?: string;
+  isGroup: boolean;
+  user_id: string;
+  my_id: string;
+}) => {
+  return apiCall.POST(SITE_URL + "/rooms", user);
+};
