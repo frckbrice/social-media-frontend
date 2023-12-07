@@ -29,11 +29,13 @@ type RoomUser = {
 };
 
 type Room = {
-  id: string;
-  name: string;
+  createdAt: string;
+  id?: string;
   image: string;
-  created_at: string;
-  updated_at: string;
+  isGroup: false;
+  my_id: string;
+  email: string;
+  name: string;
+  updatedAt?: string;
   user_id: string;
-  isGroup: boolean;
 };
