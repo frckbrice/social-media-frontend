@@ -117,7 +117,7 @@ const Chats = () => {
             <div className="flex items-center">
               <Avatar
                 size={4}
-                profilePicture={activeChat?.image || "https://i.pinimg.com/564x/17/f7/ba/17f7baaff77ee55d8807fcd7b2d2f47a.jpg"}
+                profilePicture={activeChat?.image || "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"}
                 onClick={handleAvatarClick}
               />
               <div className="ml-4 ">

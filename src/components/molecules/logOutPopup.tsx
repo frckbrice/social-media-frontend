@@ -11,9 +11,10 @@ const LogOutPopUp = ({ visible, onClose }: Props) => {
   const handleOnclose = (e: any) => {
     if (e.target.id === "container" && onClose) onClose();
   };
+  const router = useRouter();
 
   if (!visible) return null;
-  const router = useRouter();
+  
   const handleLogout = () => {
     sessionStorage.clear();
     localStorage.clear()
