@@ -13,7 +13,7 @@ const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
   const { allUsers } = useAppContext();
 
   return (
-    <div className=" h-[calc(100vh-161px)] overflow-x-hidden overflow-y-scroll">
+    <div className=" h-[calc(100vh-161px)] bigScreen:h-[calc(95vh-153px)] overflow-x-hidden overflow-y-scroll">
       <button
         onClick={goToCreateGrt}
         className="flex items-center gap-4 w-full px-3 py-2 hover:bg-bgGray border-b border-b-slate-200"
@@ -24,7 +24,7 @@ const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
         <span className="text-sm text-slate-700">New group</span>
       </button>
 
-      <p className="px-3 py-5 border-b text-darkgreen border-b-slate-200 font-normal text-sm">
+      <p className="px-3 py-5 border-b  text-darkgreen border-b-slate-200 font-normal text-sm">
         CONTACTS ON WAXCHAT
       </p>
 

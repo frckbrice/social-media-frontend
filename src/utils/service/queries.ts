@@ -1,3 +1,4 @@
+import { supabase } from "../supabase/client";
 import { SITE_URL } from "./constant";
 import ApiCall from "./httpClient";
 import { LOCAL_STORAGE } from "./storage";
@@ -49,4 +50,24 @@ export const getAllRooms = async () => {
   });
 
   return await res.json();
+};
+
+// UPLOAD IMAGE TO SUPABSE
+export const uplaodImage = async (file: any) => {
+  const fileValue = `groupIcon${Date.now()}.png`;
+
+  const { data, error } = await supabase.storage
+    .from("whatsapp_avatars/images")
+    .upload(fileValue, file);
+
+  if (error) {
+    console.error("error creatin group icon", error);
+  } else {
+    console.log("group icon data", data);
+    const imageUrl = supabase.storage
+      .from("whatsapp_avatars/images")
+      .getPublicUrl(data.path);
+    console.log("group icon download url", imageUrl.data.publicUrl);
+    return imageUrl.data.publicUrl;
+  }
 };

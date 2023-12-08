@@ -139,7 +139,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             paramName !== "discussions" ? "mobile:max-sm:hidden" : "visible"
           } mobile:max-sm:w-screen h-full bigScreen:h-[95vh]`}
         >
-          <div className="flex relative  w-[30vw] items-center justify-between mobile:max-sm:bg-themecolor mobile:max-sm:text-white bg-bgGray p-2 text-primaryText">
+          <div className="flex relative  w-[30vw] items-center justify-between mobile:max-sm:w-full mobile:max-sm:bg-themecolor mobile:max-sm:text-white bg-bgGray p-2 text-primaryText">
             <Avatar
               onClick={() => setOpenProfile((prev) => !prev)}
               size={4}
@@ -212,7 +212,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             </div>
           ) : (
             <div className="flex h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto text-center relative">
-              <span className="w-full absulote mobile:max-sm:mt-[50%] mt-[70%]">
+              <span className="w-full absulote mobile:max-sm:mt-[50%] mt-[60%]">
                 no chats
               </span>
             </div>
