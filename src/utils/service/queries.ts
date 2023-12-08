@@ -70,3 +70,14 @@ export const uplaodImage = async (file: any) => {
     return imageUrl.data.publicUrl;
   }
 };
+
+// CREAT GROUP
+
+export const createGroup = async (groupData: {
+  name: string;
+  image: string;
+  my_id: string;
+  isGroup: boolean;
+}) => {
+  return apiCall.POST(SITE_URL + "/rooms", groupData);
+};
