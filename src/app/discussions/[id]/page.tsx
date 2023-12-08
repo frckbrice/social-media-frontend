@@ -39,14 +39,8 @@ const Chats = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
-  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      handleFileDrop(Array.from(files));
-    }
-  };
-
   const handleFileDrop = (acceptedFiles: File[]) => {
+    // Handle file upload logic here
     setUploadedFiles((prevUploadedFiles) => [
       ...prevUploadedFiles,
       ...acceptedFiles,
@@ -59,10 +53,23 @@ const Chats = () => {
     );
   };
 
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    // accept: ["application/pdf", "image/*", "video/*"],
+    multiple: true,
+    onDrop: handleFileDrop,
+  });
+
   const handleDocumentClick = () => {
     const input = document.getElementById("fileInput");
     if (input) {
       input.click();
+    }
+  };
+
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      handleFileDrop(Array.from(files));
     }
   };
 
@@ -261,45 +268,54 @@ const Chats = () => {
       </div>
 
       {showDropdown && (
-            <DropdownModal>
-              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 p-4">
-                <div className="flex flex-col items-center justify-center">
-                  <label htmlFor="fileInput">
-                    <FaFileInvoice className="text-blue-500 text-4xl cursor-pointer" />
-                    <span className="text-sm">Document</span>
-                  </label>
-                  <input
-                    id="fileInput"
-                    type="file"
-                    multiple
-                    className="hidden"
-                    onChange={handleFileInputChange}
-                  />
-                </div>
-                <div className="flex flex-col items-center justify-center">
-                  <label htmlFor="imageInput">
-                    <FaPhotoVideo className="text-green-500 text-4xl cursor-pointer" />
-                    <span className="text-sm">Photo/Video</span>
-                  </label>
-                  <input
-                    id="imageInput"
-                    type="file"
-                    multiple
-                    className="hidden"
-                    onChange={handleFileInputChange}
-                  />
-                </div>
-                <div className="flex flex-col items-center justify-center">
-                  <FaUser className="text-yellow-500 text-4xl cursor-pointer" />
-                  <span className="text-sm">Contact</span>
-                </div>
-                <div className="flex flex-col items-center justify-center">
-                  <FaCamera className="text-red-500 text-4xl cursor-pointer" />
-                  <span className="text-sm">Camera</span>
-                </div>
-              </div>
-            </DropdownModal>
-          )}
+        <DropdownModal onClose={() => setShowDropdown(false)}>
+          <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
+            
+            <div
+              {...getRootProps()}
+              className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
+              onClick={handleDocumentClick}
+            >
+              <FaFileInvoice className="text-purple-500 text-2xl" />
+              <span className="text-gray-600">Document</span>
+            </div>
+
+            <div
+              className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
+              onClick={() => {
+                // Handle photos/videos upload logic here
+              }}
+            >
+              <FaPhotoVideo className="text-blue-600 text-2xl" />
+              <span className="text-gray-600">Photos & Videos</span>
+            </div>
+            <div className="flex items-center space-x-3 text-lg cursor-pointer">
+              <FaCamera className="text-pink-600  text-2xl" />
+              <span className="text-gray-600">Camera</span>
+            </div>
+            <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
+              <FaUser className="text-blue-400 text-2xl" />
+              <span className="text-gray-600">Contact</span>
+            </div>
+          </div>
+        </DropdownModal>
+      )}
+
+      <div {...getRootProps()} className="dropzone">
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p>Drop the files here...</p>
+        ) : (
+          <p>Drag and drop files here, or click to select files</p>
+        )}
+      </div>
+
+      {uploadedFiles.map((file, index) => (
+        <div key={index}>
+          <p>{file.name}</p>
+          <button onClick={() => handleRemoveFile(index)}>Remove</button>
+        </div>
+      ))}
     </>
   );
 };
