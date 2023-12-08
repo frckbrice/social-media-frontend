@@ -56,7 +56,7 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
   };
 
   return (
-    <div className="relative bigScreen:h-[calc(100vh-100px-4.5vh)] h-[calc(100vh-100px)]  ">
+    <div className="relative h-[85vh] bigScreen:h-[80vh] ">
       <div className="p-4">
         <div className="flex overflow-y-auto  max-h-[80px] w-full flex-wrap gap-2">
           {members.map((member) => (
@@ -78,10 +78,8 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
       </div>
       <div
         className={`${
-          members.length
-            ? " h-[calc(100vh-167px-74px-80px)] bigScreen:h-[calc(100vh-167px-74px-4.5vh-80px)]"
-            : ""
-        }  h-[calc(100vh-167px-74px)] bigScreen:h-[calc(100vh-167px-74px-4.5vh)] overflow-y-scroll overflow-x-hidden`}
+          members.length ? " h-[339px] bigScreen:h-[460px]" : ""
+        }  h-[390px] bigScreen:h-[calc(100vh-167px-74px-4.5vh)] overflow-y-scroll overflow-x-hidden`}
       >
         {userList.map((user: User) => (
           <ContactCard
