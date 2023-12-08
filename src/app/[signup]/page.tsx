@@ -35,6 +35,7 @@ const Signupb = () => {
           name: googleUser?.user.user_metadata.name,
           email: googleUser?.user.email,
           image: googleUser?.user.user_metadata.picture,
+          phone: googleUser?.user.phone,
         }),
         headers: {
           "content-type": "application/json",
@@ -46,7 +47,7 @@ const Signupb = () => {
             setCurrentUser(data);
             LOCAL_STORAGE.save("sender", data);
             console.log(data);
-            setSuccess(`Welcome ${data.name}🙂`);
+            setSuccess(`Welcome ${data.name} 🙂`);
             router.push("/discussions");
             setIsLoading(false);
           }

@@ -20,15 +20,11 @@ const AddGroupMembers = ({ users }: any) => {
       <div className="h-[calc(100vh-171px-54px)] overflow-y-scroll overflow-x-hidden">
         {users.map((user: User) => (
           <ContactCard
+            user={user}
             key={user.id}
-            id={user.id as string}
-            name={user.name}
-            email={user.email as string}
             onClick={() => user.id}
             notification={""}
             active={false}
-            updatedAt={""}
-            image={""}
             className={""}
           />
         ))}

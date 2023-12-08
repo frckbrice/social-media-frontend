@@ -48,13 +48,13 @@ export const AppContextProvider = ({ children }: any) => {
   useEffect(() => {
     getAllUsers().then((res) => {
       setAllUsers(res);
-      console.log(res);
+      // console.log(res);
     });
 
-    getCurrentUser().then((res) => {
-      setCurrentUser(res);
-      console.log(res);
-    });
+    // getCurrentUser().then((res) => {
+    //   setCurrentUser(res);
+    //   console.log(res);
+    // });
   }, []);
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;

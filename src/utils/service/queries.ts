@@ -20,8 +20,8 @@ export const getAllUsers = async () => {
 
 // GET CURRENT USER
 export const getCurrentUser = async () => {
-  const id = LOCAL_STORAGE.get("userId");
-  const res = await fetch(SITE_URL + `/users/${id}`);
+  const sender = LOCAL_STORAGE.get("sender");
+  const res = await fetch(SITE_URL + `/users/${sender.user_id}`);
   return await res.json();
 };
 
@@ -40,9 +40,12 @@ export const createRoom = async (user: {
 // GET ALL ROOMS
 
 export const getAllRooms = async () => {
-  const id = LOCAL_STORAGE.get("userId");
-  const res = await fetch(SITE_URL + `/rooms/my_dm/${id}`, {
-    next: { revalidate: 3000 },
+  const data: null | string = localStorage.getItem("sender");
+  if (typeof data === null) return;
+  const sender = JSON.parse(data as string);
+  // console.log(sender);
+  const res = await fetch(SITE_URL + `/rooms/my_dm/${sender?.user_id}`, {
+    next: { revalidate: 30 },
   });
 
   return await res.json();

@@ -30,6 +30,7 @@ const Chats = () => {
   const [showInfoCard, setShowInfoCard] = useState(false);
   const [message, setMessage] = useState<string>("");
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [currentUser, setCurrentUser] = useState<Room | null>(
     (): Room | null => {
       if (typeof localStorage !== "undefined") {
@@ -41,23 +42,20 @@ const Chats = () => {
     }
   );
 
-  // useEffect(() => {
   socket.on("message", (data) => {
-    console.log("received: ", data);
+    console.log("message received: ", data);
     setReceivedMessages([...receivedMessages, data]);
   });
 
   useEffect(() => {
     socket.emit("joinRoom", { name: currentUser?.name, room: param.id });
   }, [param.id, currentUser?.name]);
-  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
-  const handleSendMessage = (e?: any) => {
-    e.preventDefault();
+  const handleSendMessage = () => {
     // Handle sending message logic here
 
     const messageObject: Partial<Message> = {

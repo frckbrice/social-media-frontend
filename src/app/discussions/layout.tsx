@@ -39,7 +39,6 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   const { currentUser, allUsers } = useAppContext();
   const [chatRooms, setChatRooms] = useState<Room[]>([]);
-
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
   };
@@ -58,46 +57,52 @@ function Discussion({ children }: { children: React.ReactNode }) {
     },
   ];
 
-  // console.log("paramName", paramName);
-
   // filter all users
   const filterAllUsers = (e: { target: { value: any } }) => {
     const mainUserData = allUsers;
 
     console.log("keyword", e.target.value);
   };
+
   // FETCH CHAT ROOMS
   useEffect(() => {
     getAllRooms().then((res) => {
-      console.log(res);
-      setChatRooms(res);
+      if (res.length) {
+        LOCAL_STORAGE.save("chat-rooms", res);
+        // console.log(res);
+        setChatRooms(res);
+      }
     });
   }, []);
 
   // HANDLE START CHAT
-  const handleStartChat = async (user: User) => {
-    const myID = JSON.parse(localStorage.getItem("sender") || "{}");
-    console.log(myID);
+  const handleStartChat = async (user: Room) => {
+    const currentUser = JSON.parse(localStorage.getItem("sender") || "{}");
+    // console.log(currentUser);
 
-    console.log("start group with", user);
-    if (myID.id) {
-      await createRoom({
+    // console.log("start group with", user);
+    if (currentUser.id) {
+      createRoom({
         name: user.name,
         email: user.email as string,
         image: user.image,
         isGroup: false,
         user_id: user.id as string,
-        my_id: myID,
+        my_id: currentUser?.user_id.toString(),
       }).then((res: any) => {
-        if (!res.message) {
+        if (res) {
           router.push(`/discussions/${res.id}`);
-          setChatRooms((prev) => [res, ...prev]);
+          setChatRooms(() =>
+            chatRooms?.find((room: Room) => room.id === res.id)
+              ? [...chatRooms]
+              : [res, ...chatRooms]
+          );
           setShowAllContacts((prev) => !prev);
-          LOCAL_STORAGE.save("activeChat", res);
           console.log("room created", res);
         }
       });
     }
+    LOCAL_STORAGE.save("chat-rooms", chatRooms);
   };
 
   return (
@@ -162,23 +167,17 @@ function Discussion({ children }: { children: React.ReactNode }) {
               <BiMenuAltRight size={20} />
             </button>
           </div>
-          {chatRooms.length ? (
+          {chatRooms?.length ? (
             <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
-              {chatRooms?.map((user) => (
+              {chatRooms?.map((user: Room) => (
                 <ContactCard
-                  // id={user?.id as string}
-                  // name={user.name}
-                  // email={user.email}
                   user={user}
                   key={user.id}
                   onClick={() => {
-                    LOCAL_STORAGE.save("activeChat", user);
                     router.push(`/discussions/${user.id}`);
                   }}
                   notification={""}
                   active={false}
-                  // updatedAt={"11/30/2023"}
-                  // image={user.image}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}
                 />
               ))}
@@ -214,7 +213,6 @@ function Discussion({ children }: { children: React.ReactNode }) {
               <SearchInput handleFilter={filterAllUsers} />
             </div>
             <DisplayUsers
-              users={allUsers}
               contactClick={handleStartChat}
               goToCreateGrt={() => {
                 setShowAllContacts((prev) => !prev);

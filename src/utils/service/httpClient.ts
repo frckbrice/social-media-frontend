@@ -10,7 +10,11 @@ export default class ApiCall {
     return fetch(url, {
       method: "GET",
       headers: { ...Headers, ..._headers },
-    }).then((res) => res.json());
+    })
+      .then((res) => res.json())
+      .catch((err) =>
+        console.log("an error occurs while fetching on " + url, err)
+      );
   }
 
   async POST(url: string, body: any, _headers: HeadersInit = {}) {
@@ -18,6 +22,10 @@ export default class ApiCall {
       method: "POST",
       headers: { ...Headers, ..._headers },
       body: JSON.stringify(body),
-    }).then((res) => res.json());
+    })
+      .then((res) => res.json())
+      .catch((err) =>
+        console.log("an error occurs while fetching on " + url, err)
+      );
   }
 }
