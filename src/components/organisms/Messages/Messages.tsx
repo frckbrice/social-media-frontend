@@ -9,7 +9,6 @@ import React, {
 import SenderMessages from "./SenderMessage";
 import ReceiverMessages from "./ReceiverMessage";
 import SimpleMessage from "./SimpleMessage";
-import { Message, User } from "@/type";
 import { FaFaceGrinWide } from "react-icons/fa6";
 import EmojiMessage from "./EmojiMessage";
 import { supabase } from "@/utils/supabase/client";
@@ -24,6 +23,7 @@ type Props = {
   // recipient: User;
   isGroupdiscussion: boolean;
 };
+//exlint:disable-next-line
 const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const [target, setTarget] = useState<string>(props.messageList[0].id);
   const [emojie, setEmojie] = useState<string>();
@@ -316,5 +316,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
     </div>
   );
 });
+
+Messages.displayName = Messages;
 
 export default React.memo(Messages);

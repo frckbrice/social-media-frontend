@@ -40,10 +40,8 @@ export const createRoom = async (user: {
 // GET ALL ROOMS
 
 export const getAllRooms = async () => {
-  const data: null | string = localStorage.getItem("sender");
-  if (typeof data === null) return;
-  const sender = JSON.parse(data as string);
-  // console.log(sender);
+  console.log("getallrooms fired");
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
   const res = await fetch(SITE_URL + `/rooms/my_dm/${sender?.user_id}`, {
     next: { revalidate: 30 },
   });

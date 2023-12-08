@@ -92,6 +92,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
       }).then((res: any) => {
         if (res) {
           router.push(`/discussions/${res.id}`);
+          localStorage.setItem("receiver", JSON.stringify(res));
           setChatRooms(() =>
             chatRooms?.find((room: Room) => room.id === res.id)
               ? [...chatRooms]

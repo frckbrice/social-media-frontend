@@ -42,14 +42,25 @@ const Chats = () => {
     }
   );
 
+  const [receiver, setReceiver] = useState<Room | null>((): Room | null => {
+    if (typeof localStorage !== "undefined") {
+      const fromLocalStorage =
+        JSON.parse(localStorage.getItem("receiver") as string) || {};
+      if (fromLocalStorage) return fromLocalStorage;
+    }
+    return null;
+  });
+
   socket.on("message", (data) => {
     console.log("message received: ", data);
     setReceivedMessages([...receivedMessages, data]);
   });
+  console.log(receiver);
 
   useEffect(() => {
-    socket.emit("joinRoom", { name: currentUser?.name, room: param.id });
-  }, [param.id, currentUser?.name]);
+    socket.emit("joinRoom", { name: receiver?.name, room: param.id });
+    setReceiver(() => JSON.parse(localStorage.getItem("receiver") || "{}"));
+  }, [param.id, receiver?.name]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
