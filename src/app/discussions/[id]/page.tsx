@@ -17,6 +17,7 @@ import {
   FaUser,
   FaCamera,
   FaPaperPlane,
+  FaFile,
 } from "react-icons/fa";
 import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
@@ -300,30 +301,60 @@ const Chats = () => {
         </DropdownModal>
       )}
 
-      <div {...getRootProps()} className="dropzone">
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <p>Drop the files here...</p>
-        ) : (
-          <p>Drag and drop files here, or click to select files</p>
-        )}
-      </div>
-
-      {uploadedFiles.map((file, index) => (
-        <div key={index}>
-          <p>{file.name}</p>
-          <button onClick={() => handleRemoveFile(index)}>Remove</button>
-        </div>
-      ))}
-
       <div
-        {...getRootProps()}
-        className="dropzone w-full bg-red-600 top-0 h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] p-4"
+        className="dropzone w-full bg-red-600 top-0 z-30 h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] p-4 space-y-10"
       >
-        <div className="h-14 bg-gray-600 flex"><FaTimes
-                className="text-gray-800 text-2xl cursor-pointer"
-                // onClick={handlePlusIconClick}
-              /></div>
+        <div className="h-14 bg-gray-600 flex items-center p-4">
+          <FaTimes
+            className="text-gray-800 text-2xl cursor-pointer"
+            // onClick={handlePlusIconClick}
+          />{" "}
+          {/* <p>{{file.name}}</p> */}
+        </div>
+        <div>
+          <p>No preview available</p>
+        </div>
+
+        <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
+          <input
+            type="text"
+            placeholder="Type a message"
+            value={message}
+            onChange={handleChange}
+            className="w-full bg-transparent text-sm border-0 focus:outline-none"
+          />
+          <AiOutlineSmile className="mr-5 text-myG text-4xl" />
+        </div>
+
+        <div className="flex space-x-4 justify-center">
+          {uploadedFiles.map((file, index) => (
+            <div
+              key={index}
+              className="border flex-col p-4 w-16 h-16 hover:bg-gray-500"
+            >
+              <button
+                onClick={() => handleRemoveFile(index)}
+                className="text-sm"
+              >
+                <FaTimes />
+              </button>
+
+              <FaFile className="text-5xl" />
+            </div>
+          ))}
+
+          <div {...getRootProps()} className="dropzone">
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <p>Drop the files here...</p>
+            ) : (
+              <p className="border p-4 w-16 h-16 hover:bg-gray-500">
+                <FaPlus className="cursor-pointer " />
+              </p>
+            )}
+          </div>
+        </div>
+
       </div>
     </>
   );
