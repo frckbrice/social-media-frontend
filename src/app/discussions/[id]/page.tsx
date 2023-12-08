@@ -54,7 +54,7 @@ const Chats = () => {
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    // accept: ["application/pdf", "image/*", "video/*"],
+    accept: ["application/pdf", "image/*", "video/*"],
     multiple: true,
     onDrop: handleFileDrop,
   });
@@ -270,7 +270,6 @@ const Chats = () => {
       {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
-            
             <div
               {...getRootProps()}
               className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
@@ -316,6 +315,16 @@ const Chats = () => {
           <button onClick={() => handleRemoveFile(index)}>Remove</button>
         </div>
       ))}
+
+      <div
+        {...getRootProps()}
+        className="dropzone w-full bg-red-600 top-0 h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] p-4"
+      >
+        <div className="h-14 bg-gray-600 flex"><FaTimes
+                className="text-gray-800 text-2xl cursor-pointer"
+                // onClick={handlePlusIconClick}
+              /></div>
+      </div>
     </>
   );
 };
