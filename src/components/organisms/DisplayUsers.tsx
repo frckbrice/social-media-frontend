@@ -28,19 +28,15 @@ const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
         CONTACTS ON WAXCHAT
       </p>
 
-      {allUsers?.map((user: User) => (
+      {allUsers?.map((user: Room) => (
         <ContactCard
-          key={user.id}
-          id={user.id as string}
-          name={user.name}
-          email={user.email as string}
-          updatedAt={""}
-          onClick={() => contactClick(user)}
-          notification={""}
-          active={false}
-          image={user?.image || ""}
-          className={""}
-        />
+        user={user}
+        key={user.id}
+        onClick={() => contactClick(user as User)}
+        notification={""}
+        active={false}
+        className={""}
+      />
       ))}
     </div>
   );

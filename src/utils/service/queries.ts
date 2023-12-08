@@ -34,7 +34,7 @@ export const createRoom = async (user: {
   image?: string;
   isGroup: boolean;
   user_id: string;
-  my_id: string;
+  my_id: string | undefined;
 }) => {
   return apiCall.POST(SITE_URL + "/rooms", user);
 };
@@ -43,7 +43,8 @@ export const createRoom = async (user: {
 
 export const getAllRooms = async () => {
   const id = LOCAL_STORAGE.get("userId");
-  const res = await fetch(SITE_URL + `/rooms/my_dm/${id}`, {
+  const sender = JSON.parse(localStorage.getItem('sender') || '{}')
+  const res = await fetch(SITE_URL + `/rooms/my_dm/${sender.user_id}`, {
     next: { revalidate: 3000 },
   });
 

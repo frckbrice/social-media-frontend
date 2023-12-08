@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useAppContext } from "@/app/Context/AppContext";
 import { FaCamera } from "react-icons/fa";
 
 type Props = {
@@ -9,13 +10,15 @@ type Props = {
 };
 
 const Dp = ({ image, onClick, content }: Props) => {
+  const { currentUser, allUsers } = useAppContext();
+
   return (
     <div>
       <div className="flex items-center bg-bgGray justify-center p-5">
         <div
           style={{
             backgroundImage: `url(${
-              image ||
+              currentUser?.image ||
               "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
             })`,
             width: `200px`,

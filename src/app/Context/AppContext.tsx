@@ -1,5 +1,6 @@
 "use client";
 import { getAllUsers, getCurrentUser } from "@/utils/service/queries";
+import { LOCAL_STORAGE } from "@/utils/service/storage";
 import React, {
   createContext,
   useContext,
@@ -55,6 +56,7 @@ export const AppContextProvider = ({ children }: any) => {
       setCurrentUser(res);
       console.log(res);
     });
+    // setCurrentUser(LOCAL_STORAGE.get("sender"))
   }, []);
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;

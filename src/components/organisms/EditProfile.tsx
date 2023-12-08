@@ -23,7 +23,7 @@ const EditProfile = () => {
     <div>
       <Dp
         image={""}
-        content={""}
+        content="Change Profile picture"
         onClick={function (): void {
           throw new Error("Function not implemented.");
         }}

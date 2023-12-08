@@ -24,6 +24,7 @@ const socket = io("http://localhost:3001", {
 
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
+import { sendError } from "next/dist/server/api-utils";
 
 const Chats = () => {
   const param = useParams();
@@ -40,6 +41,8 @@ const Chats = () => {
       return null;
     }
   );
+
+  const activeChat = JSON.parse(localStorage.getItem("activeChat") as string) || {};
 
   // useEffect(() => {
   socket.on("message", (data) => {
@@ -107,19 +110,18 @@ const Chats = () => {
     <>
       <div className="w-full flex justify-between">
         <div
-          className={`relative flex flex-col h-full w-full mobile:max-sm:${
-            showInfoCard ? "hidden" : "visible"
-          }`}
+          className={`relative flex flex-col h-full w-full mobile:max-sm:${showInfoCard ? "hidden" : "visible"
+            }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
             <div className="flex items-center">
               <Avatar
                 size={4}
-                profilePicture="https://i.pinimg.com/564x/17/f7/ba/17f7baaff77ee55d8807fcd7b2d2f47a.jpg"
+                profilePicture={activeChat?.image || "https://i.pinimg.com/564x/17/f7/ba/17f7baaff77ee55d8807fcd7b2d2f47a.jpg"}
                 onClick={handleAvatarClick}
               />
               <div className="ml-4 ">
-                <p className="text-md">John Doe</p>
+                <p className="text-md">{activeChat.name}</p>
                 {/* <span className="text-gray-500 text-xs">online/offline</span> */}
               </div>
             </div>
