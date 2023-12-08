@@ -7,7 +7,7 @@ type Props = {
 
 const Emojis = ["🙏", "❤️", "😂", "😮", "😥", "👍"];
 
-const EmojiMessage = forwardRef<HTMLDivElement, Props>((props: Props, ref) => {
+const EmojiMessage = (props: Props) => {
   // const EmojiMessage = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const [target, setTarget] = useState("");
   const handleEmojie = async (emoji: string) => {
@@ -16,7 +16,7 @@ const EmojiMessage = forwardRef<HTMLDivElement, Props>((props: Props, ref) => {
   };
 
   return (
-    <div className={props.classname} ref={ref}>
+    <div className={props.classname}>
       <div className="modalEmojie p-2  bg-white w-75 z-100 overflow-auto border border-[#e7e6e641] rounded-[12px] text-[30px] absolute place-content-center -top-[100px] cursor-pointer">
         <div className=" flex justify-center items-center gap-2 relative">
           {Emojis.map((emoji) => (
@@ -36,6 +36,8 @@ const EmojiMessage = forwardRef<HTMLDivElement, Props>((props: Props, ref) => {
       </div>
     </div>
   );
-});
+};
+//eslint-disable next-line
+EmojiMessage.displayName = EmojiMessage;
 
-export default React.memo(EmojiMessage);
+export default EmojiMessage;

@@ -24,7 +24,7 @@ type Props = {
   isGroupdiscussion: boolean;
 };
 //exlint:disable-next-line
-const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
+const Messages = (props: Props) => {
   const [target, setTarget] = useState<string>(props.messageList[0].id);
   const [emojie, setEmojie] = useState<string>();
   const [messageId, setMessageId] = useState<string>("");
@@ -101,11 +101,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
           </span>
         </div>
         {props.showMessageEmoji && sortMessageList[0].id === target && (
-          <EmojiMessage
-            setEmojie={getEmoji}
-            classname=" translate-x-[10%]"
-            ref={ref}
-          />
+          <EmojiMessage setEmojie={getEmoji} classname=" translate-x-[10%]" />
         )}
         {sortMessageList[0].emoji ? (
           <span className=" w-10 h-10 rounded-full  border border-slate-200  text-[22px] bg-white shadow-sm  flex justify-center items-center p-[5px] transition-transform duration-1000 ease-in-out translate-y-[-20%] translate-x-[30%]">
@@ -129,7 +125,6 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
           <EmojiMessage
             setEmojie={getEmoji}
             classname="absolute top-[250px] right-[300px]"
-            ref={ref}
           />
         )}
         <div className="flex justify-end">
@@ -220,11 +215,7 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
           </div>
 
           {props.showMessageEmoji && messages.id === target && (
-            <EmojiMessage
-              setEmojie={getEmoji}
-              classname=" translate-x-[10%]"
-              ref={ref}
-            />
+            <EmojiMessage setEmojie={getEmoji} classname=" translate-x-[10%]" />
           )}
           {messages.emoji ? (
             <span className=" w-10 h-10 rounded-full  border border-slate-200  text-[22px] bg-white shadow-sm  flex justify-center items-center p-[5px] transition-transform duration-1000 ease-in-out translate-y-[-20%] translate-x-[30%]">
@@ -249,7 +240,6 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
             <EmojiMessage
               setEmojie={getEmoji}
               classname="relative -right-72 top-5"
-              ref={ref}
             />
           )}
           <div className="flex justify-end items-center" key={i}>
@@ -315,8 +305,8 @@ const Messages = forwardRef<HTMLDivElement, Props>((props, ref) => {
       {listOfMessages}
     </div>
   );
-});
+};
 
 Messages.displayName = Messages;
 
-export default React.memo(Messages);
+export default Messages;
