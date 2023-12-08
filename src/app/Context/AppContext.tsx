@@ -1,5 +1,6 @@
 "use client";
 import { getAllUsers, getCurrentUser } from "@/utils/service/queries";
+import { LOCAL_STORAGE } from "@/utils/service/storage";
 import React, {
   createContext,
   useContext,
@@ -10,10 +11,10 @@ import React, {
 } from "react";
 
 interface DataType {
-  currentUser: User;
-  setCurrentUser: Dispatch<SetStateAction<User>>;
-  allUsers: [];
-  setAllUsers: Dispatch<SetStateAction<[]>>;
+  currentUser: Room;
+  setCurrentUser: Dispatch<SetStateAction<Room>>;
+  allUsers: Room[];
+  setAllUsers: Dispatch<SetStateAction<Room[]>>;
 }
 
 const initialState: DataType = {
@@ -21,8 +22,8 @@ const initialState: DataType = {
     id: "",
     name: "",
     email: "",
-    createdAt: "",
-    updatedAt: "",
+    phone: "",
+    image: "",
   },
   setCurrentUser: () => {},
   allUsers: [],
@@ -33,10 +34,10 @@ const AppContext = createContext<DataType>(initialState);
 // export default AppContext;
 
 export const AppContextProvider = ({ children }: any) => {
-  const [currentUser, setCurrentUser] = useState<User>(
+  const [currentUser, setCurrentUser] = useState<Room>(
     initialState.currentUser
   );
-  const [allUsers, setAllUsers] = useState<[]>([]);
+  const [allUsers, setAllUsers] = useState<Room[]>([]);
 
   const values = {
     currentUser,
@@ -55,6 +56,7 @@ export const AppContextProvider = ({ children }: any) => {
       setCurrentUser(res);
       console.log(res);
     });
+    // setCurrentUser(LOCAL_STORAGE.get("sender"))
   }, []);
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;

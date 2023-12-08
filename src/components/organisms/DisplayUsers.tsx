@@ -9,7 +9,7 @@ type Props = {
   goToCreateGrt: () => void;
 };
 
-const DisplayUsers = ({ users, contactClick, goToCreateGrt }: Props) => {
+const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
   const { allUsers } = useAppContext();
 
   return (
@@ -28,19 +28,15 @@ const DisplayUsers = ({ users, contactClick, goToCreateGrt }: Props) => {
         CONTACTS ON WAXCHAT
       </p>
 
-      {users.map((user: User) => (
+      {allUsers?.map((user: Room) => (
         <ContactCard
-          key={user.id}
-          id={user.id}
-          name={user.name}
-          email={user.email}
-          updatedAt={""}
-          onClick={() => contactClick(user)}
-          notification={""}
-          active={false}
-          image={user?.image || ""}
-          className={""}
-        />
+        user={user}
+        key={user.id}
+        onClick={() => contactClick(user as User)}
+        notification={""}
+        active={false}
+        className={""}
+      />
       ))}
     </div>
   );

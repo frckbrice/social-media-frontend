@@ -1,4 +1,5 @@
 "use client";
+import { useAppContext } from "@/app/Context/AppContext";
 import React, { useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import DropdownModal from "../atoms/DropdownModal";
@@ -11,6 +12,8 @@ type Props = {
 };
 
 const Dp = ({ image, onClick, content }: Props) => {
+  const { currentUser, allUsers } = useAppContext();
+
   const [openModal, setOpenModal] = useState(false);
   return (
     <div>
@@ -18,7 +21,7 @@ const Dp = ({ image, onClick, content }: Props) => {
         <div
           style={{
             backgroundImage: `url(${
-              image ||
+              currentUser?.image ||
               "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
             })`,
             width: `200px`,

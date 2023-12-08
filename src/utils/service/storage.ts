@@ -18,11 +18,8 @@ export class LOCAL_STORAGE {
 
     if (data) {
       if (options.type === "STRING") return data;
-      return JSON.parse(data);
+      // return JSON.parse(data);
+      return null;
     }
   }
-
-  // static delete(key: string) {
-  //   return localStorage.removeItem(key);
-  // }
 }
