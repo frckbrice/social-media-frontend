@@ -1,11 +1,14 @@
 type User = {
-  name: string;
+  id: string;
   image: string;
+  isGroup?: false;
+  my_id: string;
+  name: string;
+  updatedAt?: string;
+  createdAt?: string;
+  user_id: string;
   phone: string;
   email: string;
-  id?: string;
-  createdAt?: string;
-  updatedAt?: string;
 };
 
 type Message = {
@@ -29,14 +32,14 @@ type RoomUser = {
 };
 
 type Room = {
-  id?: string;
+  id: string;
   image: string;
   isGroup?: false;
-  my_id?: string;
+  my_id: string;
   name: string;
   updatedAt?: string;
   createdAt?: string;
-  user_id?: string;
-  phone?: string;
-  email?: string;
+  user_id: string;
+  phone: string;
+  email: string;
 };
