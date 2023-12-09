@@ -24,6 +24,8 @@ const initialState: DataType = {
     email: "",
     phone: "",
     image: "",
+    my_id: "",
+    user_id: "",
   },
   setCurrentUser: () => {},
   allUsers: [],
