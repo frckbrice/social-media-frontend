@@ -176,6 +176,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                   key={user.id}
                   onClick={() => {
                     router.push(`/discussions/${user.id}`);
+                    localStorage.setItem("receiver", JSON.stringify(user));
                   }}
                   notification={""}
                   active={false}
