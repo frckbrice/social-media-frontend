@@ -10,19 +10,22 @@ import { useAppContext } from "@/app/Context/AppContext";
 import { MdEmojiEmotions } from "react-icons/md";
 import { BsCheck2 } from "react-icons/bs";
 import { RiPencilFill } from "react-icons/ri";
-import { uplaodImage } from "@/utils/service/queries";
+import { updateProfileName, uplaodImage } from "@/utils/service/queries";
+import { IoMdClose } from "react-icons/io";
 
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
   const [onEditAbout, setOnEditAbout] = useState(false);
   const { currentUser } = useAppContext();
   const [userName, setUserName] = useState(currentUser?.name);
+  const [about, setAbout] = useState("")
 
   const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
 
   const inputRef: any = useRef();
 
-  const handleUpdateName = () => {
+  const handleUpdateName = async () => {
+    updateProfileName(userName, currentUser.id)
     setOnEditName(false);
   };
 
@@ -56,6 +59,7 @@ const EditProfile = () => {
           <div className="flex justify-between items-center text-primaryText border-b border-b-slate-900 w-full">
             <input
               defaultValue={userName}
+              onChange={(e) => setUserName(e.target.value)}
               type="text"
               className="outline-0 text-sm font-normal mb-1"
             />
@@ -63,9 +67,17 @@ const EditProfile = () => {
               <button>
                 <MdEmojiEmotions size={20} />
               </button>
-              <button onClick={handleUpdateName}>
+              <button
+                className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
+                onClick={handleUpdateName}>
                 <BsCheck2 size={20} />
               </button>
+              <span
+                  className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
+                  onClick={() => setOnEditName(prev => !prev)}
+                >
+                  <IoMdClose size={23} />
+                </span>   
             </div>
           </div>
         ) : (
@@ -107,6 +119,8 @@ const EditProfile = () => {
               // defaultValue={}
               type="text"
               className="outline-0 text-sm font-normal mb-1 "
+              onChange={(e) => setAbout(e.target.value)}
+              value={about}
             />
             <div className="flex gap-2 mb-1">
               <button>

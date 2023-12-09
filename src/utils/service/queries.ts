@@ -92,3 +92,8 @@ export const addGroupMembers = async (
     apiCall.POST(SITE_URL + "", { user_id: member, room_id, role: "member" });
   });
 };
+
+// Update profile name
+export const updateProfileName = async (name: string, id: string) => {
+  return apiCall.PUT(SITE_URL + `/rooms/${id}`, name)
+}
