@@ -21,7 +21,7 @@ const Dp = ({ image, onClick, content }: Props) => {
         <div
           style={{
             backgroundImage: `url(${
-              currentUser?.image ||
+              image ||
               "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
             })`,
             width: `200px`,
@@ -39,7 +39,7 @@ const Dp = ({ image, onClick, content }: Props) => {
               width: `200px`,
               height: `200px`,
             }}
-            className=" opacity-50 rounded-[50%] text-sm items-center hover:bg-[#131a23] h-full p-10 w-full flex flex-col justify-center text-center hover:text-white text-tranparent text-hidden"
+            className=" opacity-50 rounded-[50%] text-sm items-center hover:bg-[#131a23] h-full p-10 w-full flex flex-col justify-center text-center hover:text-white font-bold text-tranparent "
           >
             <FaCamera size={20} />
             {content}

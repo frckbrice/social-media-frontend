@@ -7,7 +7,8 @@ import { MdEmojiEmotions } from "react-icons/md";
 import { BsCheck2 } from "react-icons/bs";
 import { RiPencilFill } from "react-icons/ri";
 import { VscPassFilled } from "react-icons/vsc";
-import { uplaodImage } from "@/utils/service/queries";
+import { createGroup, uplaodImage } from "@/utils/service/queries";
+import { LOCAL_STORAGE } from "@/utils/service/storage";
 
 function GroupSetup() {
   const [onEditName, setOnEditName] = useState(false);
@@ -31,7 +32,29 @@ function GroupSetup() {
 
   const inputRef: any = useRef();
 
-  const onClickNext = () => {};
+  const handleCreateGroup = async () => {
+    const members = JSON.parse(localStorage.getItem("group_members") || "");
+    const membersIDs = members.map((member: User) => member.id);
+    const groupData = {
+      name: groupName,
+      image: groupIcon,
+      my_id: "6572c2e0e1ddfe57a4cf3f57",
+      isGroup: true,
+    };
+    await createGroup(groupData).then((res) => {
+      if (res.error) {
+        console.log(res.message);
+        return;
+      } else {
+        console.log("created group", res);
+      }
+    });
+
+    // console.log("group members", members);
+    console.log("groupData ", groupData);
+    setGroupIcon("");
+    setGroupName("");
+  };
 
   return (
     <div className=" h-full">
@@ -61,7 +84,7 @@ function GroupSetup() {
 
       <div className="bg-bgGray absolute w-full bottom-0 flex items-center py-3 ">
         <button
-          onClick={onClickNext}
+          onClick={handleCreateGroup}
           className="w-[2.5rem] text-themecolor  m-auto"
         >
           <VscPassFilled size={50} />

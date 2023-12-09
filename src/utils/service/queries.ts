@@ -44,7 +44,7 @@ export const createRoom = async (user: {
 
 export const getAllRooms = async () => {
   const id = LOCAL_STORAGE.get("userId");
-  const sender = JSON.parse(localStorage.getItem('sender') || '{}')
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
   const res = await fetch(SITE_URL + `/rooms/my_dm/${sender.user_id}`, {
     next: { revalidate: 3000 },
   });
@@ -70,4 +70,25 @@ export const uplaodImage = async (file: any) => {
     console.log("group icon download url", imageUrl.data.publicUrl);
     return imageUrl.data.publicUrl;
   }
+};
+
+// CREAT GROUP
+
+export const createGroup = async (groupData: {
+  name: string;
+  image: string;
+  my_id: string;
+  isGroup: boolean;
+}) => {
+  return apiCall.POST(SITE_URL + "/rooms", groupData);
+};
+
+// Add Group Members
+export const addGroupMembers = async (
+  members: [id: string],
+  room_id: string
+) => {
+  return members.map((member) => {
+    apiCall.POST(SITE_URL + "", { user_id: member, room_id, role: "member" });
+  });
 };
