@@ -1,4 +1,5 @@
 "use client";
+import { useAppContext } from "@/app/Context/AppContext";
 import React, { useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import DropdownModal from "../atoms/DropdownModal";
@@ -11,6 +12,8 @@ type Props = {
 };
 
 const Dp = ({ image, onClick, content }: Props) => {
+  const { currentUser, allUsers } = useAppContext();
+
   const [openModal, setOpenModal] = useState(false);
   return (
     <div>
@@ -36,7 +39,7 @@ const Dp = ({ image, onClick, content }: Props) => {
               width: `200px`,
               height: `200px`,
             }}
-            className=" opacity-50 rounded-[50%] text-sm items-center hover:bg-[#131a23] h-full p-10 w-full flex flex-col justify-center text-center hover:text-white text-tranparent text-hidden"
+            className=" opacity-50 rounded-[50%] text-sm items-center hover:bg-[#131a23] h-full p-10 w-full flex flex-col justify-center text-center hover:text-white font-bold text-tranparent "
           >
             <FaCamera size={20} />
             {content}

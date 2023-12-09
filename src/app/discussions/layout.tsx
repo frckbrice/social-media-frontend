@@ -25,6 +25,7 @@ import { json } from "node:stream/consumers";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { SITE_URL } from "@/utils/service/constant";
 import GroupSetup from "@/components/organisms/GroupSetup";
+import LogOutPopUp from "@/components/molecules/logOutPopup";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -35,11 +36,20 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showDropDown, setShowDropdown] = useState(false);
   const [showCreateGrp, setShowCreateGrp] = useState(false);
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
-  // const [currentUserId, setCurrentUserId] = useState(
-  //   localStorage.getItem("userId")
-  // );
+  const [showPopup, setShowPopup] = useState(false)
+  const [currentUsers, setCurrentUsers] = useState<Room | null>(
+    (): Room | null => {
+      if (typeof localStorage !== "undefined") {
+        const fromLocalStorage =
+          JSON.parse(localStorage.getItem("sender") as string) || {};
+        if (fromLocalStorage) return fromLocalStorage;
+      }
+      return null;
+    }
+  )
+
   const { currentUser, allUsers } = useAppContext();
-  const [chatRooms, setChatRooms] = useState<Array<ChatRoom>>([]);
+  const [chatRooms, setChatRooms] = useState<Room[]>([]);
 
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
@@ -55,11 +65,15 @@ function Discussion({ children }: { children: React.ReactNode }) {
     },
     {
       label: "Logout",
-      function: () => {},
+      function: () => {
+        setShowPopup(prev => !prev)
+
+        setShowDropdown((prev) => !prev)
+      },
     },
   ];
 
-  console.log("paramName", paramName);
+  // console.log("paramName", paramName);
 
   // filter all users
   const filterAllUsers = (e: { target: { value: any } }) => {
@@ -76,19 +90,19 @@ function Discussion({ children }: { children: React.ReactNode }) {
   }, []);
 
   // HANDLE START CHAT
-  const handleStartChat = async (user: User) => {
-    const myID = JSON.parse(localStorage.getItem("userId") || "{}");
+  const handleStartChat = async (user: Room) => {
+    const myID = JSON.parse(localStorage.getItem("sender") || "{}");
     console.log(myID);
 
     console.log("start group with", user);
-    if (myID) {
+    if (myID.id) {
       await createRoom({
         name: user.name,
-        email: user.email,
+        email: user.email as string,
         image: user.image,
         isGroup: false,
-        user_id: user.id,
-        my_id: myID,
+        user_id: user.id as string,
+        my_id: currentUsers?.user_id,
       }).then((res: any) => {
         if (!res.message) {
           router.push(`/discussions/${res.id}`);
@@ -108,8 +122,13 @@ function Discussion({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const handleClose = () => {
+    setShowPopup(prev => !prev)
+  }
+
   return (
     <>
+      <LogOutPopUp visible={showPopup} onClose={() => handleClose()}/>
       {showDropDown && (
         <Overlay onClick={() => setShowDropdown(false)} transparent />
       )}
@@ -122,10 +141,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
         >
           <div className="flex relative  w-[30vw] items-center justify-between mobile:max-sm:w-full mobile:max-sm:bg-themecolor mobile:max-sm:text-white bg-bgGray p-2 text-primaryText">
             <Avatar
-              onClick={() => setOpenProfile(true)}
+              onClick={() => setOpenProfile((prev) => !prev)}
               size={4}
               profilePicture={
-                currentUser.image ||
+                currentUsers?.image ||
                 "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
               }
             />
@@ -174,9 +193,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
             <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
               {chatRooms?.map((user) => (
                 <ContactCard
-                  id={user.id}
-                  name={user.name}
-                  email={user.email}
+                  // id={user?.id as string}
+                  // name={user.name}
+                  // email={user.email}
+                  user={user}
                   key={user.id}
                   onClick={() => {
                     LOCAL_STORAGE.save("activeChat", user);
@@ -184,8 +204,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
                   }}
                   notification={""}
                   active={false}
-                  updatedAt={"11/30/2023"}
-                  image={user.image}
+                  // updatedAt={"11/30/2023"}
+                  // image={user.image}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}
                 />
               ))}
