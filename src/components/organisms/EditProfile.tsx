@@ -18,7 +18,7 @@ const EditProfile = () => {
   const { currentUser } = useAppContext();
   const [userName, setUserName] = useState(currentUser?.name);
 
-  const [profilePhoto, setProfilePhoto] = useState(currentUser.image);
+  const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
 
   const inputRef: any = useRef();
 

@@ -106,9 +106,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
       }).then((res: any) => {
         if (!res.message) {
           router.push(`/discussions/${res.id}`);
-          const rooms = chatRooms;
+          let rooms = chatRooms;
           if (!rooms.length) {
-            rooms.push(res);
+            rooms = [res];
             setChatRooms(rooms);
           } else {
             setChatRooms((prev) => [res, ...prev]);
