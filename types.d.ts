@@ -42,4 +42,5 @@ type Room = {
   user_id: string;
   phone: string;
   email: string;
+  original_dm_roomID?: string;
 };

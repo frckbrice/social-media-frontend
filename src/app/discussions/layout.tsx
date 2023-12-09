@@ -106,7 +106,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
         my_id: currentUser?.user_id.toString(),
       }).then((res: any) => {
         if (res) {
-          router.push(`/discussions/${res.id}`);
+          router.push(`/discussions/${res.original_dm_roomID}`);
           localStorage.setItem("receiver", JSON.stringify(res));
           setChatRooms(() =>
             chatRooms?.find((room: Room) => room.id === res.id)
@@ -195,7 +195,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                   user={user}
                   key={user.id}
                   onClick={() => {
-                    router.push(`/discussions/${user.id}`);
+                    router.push(`/discussions/${user.original_dm_roomID}`);
                     localStorage.setItem("receiver", JSON.stringify(user));
                   }}
                   notification={""}

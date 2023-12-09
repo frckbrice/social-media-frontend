@@ -15,7 +15,7 @@ export const signUp = (newUser: {
 
 // GET ALL USERS  from room table
 export const getAllUsers = async () => {
-  const res = await fetch(SITE_URL + "/rooms", { next: { revalidate: 3600 } });
+  const res = await fetch(SITE_URL + "/users", { next: { revalidate: 3600 } });
   return await res.json();
 };
 
