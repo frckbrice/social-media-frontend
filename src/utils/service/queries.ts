@@ -78,17 +78,19 @@ export const createGroup = async (groupData: {
   name: string;
   image: string;
   my_id: string;
+  user_id: string;
   isGroup: boolean;
 }) => {
   return apiCall.POST(SITE_URL + "/rooms", groupData);
 };
 
 // Add Group Members
-export const addGroupMembers = async (
-  members: [id: string],
-  room_id: string
-) => {
+export const addGroupMembers = async (members: string[], room_id: string) => {
   return members.map((member) => {
-    apiCall.POST(SITE_URL + "", { user_id: member, room_id, role: "member" });
+    apiCall.POST(SITE_URL + "/rooms_users", {
+      user_id: member,
+      room_id,
+      role: "member",
+    });
   });
 };
