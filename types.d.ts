@@ -43,3 +43,8 @@ type Room = {
   phone: string;
   email: string;
 };
+
+type AddMembersProps = {
+  members: string[];
+  room_id: string;
+};

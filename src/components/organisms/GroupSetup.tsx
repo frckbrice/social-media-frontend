@@ -7,15 +7,23 @@ import { MdEmojiEmotions } from "react-icons/md";
 import { BsCheck2 } from "react-icons/bs";
 import { RiPencilFill } from "react-icons/ri";
 import { VscPassFilled } from "react-icons/vsc";
-import { createGroup, uplaodImage } from "@/utils/service/queries";
-import { LOCAL_STORAGE } from "@/utils/service/storage";
+import {
+  addGroupMembers,
+  createGroup,
+  uplaodImage,
+} from "@/utils/service/queries";
+import { useAppContext } from "@/app/Context/AppContext";
 
-function GroupSetup() {
-  const [onEditName, setOnEditName] = useState(false);
-  const [onEditAbout, setOnEditAbout] = useState(false);
+type setupProps = {
+  closeModal: () => void;
+};
+
+function GroupSetup({ closeModal }: setupProps) {
   const [groupName, setGroupName] = useState("");
   const [groupIcon, setGroupIcon] = useState("");
   //   const [file, setFile] = useState<FileList | null>();
+
+  const { currentUser } = useAppContext();
 
   const handleImageUpload = async (e: any) => {
     // setFile(e.target.files[0]);
@@ -33,27 +41,43 @@ function GroupSetup() {
   const inputRef: any = useRef();
 
   const handleCreateGroup = async () => {
+    if (!groupName || !groupIcon) {
+      console.log("please add group and group icon");
+      return;
+    }
     const members = JSON.parse(localStorage.getItem("group_members") || "");
-    const membersIDs = members.map((member: User) => member.id);
+    let membersIDs = members.map((member: User) => member.id);
+    if (!members.find((member: string) => member === currentUser.user_id)) {
+      membersIDs = [...membersIDs, currentUser.user_id];
+    }
+    console.log("membersId,", membersIDs);
+
     const groupData = {
       name: groupName,
       image: groupIcon,
-      my_id: "6572c2e0e1ddfe57a4cf3f57",
+      user_id: Math.floor(Math.random() * 256).toString(),
+      my_id: currentUser.user_id,
       isGroup: true,
     };
-    await createGroup(groupData).then((res) => {
+    await createGroup(groupData).then(async (res) => {
       if (res.error) {
         console.log(res.message);
         return;
       } else {
+        await addGroupMembers(membersIDs, res.id).then((response) => {
+          console.log("groupMembers: ", response);
+        });
         console.log("created group", res);
+        return res;
       }
     });
 
     // console.log("group members", members);
     console.log("groupData ", groupData);
-    setGroupIcon("");
+    // setGroupIcon("");
     setGroupName("");
+    localStorage.removeItem("group_members");
+    closeModal();
   };
 
   return (

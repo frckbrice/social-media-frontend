@@ -55,11 +55,11 @@ export const AppContextProvider = ({ children }: any) => {
     });
 
     // getCurrentUser().then((res) => {
-    //   setCurrentUser(res);
+    //   // setCurrentUser(res);
     //   console.log(res);
     // });
-    setCurrentUser(JSON.parse(localStorage.getItem('sender') || '{}'))
-    console.log(JSON.parse(localStorage.getItem('sender') || '{}'))
+    setCurrentUser(JSON.parse(localStorage.getItem("sender") || "{}"));
+    console.log(JSON.parse(localStorage.getItem("sender") || "{}"));
   }, []);
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
