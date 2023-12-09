@@ -10,20 +10,30 @@ import { useAppContext } from "@/app/Context/AppContext";
 import { MdEmojiEmotions } from "react-icons/md";
 import { BsCheck2 } from "react-icons/bs";
 import { RiPencilFill } from "react-icons/ri";
-import { uplaodImage } from "@/utils/service/queries";
+import { updateProfileName, uplaodImage } from "@/utils/service/queries";
+import { IoMdClose } from "react-icons/io";
 
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
   const [onEditAbout, setOnEditAbout] = useState(false);
   const { currentUser } = useAppContext();
   const [userName, setUserName] = useState(currentUser?.name);
+  const [about, setAbout] = useState("")
 
   const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
 
   const inputRef: any = useRef();
 
-  const handleUpdateName = () => {
-    setOnEditName(false);
+  const email = JSON.parse(localStorage.getItem('email') || '')
+  const handleUpdateName = async () => {
+    updateProfileName(userName, currentUser.id)
+      .then((res) => {
+        console.log('updated user', res)
+      })
+      .catch((error) => {
+        console.log('error', error)
+      })
+    setOnEditName((prev) => !prev);
   };
 
   const handleUpdateAbout = () => {
@@ -56,16 +66,25 @@ const EditProfile = () => {
           <div className="flex justify-between items-center text-primaryText border-b border-b-slate-900 w-full">
             <input
               defaultValue={userName}
+              onChange={(e) => setUserName(e.target.value)}
               type="text"
               className="outline-0 text-sm font-normal mb-1"
             />
             <div className="flex gap-2 mb-1">
-              <button>
+              {/* <button>
                 <MdEmojiEmotions size={20} />
-              </button>
-              <button onClick={handleUpdateName}>
+              </button> */}
+              <button
+                className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
+                onClick={handleUpdateName}>
                 <BsCheck2 size={20} />
               </button>
+              <span
+                className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
+                onClick={() => setOnEditName(prev => !prev)}
+              >
+                <IoMdClose size={23} />
+              </span>
             </div>
           </div>
         ) : (
@@ -91,10 +110,11 @@ const EditProfile = () => {
         </p>
       </div>
       <div className="p-5 flex flex-col gap-5 text-primaryText">
-        <span className="text-sm text-darkgreen">About</span>
+        <span className="text-sm text-darkgreen">Email</span>
       </div>
+      <span className="text-sm font-normal p-5 text-primaryText">{email}</span>
 
-      {!onEditAbout ? (
+      {/* {!onEditAbout ? (
         <div className="px-5">
           <button onClick={() => setOnEditAbout((prev) => !prev)}>
             <RiPencilFill size={20} />
@@ -107,6 +127,8 @@ const EditProfile = () => {
               // defaultValue={}
               type="text"
               className="outline-0 text-sm font-normal mb-1 "
+              onChange={(e) => setAbout(e.target.value)}
+              value={about}
             />
             <div className="flex gap-2 mb-1">
               <button>
@@ -118,7 +140,7 @@ const EditProfile = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

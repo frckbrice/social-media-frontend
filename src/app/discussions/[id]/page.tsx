@@ -114,20 +114,21 @@ const Chats = () => {
             }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
-            <div className="flex items-center">
+            <div
+              onClick={handleAvatarClick}
+              className="flex items-center hover:cursor-ponter">
               <Avatar
                 size={4}
                 profilePicture={activeChat?.image || "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"}
-                onClick={handleAvatarClick}
               />
               <div className="ml-4 ">
-                <p className="text-md">{activeChat.name}</p>
+                <p className="text-md hover:cursor-pointer ">{activeChat.name}</p>
                 {/* <span className="text-gray-500 text-xs">online/offline</span> */}
               </div>
             </div>
             <div className="flex items-center text-gray-500 text-xl">
               <FaSearch className="mr-8" />
-              <FaEllipsisV className="mr-2" />
+              <FaEllipsisV onClick={handleAvatarClick} className="mr-2 hover:cursor-pointer  hover:bg-gray-300 rounded-full w-fit self-center" />
             </div>
           </div>
 
@@ -190,11 +191,12 @@ const Chats = () => {
             title={"Contact info"}
             onClose={() => setShowInfoCard((prev) => !prev)}
             picture={
-              "https://i.pinimg.com/564x/fe/85/c3/fe85c35b97c3f14082ac2edfb25eba44.jpg"
+              activeChat?.image ||
+              "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
             }
-            name={"Caleb matins"}
+            name={activeChat?.name}
             about={"made of gold"}
-            email={"calebmatins@gmail.com"}
+            email={activeChat?.email}
           />
         )}
       </div>

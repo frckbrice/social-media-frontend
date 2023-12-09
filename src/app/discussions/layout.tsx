@@ -144,7 +144,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
               onClick={() => setOpenProfile((prev) => !prev)}
               size={4}
               profilePicture={
-                currentUsers?.image ||
+                currentUser?.image ||
                 "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
               }
             />
