@@ -9,8 +9,8 @@ type Props = {
   goToCreateGrt: () => void;
 };
 
-const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
-  const { allUsers } = useAppContext();
+const DisplayUsers = ({ contactClick, goToCreateGrt, users }: Props) => {
+  // const { allUsers } = useAppContext();
 
   return (
     <div className=" h-[calc(100vh-161px)] bigScreen:h-[calc(95vh-153px)] overflow-x-hidden overflow-y-scroll">
@@ -28,7 +28,7 @@ const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
         CONTACTS ON WAXCHAT
       </p>
 
-      {allUsers?.map((user: Room) => (
+      {users?.map((user: Room) => (
         <ContactCard
           user={user}
           key={user.id}
