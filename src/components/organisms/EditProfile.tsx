@@ -24,9 +24,16 @@ const EditProfile = () => {
 
   const inputRef: any = useRef();
 
+  const email = JSON.parse(localStorage.getItem('email') || '')
   const handleUpdateName = async () => {
     updateProfileName(userName, currentUser.id)
-    setOnEditName(false);
+      .then((res) => {
+        console.log('updated user', res)
+      })
+      .catch((error) => {
+        console.log('error', error)
+      })
+    setOnEditName((prev) => !prev);
   };
 
   const handleUpdateAbout = () => {
@@ -64,20 +71,20 @@ const EditProfile = () => {
               className="outline-0 text-sm font-normal mb-1"
             />
             <div className="flex gap-2 mb-1">
-              <button>
+              {/* <button>
                 <MdEmojiEmotions size={20} />
-              </button>
+              </button> */}
               <button
                 className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
                 onClick={handleUpdateName}>
                 <BsCheck2 size={20} />
               </button>
               <span
-                  className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
-                  onClick={() => setOnEditName(prev => !prev)}
-                >
-                  <IoMdClose size={23} />
-                </span>   
+                className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
+                onClick={() => setOnEditName(prev => !prev)}
+              >
+                <IoMdClose size={23} />
+              </span>
             </div>
           </div>
         ) : (
@@ -103,10 +110,11 @@ const EditProfile = () => {
         </p>
       </div>
       <div className="p-5 flex flex-col gap-5 text-primaryText">
-        <span className="text-sm text-darkgreen">About</span>
+        <span className="text-sm text-darkgreen">Email</span>
       </div>
+      <span className="text-sm font-normal p-5 text-primaryText">{email}</span>
 
-      {!onEditAbout ? (
+      {/* {!onEditAbout ? (
         <div className="px-5">
           <button onClick={() => setOnEditAbout((prev) => !prev)}>
             <RiPencilFill size={20} />
@@ -132,7 +140,7 @@ const EditProfile = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -95,5 +95,6 @@ export const addGroupMembers = async (
 
 // Update profile name
 export const updateProfileName = async (name: string, id: string) => {
+  console.log('id', id)
   return apiCall.PUT(SITE_URL + `/rooms/${id}`, name)
 }
