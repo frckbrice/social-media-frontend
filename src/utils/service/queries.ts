@@ -41,17 +41,10 @@ export const createRoom = async (user: {
 // GET ALL ROOMS
 
 export const getAllRooms = async () => {
-<<<<<<< HEAD
   console.log("getallrooms fired");
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
   const res = await fetch(SITE_URL + `/rooms/my_dm/${sender?.user_id}`, {
     next: { revalidate: 30 },
-=======
-  const id = LOCAL_STORAGE.get("userId");
-  const sender = JSON.parse(localStorage.getItem('sender') || '{}')
-  const res = await fetch(SITE_URL + `/rooms/my_dm/${sender.user_id}`, {
-    next: { revalidate: 3000 },
->>>>>>> d826d07011cdf7146368bf7e9d97311a0282f5fd
   });
 
   return await res.json();
