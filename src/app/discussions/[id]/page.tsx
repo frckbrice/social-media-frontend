@@ -24,6 +24,7 @@ const socket = io("http://localhost:3001", {
 
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
+import { sendError } from "next/dist/server/api-utils";
 
 const Chats = () => {
   const param = useParams();
@@ -124,11 +125,14 @@ const Chats = () => {
             <div className="flex items-center">
               <Avatar
                 size={4}
-                profilePicture="https://i.pinimg.com/564x/17/f7/ba/17f7baaff77ee55d8807fcd7b2d2f47a.jpg"
+                profilePicture={
+                  receiver?.image ||
+                  "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+                }
                 onClick={handleAvatarClick}
               />
               <div className="ml-4 ">
-                <p className="text-md">John Doe</p>
+                <p className="text-md">{receiver?.name}</p>
                 {/* <span className="text-gray-500 text-xs">online/offline</span> */}
               </div>
             </div>

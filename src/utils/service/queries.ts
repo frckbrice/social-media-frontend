@@ -1,3 +1,4 @@
+import { supabase } from "../supabase/client";
 import { SITE_URL } from "./constant";
 import ApiCall from "./httpClient";
 import { LOCAL_STORAGE } from "./storage";
@@ -32,7 +33,7 @@ export const createRoom = async (user: {
   image?: string;
   isGroup: boolean;
   user_id: string;
-  my_id: string;
+  my_id: string | undefined;
 }) => {
   return apiCall.POST(SITE_URL + "/rooms", user);
 };
@@ -40,11 +41,38 @@ export const createRoom = async (user: {
 // GET ALL ROOMS
 
 export const getAllRooms = async () => {
+<<<<<<< HEAD
   console.log("getallrooms fired");
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
   const res = await fetch(SITE_URL + `/rooms/my_dm/${sender?.user_id}`, {
     next: { revalidate: 30 },
+=======
+  const id = LOCAL_STORAGE.get("userId");
+  const sender = JSON.parse(localStorage.getItem('sender') || '{}')
+  const res = await fetch(SITE_URL + `/rooms/my_dm/${sender.user_id}`, {
+    next: { revalidate: 3000 },
+>>>>>>> d826d07011cdf7146368bf7e9d97311a0282f5fd
   });
 
   return await res.json();
+};
+
+// UPLOAD IMAGE TO SUPABSE
+export const uplaodImage = async (file: any) => {
+  const fileValue = `groupIcon${Date.now()}.png`;
+
+  const { data, error } = await supabase.storage
+    .from("whatsapp_avatars/images")
+    .upload(fileValue, file);
+
+  if (error) {
+    console.error("error creatin group icon", error);
+  } else {
+    console.log("group icon data", data);
+    const imageUrl = supabase.storage
+      .from("whatsapp_avatars/images")
+      .getPublicUrl(data.path);
+    console.log("group icon download url", imageUrl.data.publicUrl);
+    return imageUrl.data.publicUrl;
+  }
 };

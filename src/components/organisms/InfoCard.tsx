@@ -20,6 +20,8 @@ const Profile = (props: Props) => {
     setIsContactInfoOpen(false);
   };
 
+  const changeProfilePhoto = () => {};
+
   return (
     <>
       {isContactInfoOpen && (
@@ -36,7 +38,11 @@ const Profile = (props: Props) => {
           </div>
 
           <div className="pt-28">
-            <Dp />
+            <Dp
+              image={""}
+              content={"CHANGE PROFILE PHOTO"}
+              onClick={changeProfilePhoto}
+            />
           </div>
           <div className=" w-full px-7 pr-6 py-4 text-[#667781] border-y border-y-gray-200 flex flex-col">
             <span className=" text-[#667781] border-y-gray-200 mb-3">
