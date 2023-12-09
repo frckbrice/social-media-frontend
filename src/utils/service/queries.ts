@@ -69,3 +69,24 @@ export const uplaodImage = async (file: any) => {
     return imageUrl.data.publicUrl;
   }
 };
+
+// CREAT GROUP
+
+export const createGroup = async (groupData: {
+  name: string;
+  image: string;
+  my_id: string;
+  isGroup: boolean;
+}) => {
+  return apiCall.POST(SITE_URL + "/rooms", groupData);
+};
+
+// Add Group Members
+export const addGroupMembers = async (
+  members: [id: string],
+  room_id: string
+) => {
+  return members.map((member) => {
+    apiCall.POST(SITE_URL + "", { user_id: member, room_id, role: "member" });
+  });
+};

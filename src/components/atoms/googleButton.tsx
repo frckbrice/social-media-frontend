@@ -40,7 +40,7 @@ const GoogleButton = () => {
         data-u
         className={
           isLoading
-            ? "hover:cursor-not-allowed"
+            ? "hover:cursor-not-allowed flex border border-themecolor text-xl items-center rounded p-4 gap-3 px-8   font-bold m-auto"
             : "flex border border-themecolor text-xl items-center rounded p-4 gap-3 px-8   font-bold m-auto"
         }
       >

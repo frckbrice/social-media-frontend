@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchInput from "../atoms/SearchInput";
 import ContactCard from "./ContactCard";
 import AddedMember from "../molecules/AddedMember";
@@ -13,9 +13,13 @@ type Props = {
 
 const AddGroupMembers = ({ users, onClickNext }: Props) => {
   const [userList, setUserList] = useState<Array<User>>(users);
-  const [members, setMembers] = useState<Array<User>>(
-    LOCAL_STORAGE.get("group_members") || []
-  );
+  const [members, setMembers] = useState<Array<User>>([]);
+
+  console.log("members", members);
+
+  useEffect(() => {
+    setMembers(LOCAL_STORAGE.get("group_members") || []);
+  }, []);
 
   // filter Group all contacts
   const handlefilter = (e: { target: { value: any } }) => {
@@ -40,11 +44,11 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
       return;
     }
 
-    let selectedMember = members;
+    let selectedMember: User[] = [];
     selectedMember.push(user);
-    LOCAL_STORAGE.save("group_members", selectedMember);
-    setMembers(LOCAL_STORAGE.get("group_members"));
-    selectedMember = [];
+    setMembers((prev) => [...prev, ...selectedMember]);
+
+    LOCAL_STORAGE.save("group_members", [...members, ...selectedMember]);
   };
 
   // REMOVE A GROUP MEMBER
@@ -59,7 +63,7 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
     <div className="relative h-[85vh] bigScreen:h-[80vh] ">
       <div className="p-4">
         <div className="flex overflow-y-auto  max-h-[80px] w-full flex-wrap gap-2">
-          {members.map((member) => (
+          {members?.map((member) => (
             <AddedMember
               key={member.id}
               name={member.name}
@@ -85,7 +89,7 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
           <ContactCard
             user={user}
             key={user.id}
-            onClick={() => user.id}
+            onClick={() => handelAddMembers(user)}
             notification={""}
             active={false}
             className={""}
