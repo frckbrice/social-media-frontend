@@ -16,7 +16,7 @@ const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
   const [onEditAbout, setOnEditAbout] = useState(false);
   const { currentUser } = useAppContext();
-  const [userName, setUserName] = useState(currentUser.name);
+  const [userName, setUserName] = useState(currentUser?.name);
 
   const [profilePhoto, setProfilePhoto] = useState(currentUser.image);
 
