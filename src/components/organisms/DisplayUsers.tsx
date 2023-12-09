@@ -30,13 +30,14 @@ const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
 
       {allUsers?.map((user: Room) => (
         <ContactCard
-        user={user}
-        key={user.id}
-        onClick={() => contactClick(user as User)}
-        notification={""}
-        active={false}
-        className={""}
-      />
+          user={user}
+          key={user.id}
+          onClick={() => contactClick(user as User)}
+          notification={""}
+          active={false}
+          className={""}
+          updatedAt={""}
+        />
       ))}
     </div>
   );
