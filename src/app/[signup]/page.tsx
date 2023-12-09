@@ -45,7 +45,7 @@ const Signupb = () => {
           if (data) {
             setCurrentUser(data);
             LOCAL_STORAGE.save("sender", data);
-            console.log(data);
+            console.log('userObject', data);
             setSuccess(`Welcome ${data.name}🙂`);
             router.push("/discussions");
             setIsLoading(false);

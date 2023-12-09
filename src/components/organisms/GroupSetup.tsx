@@ -12,7 +12,7 @@ import {
   createGroup,
   uplaodImage,
 } from "@/utils/service/queries";
-import { LOCAL_STORAGE } from "@/utils/service/storage";
+import { useAppContext } from "@/app/Context/AppContext";
 
 function GroupSetup() {
   const [onEditName, setOnEditName] = useState(false);
@@ -20,6 +20,8 @@ function GroupSetup() {
   const [groupName, setGroupName] = useState("");
   const [groupIcon, setGroupIcon] = useState("");
   //   const [file, setFile] = useState<FileList | null>();
+
+  const { currentUser } = useAppContext();
 
   const handleImageUpload = async (e: any) => {
     // setFile(e.target.files[0]);
@@ -42,15 +44,15 @@ function GroupSetup() {
       return;
     }
     const members = JSON.parse(localStorage.getItem("group_members") || "");
-    const membersIDs = members.map((member: User) => member.id);
+    let membersIDs = members.map((member: User) => member.id);
+    membersIDs = [...membersIDs, currentUser.user_id];
     console.log("membersId,", membersIDs);
 
     const groupData = {
       name: groupName,
       image: groupIcon,
       user_id: Math.floor(Math.random() * 256).toString(),
-      my_id: "6572c2e0e1ddfe57a4cf3f57",
-
+      my_id: currentUser.user_id,
       isGroup: true,
     };
     await createGroup(groupData).then(async (res) => {
@@ -70,6 +72,7 @@ function GroupSetup() {
     console.log("groupData ", groupData);
     // setGroupIcon("");
     setGroupName("");
+    localStorage.removeItem("group_members");
   };
 
   return (

@@ -86,11 +86,18 @@ export const createGroup = async (groupData: {
 
 // Add Group Members
 export const addGroupMembers = async (members: string[], room_id: string) => {
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
+
   return members.map((member) => {
     apiCall.POST(SITE_URL + "/rooms_users", {
       user_id: member,
       room_id,
-      role: "member",
+      role: `${member === sender.user_id ? "admin" : "member"}`,
     });
   });
+};
+
+// Update profile name
+export const updateProfileName = async (name: string, id: string) => {
+  return apiCall.PUT(SITE_URL + `/rooms/${id}`, name);
 };
