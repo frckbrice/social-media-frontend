@@ -36,7 +36,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showDropDown, setShowDropdown] = useState(false);
   const [showCreateGrp, setShowCreateGrp] = useState(false);
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
-  const [showPopup, setShowPopup] = useState(false)
+  const [showPopup, setShowPopup] = useState(false);
   const [currentUsers, setCurrentUsers] = useState<Room | null>(
     (): Room | null => {
       if (typeof localStorage !== "undefined") {
@@ -46,7 +46,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
       }
       return null;
     }
-  )
+  );
 
   const { currentUser, allUsers } = useAppContext();
   const [chatRooms, setChatRooms] = useState<Room[]>([]);
@@ -66,9 +66,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
     {
       label: "Logout",
       function: () => {
-        setShowPopup(prev => !prev)
+        setShowPopup((prev) => !prev);
 
-        setShowDropdown((prev) => !prev)
+        setShowDropdown((prev) => !prev);
       },
     },
   ];
@@ -123,12 +123,12 @@ function Discussion({ children }: { children: React.ReactNode }) {
   };
 
   const handleClose = () => {
-    setShowPopup(prev => !prev)
-  }
+    setShowPopup((prev) => !prev);
+  };
 
   return (
     <>
-      <LogOutPopUp visible={showPopup} onClose={() => handleClose()}/>
+      <LogOutPopUp visible={showPopup} onClose={() => handleClose()} />
       {showDropDown && (
         <Overlay onClick={() => setShowDropdown(false)} transparent />
       )}
@@ -207,6 +207,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                   // updatedAt={"11/30/2023"}
                   // image={user.image}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}
+                  updatedAt={user.updatedAt || ""}
                 />
               ))}
             </div>
@@ -270,7 +271,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             title="New group"
             clickToClose={() => setOpenGroupSetup((prev) => !prev)}
           >
-            <GroupSetup />
+            <GroupSetup closeModal={() => setOpenGroupSetup((prev) => !prev)} />
           </ProfileCard>
         )}
         <div

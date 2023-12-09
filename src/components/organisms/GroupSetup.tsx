@@ -14,9 +14,11 @@ import {
 } from "@/utils/service/queries";
 import { useAppContext } from "@/app/Context/AppContext";
 
-function GroupSetup() {
-  const [onEditName, setOnEditName] = useState(false);
-  const [onEditAbout, setOnEditAbout] = useState(false);
+type setupProps = {
+  closeModal: () => void;
+};
+
+function GroupSetup({ closeModal }: setupProps) {
   const [groupName, setGroupName] = useState("");
   const [groupIcon, setGroupIcon] = useState("");
   //   const [file, setFile] = useState<FileList | null>();
@@ -45,7 +47,9 @@ function GroupSetup() {
     }
     const members = JSON.parse(localStorage.getItem("group_members") || "");
     let membersIDs = members.map((member: User) => member.id);
-    membersIDs = [...membersIDs, currentUser.user_id];
+    if (!members.find((member: string) => member === currentUser.user_id)) {
+      membersIDs = [...membersIDs, currentUser.user_id];
+    }
     console.log("membersId,", membersIDs);
 
     const groupData = {
@@ -73,6 +77,7 @@ function GroupSetup() {
     // setGroupIcon("");
     setGroupName("");
     localStorage.removeItem("group_members");
+    closeModal();
   };
 
   return (
