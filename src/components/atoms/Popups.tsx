@@ -27,7 +27,7 @@ const Popups = ({
           onClick={onCancel}
           className="text-darkgreen border  px-6 py-1 rounded-[20px]"
         >
-          cansel
+          Cancel
         </button>
         <button
           onClick={onAction}

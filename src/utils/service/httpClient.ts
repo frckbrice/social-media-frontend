@@ -6,6 +6,7 @@ const Headers = {
 };
 
 export default class ApiCall {
+  
   async PUT(url: string, body: any, _headers: HeadersInit = {}) {
     return fetch(url, {
       method: "PUT",
@@ -13,6 +14,7 @@ export default class ApiCall {
       body: JSON.stringify(body)
     }).then((res) => res.json())
   }
+
   async GET(url: string, _headers: HeadersInit = {}) {
     return fetch(url, {
       method: "GET",
