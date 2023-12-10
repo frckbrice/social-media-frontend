@@ -75,17 +75,27 @@ export const createGroup = async (groupData: {
   name: string;
   image: string;
   my_id: string;
+  user_id: string;
   isGroup: boolean;
 }) => {
   return apiCall.POST(SITE_URL + "/rooms", groupData);
 };
 
 // Add Group Members
-export const addGroupMembers = async (
-  members: [id: string],
-  room_id: string
-) => {
+export const addGroupMembers = async (members: string[], room_id: string) => {
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
+
   return members.map((member) => {
-    apiCall.POST(SITE_URL + "", { user_id: member, room_id, role: "member" });
+    apiCall.POST(SITE_URL + "/rooms_users", {
+      user_id: member,
+      room_id,
+      role: `${member === sender.user_id ? "admin" : "member"}`,
+    });
   });
+};
+
+// Update profile name
+export const updateProfileName = async (name: string, id: string) => {
+  console.log("id", id);
+  return apiCall.PUT(SITE_URL + `/rooms/${id}`, name);
 };

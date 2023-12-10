@@ -42,3 +42,8 @@ type Room = {
   email: string;
   original_dm_roomID?: string;
 };
+
+type AddMembersProps = {
+  members: string[];
+  room_id: string;
+};

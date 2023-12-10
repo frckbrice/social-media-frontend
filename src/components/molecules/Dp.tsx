@@ -53,16 +53,17 @@ const Dp = ({ image, onClick, content }: Props) => {
               transparent
             />
             <div className="absolute top-[55%] right-0 z-40">
-              <DropdownModal
-                onClose={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
-              >
+              <DropdownModal onClose={() => setOpenModal((prev) => !prev)}>
                 <button
                   onClick={onClick}
-                  className="my-2 hover:bg-bgGray text-start p-2 text-slate-600 text-sm"
+                  className="my-2 hover:bg-bgGray text-start text-slate-600 text-sm"
                 >
-                  <span>Upload Photo</span>
+                  <span
+                    className="m-4 "
+                    onClick={() => setOpenModal((prev) => !prev)}
+                  >
+                    Upload Photo
+                  </span>
                 </button>
               </DropdownModal>
             </div>

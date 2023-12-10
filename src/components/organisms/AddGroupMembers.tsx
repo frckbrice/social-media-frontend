@@ -93,16 +93,21 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
             notification={""}
             active={false}
             className={""}
+            updatedAt={""}
           />
         ))}
       </div>
       <div className="bg-bgGray absolute w-full bottom-0 flex items-center py-3 ">
-        <button
-          onClick={onClickNext}
-          className="w-[2.5rem] text-themecolor  m-auto"
-        >
-          <FaCircleArrowRight size={50} />
-        </button>
+        {members.length ? (
+          <button
+            onClick={onClickNext}
+            className={`w-[2.5rem] text-themecolor   m-auto`}
+          >
+            <FaCircleArrowRight size={50} />
+          </button>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
