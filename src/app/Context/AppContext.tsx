@@ -1,5 +1,9 @@
 "use client";
-import { getAllUsers, getCurrentUser } from "@/utils/service/queries";
+import {
+  getAllRooms,
+  getAllUsers,
+  getCurrentUser,
+} from "@/utils/service/queries";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import React, {
   createContext,
@@ -15,6 +19,8 @@ interface DataType {
   setCurrentUser: Dispatch<SetStateAction<Room>>;
   allUsers: Room[];
   setAllUsers: Dispatch<SetStateAction<Room[]>>;
+  chatRooms: Room[];
+  setChatRooms: Dispatch<SetStateAction<Room[]>>;
 }
 
 const initialState: DataType = {
@@ -30,6 +36,8 @@ const initialState: DataType = {
   setCurrentUser: () => {},
   allUsers: [],
   setAllUsers: () => [],
+  chatRooms: [],
+  setChatRooms: () => [],
 };
 
 const AppContext = createContext<DataType>(initialState);
@@ -40,18 +48,27 @@ export const AppContextProvider = ({ children }: any) => {
     initialState.currentUser
   );
   const [allUsers, setAllUsers] = useState<Room[]>([]);
+  const [chatRooms, setChatRooms] = useState<Room[]>([]);
 
   const values = {
     currentUser,
     setCurrentUser,
     allUsers,
     setAllUsers,
+    chatRooms,
+    setChatRooms,
   };
 
   useEffect(() => {
     getAllUsers().then((res) => {
       setAllUsers(res);
       console.log(res);
+    });
+
+    // Get all chats rooms
+    getAllRooms().then((res) => {
+      console.log(res);
+      setChatRooms(res);
     });
 
     // getCurrentUser().then((res) => {

@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, ChangeEvent, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import Avatar from "@/components/atoms/Avatar";
 import {
   FaSearch,
@@ -25,10 +27,13 @@ const socket = io("http://localhost:3001", {
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
 import { sendError } from "next/dist/server/api-utils";
+import { IoMdArrowBack } from "react-icons/io";
 
 const Chats = () => {
   const param = useParams();
+  const router = useRouter();
   const [showInfoCard, setShowInfoCard] = useState(false);
+
   const [message, setMessage] = useState<string>("");
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<Room | null>(
@@ -116,17 +121,23 @@ const Chats = () => {
           }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
-            <div
-              onClick={handleAvatarClick}
-              className="flex items-center hover:cursor-ponter"
-            >
-              <Avatar
-                size={4}
-                profilePicture={
-                  activeChat?.image ||
-                  "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
-                }
-              />
+            <div className="flex items-center hover:cursor-ponter">
+              <>
+                <button
+                  onClick={() => router.push("/discussions")}
+                  className="sm:hidden mr-3 relative "
+                >
+                  <IoMdArrowBack size={20} />
+                </button>
+                <Avatar
+                  size={4}
+                  profilePicture={
+                    activeChat?.image ||
+                    "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+                  }
+                />
+              </>
+
               <div className="ml-4 ">
                 <p className="text-md hover:cursor-pointer ">
                   {activeChat.name}
