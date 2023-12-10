@@ -39,7 +39,6 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showCreateGrp, setShowCreateGrp] = useState(false);
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-<<<<<<< HEAD
   const [currentUser] = useState<Room | null>((): Room | null => {
     if (typeof localStorage !== "undefined") {
       const fromLocalStorage =
@@ -48,27 +47,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
     }
     return null;
   });
-=======
-  const [currentUsers, setCurrentUsers] = useState<Room | null>(
-    (): Room | null => {
-      if (typeof localStorage !== "undefined") {
-        const fromLocalStorage =
-          JSON.parse(localStorage.getItem("sender") as string) || {};
-        if (fromLocalStorage) return fromLocalStorage;
-      }
-      return null;
-    }
-  );
->>>>>>> 3dff68dee7bbfa1b3b20b6537e5e892ab84fad59
 
   const { allUsers } = useAppContext();
   const [chatRooms, setChatRooms] = useState<Room[]>([]);
-<<<<<<< HEAD
-=======
-  const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
-  const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
-
->>>>>>> 3dff68dee7bbfa1b3b20b6537e5e892ab84fad59
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
   };
@@ -91,56 +72,21 @@ function Discussion({ children }: { children: React.ReactNode }) {
     },
   ];
 
-<<<<<<< HEAD
   // filter all users
-=======
-  // console.log("paramName", paramName);
-
-  // HANDLE ALL USERS FILTER
->>>>>>> 3dff68dee7bbfa1b3b20b6537e5e892ab84fad59
   const filterAllUsers = (e: { target: { value: any } }) => {
-    const searchName = e.target.value;
-    const filteredResults = usersDisplay.filter((user) => {
-      return user.name.toLowerCase().includes(searchName.toLowerCase());
-    });
-    if (!filteredResults.length || !searchName.length) {
-      setUsersDisplay(allUsers);
-      return;
-    }
-    setUsersDisplay(filteredResults);
-    // console.log("filterAllUsers", filteredResults);
-    // console.log("keyword", e.target.value);
-  };
+    const mainUserData = allUsers;
 
-  // HANDLE FILTER CHAT ROOMS
-  const filterChatRoom = (e: { target: { value: any } }) => {
-    const searchName = e.target.value;
-    const filteredResults = chatRooms.filter((user) => {
-      return user.name.toLowerCase().includes(searchName.toLowerCase());
-    });
-    if (!filteredResults.length || !searchName.length) {
-      setFilterChats(chatRooms);
-      return;
-    }
-    setFilterChats(filteredResults);
-    // console.log("FilterChats", filteredResults);
-    // console.log("keyword", e.target.value);
+    console.log("keyword", e.target.value);
   };
 
   // FETCH CHAT ROOMS
   useEffect(() => {
     getAllRooms().then((res) => {
-<<<<<<< HEAD
       if (res.length) {
         LOCAL_STORAGE.save("chat-rooms", res);
         // console.log(res);
         setChatRooms(res);
       }
-=======
-      console.log(res);
-      setChatRooms(res);
-      setFilterChats(res);
->>>>>>> 3dff68dee7bbfa1b3b20b6537e5e892ab84fad59
     });
   }, []);
 
@@ -173,7 +119,6 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const handleClose = () => {
     setShowPopup((prev) => !prev);
   };
-<<<<<<< HEAD
 
   const handleClick = (user: Room) => {
     const data = {
@@ -182,11 +127,11 @@ function Discussion({ children }: { children: React.ReactNode }) {
     };
     console.log(data);
     socket.emit("roomMessages", data);
+
     router.push(`/discussions/${user.original_dm_roomID}`);
     localStorage.setItem("receiver", JSON.stringify(user));
+    socket.emit("disconnected", data);
   };
-=======
->>>>>>> 3dff68dee7bbfa1b3b20b6537e5e892ab84fad59
 
   return (
     <>
@@ -242,28 +187,25 @@ function Discussion({ children }: { children: React.ReactNode }) {
             )}
           </div>
           <div className="flex items-center px-4 py-2 gap-5 border-b border-b-bgGray">
-            <SearchInput handleFilter={filterChatRoom} />
+            <SearchInput
+              handleFilter={(e: { target: { value: any } }) =>
+                console.log(e.target.value)
+              }
+            />
             <button className="text-slate-400">
               <BiMenuAltRight size={20} />
             </button>
           </div>
-<<<<<<< HEAD
           {chatRooms?.length ? (
             <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
               {chatRooms?.map((user: Room) => (
-=======
-          {filterChats.length ? (
-            <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
-              {filterChats?.map((user) => (
->>>>>>> 3dff68dee7bbfa1b3b20b6537e5e892ab84fad59
                 <ContactCard
                   user={user}
                   key={user.id}
                   onClick={() => handleClick(user)}
                   notification={""}
-                  active={false}
+                  active={user.unread_count ? true : false}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}
-                  updatedAt={user.updatedAt || ""}
                 />
               ))}
             </div>
@@ -298,10 +240,6 @@ function Discussion({ children }: { children: React.ReactNode }) {
               <SearchInput handleFilter={filterAllUsers} />
             </div>
             <DisplayUsers
-<<<<<<< HEAD
-=======
-              users={!usersDisplay.length ? allUsers : usersDisplay}
->>>>>>> 3dff68dee7bbfa1b3b20b6537e5e892ab84fad59
               contactClick={handleStartChat}
               goToCreateGrt={() => {
                 setShowAllContacts((prev) => !prev);
@@ -330,7 +268,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             title="New group"
             clickToClose={() => setOpenGroupSetup((prev) => !prev)}
           >
-            <GroupSetup closeModal={() => setOpenGroupSetup((prev) => !prev)} />
+            <GroupSetup />
           </ProfileCard>
         )}
         <div

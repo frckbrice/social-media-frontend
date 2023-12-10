@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import Avatar from "@/components/atoms/Avatar";
 import {
   FaSearch,
@@ -54,7 +54,6 @@ const Chats = () => {
     }
   );
 
-<<<<<<< HEAD
   const [receiver, setReceiver] = useState<Room | null>((): Room | null => {
     if (typeof localStorage !== "undefined") {
       const fromLocalStorage =
@@ -63,13 +62,11 @@ const Chats = () => {
     }
     return null;
   });
-=======
-  const activeChat =
-    JSON.parse(localStorage.getItem("activeChat") as string) || {};
->>>>>>> 3dff68dee7bbfa1b3b20b6537e5e892ab84fad59
+
+  let oldReceiver: string = "";
 
   socket.on("message", (data) => {
-    console.log("message received: ", data);
+    // console.log("message received: ", data);
     if (Array.isArray(data)) {
       setReceivedMessages([...receivedMessages, ...data]);
     } else setReceivedMessages([...receivedMessages, data]);
@@ -80,18 +77,26 @@ const Chats = () => {
   });
 
   useEffect(() => {
-    socket.emit("joinRoom", {
-      name: currentUser?.name,
+    socket.emit("connected", {
+      start: true,
       room: param.id,
       owner: currentUser?.id,
     });
     setReceivedMessages([]);
+
     setReceiver(() => JSON.parse(localStorage.getItem("receiver") || "{}"));
   }, [param.id, currentUser?.name, currentUser?.id]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
+
+  if (oldReceiver !== receiver?.id) {
+    oldReceiver = receiver?.id as string;
+    socket.volatile.emit("disconnected", oldReceiver);
+  }
+
+  // socket.volatile.emit("disconnected", currentUser?.id);
 
   const handleSendMessage = () => {
     // Handle sending message logic here
@@ -150,14 +155,10 @@ const Chats = () => {
           }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
-            <div
-              onClick={handleAvatarClick}
-              className="flex items-center hover:cursor-ponter"
-            >
+            <div className="flex items-center">
               <Avatar
                 size={4}
                 profilePicture={
-<<<<<<< HEAD
                   receiver?.image ||
                   "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
                 }
@@ -165,25 +166,12 @@ const Chats = () => {
               />
               <div className="ml-4 ">
                 <p className="text-md">{receiver?.name}</p>
-=======
-                  activeChat?.image ||
-                  "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
-                }
-              />
-              <div className="ml-4 ">
-                <p className="text-md hover:cursor-pointer ">
-                  {activeChat.name}
-                </p>
->>>>>>> 3dff68dee7bbfa1b3b20b6537e5e892ab84fad59
                 {/* <span className="text-gray-500 text-xs">online/offline</span> */}
               </div>
             </div>
             <div className="flex items-center text-gray-500 text-xl">
               <FaSearch className="mr-8" />
-              <FaEllipsisV
-                onClick={handleAvatarClick}
-                className="mr-2 hover:cursor-pointer  hover:bg-gray-300 rounded-full w-fit self-center"
-              />
+              <FaEllipsisV className="mr-2" />
             </div>
           </div>
 
@@ -249,16 +237,14 @@ const Chats = () => {
         {showInfoCard && (
           <ContactInfo
             id={""}
-            title={` ${activeChat.isGroup ? "Group info" : "Contact info"}`}
+            title={"Contact info"}
             onClose={() => setShowInfoCard((prev) => !prev)}
             picture={
-              activeChat?.image ||
-              "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+              "https://i.pinimg.com/564x/fe/85/c3/fe85c35b97c3f14082ac2edfb25eba44.jpg"
             }
-            name={activeChat?.name}
+            name={"Caleb matins"}
             about={"made of gold"}
-            email={activeChat?.email}
-            isGroup={activeChat.isGroup}
+            email={"calebmatins@gmail.com"}
           />
         )}
       </div>

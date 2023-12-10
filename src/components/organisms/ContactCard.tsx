@@ -3,6 +3,7 @@
 import React from "react";
 
 import Avatar from "../atoms/Avatar";
+import { formatLastMessageTime } from "@/utils/service/format_time";
 
 interface CardProps {
   // id: number | string;
@@ -12,7 +13,7 @@ interface CardProps {
   onClick: () => void;
   notification: string | "";
   active: boolean;
-  updatedAt: string;
+  // updatedAt: string;
   className: string | "";
   user: Room;
 }
@@ -25,7 +26,7 @@ const ContactCard = ({
   active,
   // image,
   onClick,
-  updatedAt,
+  // updatedAt,
   className,
   user,
 }: CardProps) => {
@@ -36,7 +37,7 @@ const ContactCard = ({
       onClick={onClick}
       className={`flex  p-2 justify-between w-[100%] mobile:max-sm:w-full ${className} bigScreen:w-[100%] border-b hover:bg-bgGray items-center hover:cursor-pointer gap-5`}
     >
-      <div className="flex items-center w-full gap-5">
+      <div className="flex items-center gap-5">
         <Avatar
           profilePicture={
             user.image ||
@@ -45,18 +46,22 @@ const ContactCard = ({
           size={5}
         />
         <div className="pb-2 flex flex-col gap-2">
-          <div className="flex justify-between w-[22.5vw] bigScreen:w-[25vw] mobile:max-sm:w-[70vw]  gap-10">
+          <div className="flex justify-between w-[21vw] mobile:max-sm:w-[77vw] bigScreen:w-[18vw] gap-10">
             <p className="">{user.name}</p>
-            <span className="text-primaryText text-xs">{updatedAt || ""}</span>
+            <span className="text-primaryText text-xs">
+              {formatLastMessageTime(user.updatedAt)}
+            </span>
           </div>
           <div className="flex justify-between w-full">
-            <span className=" text-xs text-primaryText">{user.email}</span>
+            <span className=" text-xs text-primaryText">
+              {user.last_message}
+            </span>
             <span
               className={`text-white self-center bg-themecolor p-1 rounded-[50%] text-xs ${
                 !active ? "hidden" : "visible"
               }`}
             >
-              {notification}
+              {user.unread_count}
             </span>
           </div>
         </div>

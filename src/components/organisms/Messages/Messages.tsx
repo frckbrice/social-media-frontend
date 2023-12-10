@@ -19,6 +19,24 @@ type Props = {
 };
 //exlint:disable-next-line
 const Messages = (props: Props) => {
+  const divMessageRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    console.log("useeffect fired");
+    if (divMessageRef && divMessageRef.current) {
+      const scrollPosition =
+        divMessageRef.current.scrollHeight -
+        divMessageRef.current.getBoundingClientRect().height;
+
+      console.log(scrollPosition);
+      divMessageRef.current.scrollTo({
+        top: scrollPosition,
+        left: 0,
+        behavior: "smooth", // Enable smooth scrolling
+      });
+    }
+    // divMessageRef.current.scrollTop = divMessageRef.current.scrollHeight;{}
+  }, [props.messageList]);
+
   const classForMessageReceiver = "align-left max-w-4/5 min-w-fit";
   const classForMessageSender = "box-row align-right  max-w-4/5 min-w-fit";
 
@@ -72,7 +90,7 @@ const Messages = (props: Props) => {
   });
 
   return (
-    <div className=" max-w-full flex flex-col ">
+    <div className=" max-w-full flex flex-col " ref={divMessageRef}>
       <div className=" flex justify-center flex-col items-center pt-10 text-[#54656f] mb-3">
         <span className=" w-fit pt-1 pb-[8px] px-3 bg-white shadow-sm rounded-[8px] mb-4 ">
           {" "}
