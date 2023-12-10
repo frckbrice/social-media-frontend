@@ -48,9 +48,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
     }
   );
 
-  const { currentUser, allUsers } = useAppContext();
-  const [chatRooms, setChatRooms] = useState<Room[]>([]);
-  const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
+  const { currentUser, allUsers, chatRooms, setChatRooms } = useAppContext();
+  // const [chatRooms, setChatRooms] = useState<Room[]>([]);
+  const [filterChats, setFilterChats] = useState<User[]>(chatRooms);
   const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
 
   const handleCloseModal = () => {
@@ -108,12 +108,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
   };
   // FETCH CHAT ROOMS
   useEffect(() => {
-    getAllRooms().then((res) => {
-      console.log(res);
-      setChatRooms(res);
-      setFilterChats(res);
-    });
-  }, []);
+    setFilterChats(chatRooms);
+  }, [chatRooms]);
 
   // HANDLE START CHAT
   const handleStartChat = async (user: Room) => {
@@ -137,6 +133,11 @@ function Discussion({ children }: { children: React.ReactNode }) {
             rooms = [res];
             setChatRooms(rooms);
           } else {
+            if (chatRooms.find((room) => room.id === res.id)) {
+              setShowAllContacts((prev) => !prev);
+              LOCAL_STORAGE.save("activeChat", res);
+              return;
+            }
             setChatRooms((prev) => [res, ...prev]);
           }
 
