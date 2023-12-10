@@ -103,7 +103,3 @@ export const updateProfileName = async (name: string, id: string) => {
   return apiCall.PUT(SITE_URL + `/rooms/${id}`, name)
 }
 
-// Delete single chat
-export const deleteSingleChat = async (id: string, myId: string) => {
-  return apiCall.DELETE(SITE_URL + `/rooms/${id}/${myId}`)
-}

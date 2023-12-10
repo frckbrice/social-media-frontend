@@ -50,6 +50,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   const { currentUser, allUsers } = useAppContext();
   const [chatRooms, setChatRooms] = useState<Room[]>([]);
+  const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
+  const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
 
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
@@ -75,17 +77,41 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   // console.log("paramName", paramName);
 
-  // filter all users
+  // HANDLE ALL USERS FILTER
   const filterAllUsers = (e: { target: { value: any } }) => {
-    const mainUserData = allUsers;
+    const searchName = e.target.value;
+    const filteredResults = usersDisplay.filter((user) => {
+      return user.name.toLowerCase().includes(searchName.toLowerCase());
+    });
+    if (!filteredResults.length || !searchName.length) {
+      setUsersDisplay(allUsers);
+      return;
+    }
+    setUsersDisplay(filteredResults);
+    // console.log("filterAllUsers", filteredResults);
+    // console.log("keyword", e.target.value);
+  };
 
-    console.log("keyword", e.target.value);
+  // HANDLE FILTER CHAT ROOMS
+  const filterChatRoom = (e: { target: { value: any } }) => {
+    const searchName = e.target.value;
+    const filteredResults = chatRooms.filter((user) => {
+      return user.name.toLowerCase().includes(searchName.toLowerCase());
+    });
+    if (!filteredResults.length || !searchName.length) {
+      setFilterChats(chatRooms);
+      return;
+    }
+    setFilterChats(filteredResults);
+    // console.log("FilterChats", filteredResults);
+    // console.log("keyword", e.target.value);
   };
   // FETCH CHAT ROOMS
   useEffect(() => {
     getAllRooms().then((res) => {
       console.log(res);
       setChatRooms(res);
+      setFilterChats(res);
     });
   }, []);
 
@@ -180,18 +206,14 @@ function Discussion({ children }: { children: React.ReactNode }) {
             )}
           </div>
           <div className="flex items-center px-4 py-2 gap-5 border-b border-b-bgGray">
-            <SearchInput
-              handleFilter={(e: { target: { value: any } }) =>
-                console.log(e.target.value)
-              }
-            />
+            <SearchInput handleFilter={filterChatRoom} />
             <button className="text-slate-400">
               <BiMenuAltRight size={20} />
             </button>
           </div>
-          {chatRooms.length ? (
+          {filterChats.length ? (
             <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
-              {chatRooms?.map((user) => (
+              {filterChats?.map((user) => (
                 <ContactCard
                   // id={user?.id as string}
                   // name={user.name}
@@ -242,7 +264,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
               <SearchInput handleFilter={filterAllUsers} />
             </div>
             <DisplayUsers
-              users={allUsers}
+              users={!usersDisplay.length ? allUsers : usersDisplay}
               contactClick={handleStartChat}
               goToCreateGrt={() => {
                 setShowAllContacts((prev) => !prev);

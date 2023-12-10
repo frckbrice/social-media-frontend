@@ -29,11 +29,4 @@ export default class ApiCall {
       body: JSON.stringify(body),
     }).then((res) => res.json());
   }
-
-  async DELETE(url: string, _headers: HeadersInit = {}) {
-    return fetch(url, {
-      method: "DELETE",
-      headers: {...Headers, ..._headers}
-    }).then((res) => res.json())
-  }
 }
