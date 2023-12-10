@@ -46,7 +46,7 @@ const ContactCard = ({
           size={5}
         />
         <div className="pb-2 flex flex-col gap-2">
-          <div className="flex justify-between w-[21vw] mobile:max-sm:w-[77vw] bigScreen:w-[18vw] gap-10">
+          <div className="flex justify-between w-[22.5vw] bigScreen:w-[24vw] mobile:max-sm:w-[70vw]  gap-10">
             <p className="">{user.name}</p>
             <span className="text-primaryText text-xs">
               {formatLastMessageTime(user.updatedAt)}

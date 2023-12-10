@@ -41,8 +41,8 @@ type Room = {
   phone: string;
   email: string;
   original_dm_roomID?: string;
-  last_message: string;
-  unread_count: number;
+  last_message?: string;
+  unread_count?: number;
 };
 
 type AddMembersProps = {

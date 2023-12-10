@@ -1,11 +1,9 @@
 "use client";
 import React, { useState, useRef } from "react";
 import Dp from "../molecules/Dp";
+import { toast } from "react-toastify";
 
 // Icons Import
-import { MdEmojiEmotions } from "react-icons/md";
-import { BsCheck2 } from "react-icons/bs";
-import { RiPencilFill } from "react-icons/ri";
 import { VscPassFilled } from "react-icons/vsc";
 import {
   addGroupMembers,
@@ -23,7 +21,7 @@ function GroupSetup({ closeModal }: setupProps) {
   const [groupIcon, setGroupIcon] = useState("");
   //   const [file, setFile] = useState<FileList | null>();
 
-  const { currentUser } = useAppContext();
+  const { currentUser, chatRooms, setChatRooms } = useAppContext();
 
   const handleImageUpload = async (e: any) => {
     // setFile(e.target.files[0]);
@@ -41,10 +39,24 @@ function GroupSetup({ closeModal }: setupProps) {
   const inputRef: any = useRef();
 
   const handleCreateGroup = async () => {
-    if (!groupName || !groupIcon) {
-      console.log("please add group and group icon");
+    if (!groupName) {
+      toast.warning("upload group icon first...!", {
+        position: "top-right",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
       return;
     }
+
+    if (!groupIcon) {
+      toast.warning("add a group subject...!", {
+        position: "top-right",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+      return;
+    }
+
     const members = JSON.parse(localStorage.getItem("group_members") || "");
     let membersIDs = members.map((member: User) => member.id);
     if (!members.find((member: string) => member === currentUser.user_id)) {
@@ -61,6 +73,11 @@ function GroupSetup({ closeModal }: setupProps) {
     };
     await createGroup(groupData).then(async (res) => {
       if (res.error) {
+        toast.error("Failed to create Group...!", {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
         console.log(res.message);
         return;
       } else {
@@ -68,6 +85,7 @@ function GroupSetup({ closeModal }: setupProps) {
           console.log("groupMembers: ", response);
         });
         console.log("created group", res);
+        setChatRooms((prev) => [res, ...prev]);
         return res;
       }
     });
@@ -75,6 +93,11 @@ function GroupSetup({ closeModal }: setupProps) {
     // console.log("group members", members);
     console.log("groupData ", groupData);
     // setGroupIcon("");
+    toast.success("Group Created successfuly", {
+      position: "top-right",
+      hideProgressBar: true,
+      autoClose: 3000,
+    });
     setGroupName("");
     localStorage.removeItem("group_members");
     closeModal();

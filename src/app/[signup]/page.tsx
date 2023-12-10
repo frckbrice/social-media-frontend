@@ -57,22 +57,28 @@ const Signupb = () => {
 
   return (
     <div className=" mt-56 items-center justify-center text-center">
-      <h1 className="text-3xl font-extrabold text-white font-serif">
+      <h1 className="text-3xl font-extrabold text-slate-800 font-serif">
         Welcome to <span className="text-4xl"> WAXCHAT</span> WEB
       </h1>
-      <h4 className="mt-8 mb-6 font-bold text-xl text-gray-950">
+      <h4 className="mt-8 mb-6 font-bold text-xl text-slate-950">
         Read our <span className="text-themecolor">Privacy Policy</span>. Tap
         Agree and Continue to accept the{" "}
         <span className="text-themecolor">Terms of Service</span>
       </h4>
-      <button
-        onClick={() => handleInputChange()}
-        className="border p-4 px-5 text-base font-extrabold text-black rounded"
-      >
-        {isLoading ? <Pulsation /> : "Agree and Continue"}
-      </button>
-
-      <p className="text-2xl mt-6 font-extrabold text-themecolor">{success}</p>
+      {!success ? (
+        <button
+          onClick={() => handleInputChange()}
+          className={`border ${
+            isLoading ? "cursor-not-allowed disabled:cursor-wait" : ""
+          } p-4 px-5 text-base font-extrabold bg-themecolor text-black rounded`}
+        >
+          {isLoading ? <Pulsation /> : "Agree and Continue"}
+        </button>
+      ) : (
+        <p className="text-2xl mt-6 font-extrabold text-themecolor">
+          {success}
+        </p>
+      )}
     </div>
   );
 };

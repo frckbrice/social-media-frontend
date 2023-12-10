@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect, useRef } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import Avatar from "@/components/atoms/Avatar";
 import {
   FaSearch,
@@ -36,10 +38,13 @@ import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
 import { sendError } from "next/dist/server/api-utils";
 import Messages from "@/components/organisms/Messages/Messages";
+import { IoMdArrowBack } from "react-icons/io";
 
 const Chats = () => {
   const param = useParams();
+  const router = useRouter();
   const [showInfoCard, setShowInfoCard] = useState(false);
+
   const [message, setMessage] = useState<string>("");
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -155,15 +160,24 @@ const Chats = () => {
           }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
-            <div className="flex items-center">
-              <Avatar
-                size={4}
-                profilePicture={
-                  receiver?.image ||
-                  "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
-                }
-                onClick={handleAvatarClick}
-              />
+            <div className="flex items-center hover:cursor-ponter">
+              <>
+                <button
+                  onClick={() => router.push("/discussions")}
+                  className="sm:hidden mr-3 relative "
+                >
+                  <IoMdArrowBack size={20} />
+                </button>
+                <Avatar
+                  size={4}
+                  onClick={handleAvatarClick}
+                  profilePicture={
+                    receiver?.image ||
+                    "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+                  }
+                />
+              </>
+
               <div className="ml-4 ">
                 <p className="text-md">{receiver?.name}</p>
                 {/* <span className="text-gray-500 text-xs">online/offline</span> */}

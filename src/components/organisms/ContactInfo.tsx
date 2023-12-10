@@ -7,6 +7,8 @@ import { MdDelete } from "react-icons/md";
 import Overlay from "../atoms/Overlay";
 import Popups from "../atoms/Popups";
 import { IoMdPersonAdd } from "react-icons/io";
+import { useRouter } from "next/navigation";
+import { SITE_URL } from "@/utils/service/constant";
 
 type ContactCardProps = {
   id: string;
@@ -16,7 +18,7 @@ type ContactCardProps = {
   name: string;
   about: string;
   email: string;
-  isGroup: boolean;
+  isGroup?: boolean;
 };
 
 const ContactInfo = ({
@@ -32,8 +34,43 @@ const ContactInfo = ({
   const [onDelete, setOnDelete] = useState(false);
   const [groupMembers, setGroupMembers] = useState<Array<User>>([]);
   const [openCard, setOpenCard] = useState(false);
+  const [showAddMembers, setShowAddMembers] = useState(false);
+  const router = useRouter();
+  const activeChat = JSON.parse(localStorage.getItem("activeChat") || "{}");
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
+
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        SITE_URL + `/rooms/${activeChat.id}/${sender.user_id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete chat");
+      }
+      const data = response.json();
+      console.log("deleted contact", data);
+      localStorage.removeItem("activeChat");
+      router.push("/discussions");
+    } catch (error) {
+      console.error(error);
+    }
+    // await deleteSingleChat(activeChat.id, sender.user_id)
+    //   .then((res) => {
+    //     console.log('deleted chat', res)
+    //     localStorage.removeItem('activeChat')
+    //     router.push("/discussions")
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //   })
+    setOnDelete((prev) => !prev);
+  };
+
   return (
-    <div className="w-[45vw] mobile:max-sm:w-full bg-bgGray overflow-y-scroll z-40">
+    <div className="w-[45vw] z-20 mobile:max-sm:w-full bg-bgGray overflow-y-scroll ">
       <div className="flex items-center gap-5 p-4 border-l border-l-slate-300">
         <button onClick={onClose}>
           <IoClose size={25} />
@@ -70,7 +107,7 @@ const ContactInfo = ({
             <div className="flex flex-col bg-white">
               <p className="m-4">{groupMembers.length} Members</p>
               <button
-                onClick={() => setOpenCard((prev) => !prev)}
+                onClick={() => setShowAddMembers((prev) => !prev)}
                 className="hover:bg-slate-200 flex items-center p-4 gap-2"
               >
                 <span className="bg-themecolor text-white p-2 rounded-[50%]">
@@ -118,10 +155,14 @@ const ContactInfo = ({
             content={""}
             actionText={"Delete chat"}
             onCancel={() => setOnDelete((prev) => !prev)}
-            onAction={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            onAction={() => handleDelete()}
           />
+        </>
+      )}
+
+      {showAddMembers && (
+        <>
+          <Overlay onClick={() => setShowAddMembers((prev) => !prev)} />
         </>
       )}
     </div>
