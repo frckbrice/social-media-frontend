@@ -12,6 +12,7 @@ import { BsCheck2 } from "react-icons/bs";
 import { RiPencilFill } from "react-icons/ri";
 import { updateProfileName, uplaodImage } from "@/utils/service/queries";
 import { IoMdClose } from "react-icons/io";
+import { SITE_URL } from "@/utils/service/constant";
 
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
@@ -26,13 +27,21 @@ const EditProfile = () => {
 
   const email = JSON.parse(localStorage.getItem('email') || '')
   const handleUpdateName = async () => {
-    updateProfileName(userName, currentUser.id)
-      .then((res) => {
-        console.log('updated user', res)
+    try {
+      const payload = {name: userName}
+      const response = await fetch(SITE_URL + `/rooms/${currentUser.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(payload),
       })
-      .catch((error) => {
-        console.log('error', error)
-      })
+      if (!response.ok) {
+        throw new Error('unable to update profile name')
+      }
+      const data = response.json()
+      console.log('this is new user OBJECT', data)
+
+    } catch (error) {
+      console.error(error)
+    }
     setOnEditName((prev) => !prev);
   };
 
