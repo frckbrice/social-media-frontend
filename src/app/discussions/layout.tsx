@@ -26,6 +26,8 @@ import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { SITE_URL } from "@/utils/service/constant";
 import GroupSetup from "@/components/organisms/GroupSetup";
 import LogOutPopUp from "@/components/molecules/logOutPopup";
+import io from "socket.io-client";
+const socket = io("http://localhost:3001");
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -37,18 +39,16 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showCreateGrp, setShowCreateGrp] = useState(false);
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [currentUsers, setCurrentUsers] = useState<Room | null>(
-    (): Room | null => {
-      if (typeof localStorage !== "undefined") {
-        const fromLocalStorage =
-          JSON.parse(localStorage.getItem("sender") as string) || {};
-        if (fromLocalStorage) return fromLocalStorage;
-      }
-      return null;
+  const [currentUser] = useState<Room | null>((): Room | null => {
+    if (typeof localStorage !== "undefined") {
+      const fromLocalStorage =
+        JSON.parse(localStorage.getItem("sender") as string) || {};
+      if (fromLocalStorage) return fromLocalStorage;
     }
-  );
+    return null;
+  });
 
-  const { currentUser, allUsers } = useAppContext();
+  const { allUsers } = useAppContext();
   const [chatRooms, setChatRooms] = useState<Room[]>([]);
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
@@ -92,14 +92,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   // HANDLE START CHAT
   const handleStartChat = async (user: Room) => {
-    const currentUser = JSON.parse(localStorage.getItem("sender") || "{}");
-    // console.log(currentUser);
-
-    // console.log("start group with", user);
-    if (currentUser.id) {
+    if (currentUser?.id) {
       createRoom({
         name: user.name,
-        email: user.email as string,
         image: user.image,
         isGroup: false,
         user_id: user.id as string,
@@ -125,6 +120,17 @@ function Discussion({ children }: { children: React.ReactNode }) {
     setShowPopup((prev) => !prev);
   };
 
+  const handleClick = (user: Room) => {
+    const data = {
+      sender_id: currentUser?.id,
+      receiver_room_id: user.original_dm_roomID,
+    };
+    console.log(data);
+    socket.emit("roomMessages", data);
+    router.push(`/discussions/${user.original_dm_roomID}`);
+    localStorage.setItem("receiver", JSON.stringify(user));
+  };
+
   return (
     <>
       <LogOutPopUp visible={showPopup} onClose={() => handleClose()} />
@@ -143,7 +149,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
               onClick={() => setOpenProfile((prev) => !prev)}
               size={4}
               profilePicture={
-                currentUsers?.image ||
+                currentUser?.image ||
                 "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
               }
             />
@@ -194,10 +200,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                 <ContactCard
                   user={user}
                   key={user.id}
-                  onClick={() => {
-                    router.push(`/discussions/${user.original_dm_roomID}`);
-                    localStorage.setItem("receiver", JSON.stringify(user));
-                  }}
+                  onClick={() => handleClick(user)}
                   notification={""}
                   active={false}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}

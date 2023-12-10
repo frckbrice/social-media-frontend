@@ -29,7 +29,6 @@ export const getCurrentUser = async () => {
 // CREATE CHAT ROOM
 export const createRoom = async (user: {
   name: string;
-  email: string;
   image?: string;
   isGroup: boolean;
   user_id: string;

@@ -19,12 +19,23 @@ import { AiOutlineSmile } from "react-icons/ai";
 import io from "socket.io-client";
 
 const socket = io("http://localhost:3001", {
+  // [1] Important as fuck
+  path: "/socket.io/",
+  reconnectionDelay: 1000,
+  reconnection: true,
+  reconnectionAttempts: 10,
   transports: ["websocket"],
+  agent: false, // [2] Please don't set this to true
+  upgrade: false,
+  rejectUnauthorized: false,
 });
+
+// const socket = io();
 
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
 import { sendError } from "next/dist/server/api-utils";
+import Messages from "@/components/organisms/Messages/Messages";
 
 const Chats = () => {
   const param = useParams();
@@ -54,14 +65,24 @@ const Chats = () => {
 
   socket.on("message", (data) => {
     console.log("message received: ", data);
-    setReceivedMessages([...receivedMessages, data]);
+    if (Array.isArray(data)) {
+      setReceivedMessages([...receivedMessages, ...data]);
+    } else setReceivedMessages([...receivedMessages, data]);
   });
-  console.log(receiver);
+
+  socket.on("connect_error", (err) => {
+    console.log(`connection error due to ${err}`);
+  });
 
   useEffect(() => {
-    socket.emit("joinRoom", { name: receiver?.name, room: param.id });
+    socket.emit("joinRoom", {
+      name: currentUser?.name,
+      room: param.id,
+      owner: currentUser?.id,
+    });
+    setReceivedMessages([]);
     setReceiver(() => JSON.parse(localStorage.getItem("receiver") || "{}"));
-  }, [param.id, receiver?.name]);
+  }, [param.id, currentUser?.name, currentUser?.id]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -113,6 +134,8 @@ const Chats = () => {
     };
   }, [showDropdown]);
 
+  // console.log(receivedMessages);
+
   return (
     <>
       <div className="w-full flex justify-between">
@@ -149,9 +172,15 @@ const Chats = () => {
             }}
             className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
           >
-            {receivedMessages?.map((message, i) => (
+            {/* {receivedMessages?.map((message, i) => (
               <div key={i}>{message} </div>
-            ))}
+            ))} */}
+
+            <Messages
+              messageList={receivedMessages}
+              currentUser={currentUser as Room}
+              receiver={receiver as Room}
+            />
           </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 

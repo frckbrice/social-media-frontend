@@ -1,12 +1,11 @@
 type User = {
   id: string;
   image: string;
-  isGroup?: false;
-  my_id: string;
+
   name: string;
   updatedAt?: string;
   createdAt?: string;
-  user_id: string;
+
   phone: string;
   email: string;
 };
@@ -16,8 +15,7 @@ type Message = {
   sender_id: string;
   receiver_room_id: string;
   content: string;
-  create_at: string;
-  upated_at: string;
+  timestamp: string;
   reaction: string;
   sender_name: string;
   sender_phone: string;
