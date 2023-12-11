@@ -30,10 +30,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
     onClose();
   };
 
-//   if (!isOpen) {
-//     return null;
-//   }
-
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -117,8 +113,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
             <img src="" alt="" />
           </div>
         )}
-        {/* {!file && typeof file !== "string" && (
-  )} */}
         {!file && (
           <p className="text-2xl text-gray-400">No preview available</p>
         )}
