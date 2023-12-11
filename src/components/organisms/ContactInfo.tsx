@@ -9,6 +9,7 @@ import Popups from "../atoms/Popups";
 import { IoMdPersonAdd } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { SITE_URL } from "@/utils/service/constant";
+import { toast } from "react-toastify";
 
 type ContactCardProps = {
   id: string;
@@ -53,6 +54,11 @@ const ContactInfo = ({
       const data = response.json();
       console.log("deleted contact", data);
       localStorage.removeItem("activeChat");
+      toast.success('Chat deleted successfully', {
+        position: "top-right",
+        hideProgressBar: true,
+        autoClose: 2000
+      })
       router.push("/discussions");
     } catch (error) {
       console.error(error);

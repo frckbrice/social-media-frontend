@@ -15,11 +15,14 @@ import { IoMdClose } from "react-icons/io";
 import { SITE_URL } from "@/utils/service/constant";
 import { toast } from "react-toastify";
 
+import { TbHourglassEmpty } from "react-icons/tb";
+
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
   const [onEditAbout, setOnEditAbout] = useState(false);
   const { currentUser } = useAppContext();
   const [userName, setUserName] = useState(currentUser?.name);
+
   const [about, setAbout] = useState("");
 
   const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
@@ -28,31 +31,22 @@ const EditProfile = () => {
 
   const email = JSON.parse(localStorage.getItem("email") || "");
   const handleUpdateName = async () => {
-    try {
-      const payload = { name: userName };
-      const response = await fetch(SITE_URL + `/rooms/${currentUser.id}`, {
-        method: "PUT",
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        toast.error("unable to update profile name...!", {
+    const update = { name: userName };
+
+    await updateProfileName(currentUser.id, update)
+      .then((res) => {
+        localStorage.setItem("sender", JSON.stringify(res));
+        setOnEditName((prev) => !prev);
+        toast.success("UserName updated", {
           position: "top-right",
           hideProgressBar: true,
-          autoClose: 3000,
+          autoClose: 2000,
         });
-        throw new Error("unable to update profile name");
-      }
-      const data = await response.json();
-      toast.success("profile name updated...!", {
-        position: "top-right",
-        hideProgressBar: true,
-        autoClose: 3000,
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      console.log("this is new user OBJECT", data);
-    } catch (error) {
-      console.error(error);
-    }
-    setOnEditName((prev) => !prev);
   };
 
   const handleUpdateAbout = () => {
