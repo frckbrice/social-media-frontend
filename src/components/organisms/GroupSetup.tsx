@@ -48,7 +48,7 @@ function GroupSetup({ closeModal }: setupProps) {
       return;
     }
 
-    if (!groupIcon) {
+    if (groupIcon === "") {
       toast.warning("add a group subject...!", {
         position: "top-right",
         hideProgressBar: true,
