@@ -62,7 +62,7 @@ export const AppContextProvider = ({ children }: any) => {
   useEffect(() => {
     getAllUsers().then((res) => {
       setAllUsers(res);
-      console.log(res);
+      // console.log(res);
     });
 
     // Get all chats rooms
@@ -71,12 +71,7 @@ export const AppContextProvider = ({ children }: any) => {
       setChatRooms(res);
     });
 
-    // getCurrentUser().then((res) => {
-    //   // setCurrentUser(res);
-    //   console.log(res);
-    // });
     setCurrentUser(JSON.parse(localStorage.getItem("sender") || "{}"));
-    console.log(JSON.parse(localStorage.getItem("sender") || "{}"));
   }, []);
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;

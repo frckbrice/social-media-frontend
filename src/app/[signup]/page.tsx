@@ -27,7 +27,7 @@ const Signupb = () => {
     let res = data?.filter((i) => i.email === googleUser?.user?.email);
     if (res?.length === 1) {
       LOCAL_STORAGE.save("email", googleUser?.user.email);
-      LOCAL_STORAGE.save("userObject", googleUser?.user);
+      // LOCAL_STORAGE.save("userObject", googleUser?.user);
 
       await fetch(SITE_URL + "/users", {
         method: "POST",
@@ -35,6 +35,7 @@ const Signupb = () => {
           name: googleUser?.user.user_metadata.name,
           email: googleUser?.user.email,
           image: googleUser?.user.user_metadata.picture,
+          phone: googleUser?.user.phone,
         }),
         headers: {
           "content-type": "application/json",
@@ -42,17 +43,15 @@ const Signupb = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          if (data) {
+          if (!data.message) {
             setCurrentUser(data);
             LOCAL_STORAGE.save("sender", data);
-            console.log("userObject", data);
-            setSuccess(`Welcome ${data.name}🙂`);
+            console.log(data);
+            setSuccess(`Welcome ${data.name} 🙂`);
             router.push("/discussions");
             setIsLoading(false);
           }
         });
-
-      return;
     }
   };
 

@@ -19,7 +19,7 @@ type ContactCardProps = {
   name: string;
   about: string;
   email: string;
-  isGroup: boolean;
+  isGroup?: boolean;
 };
 
 const ContactInfo = ({

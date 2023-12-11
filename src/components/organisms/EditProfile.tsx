@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import Dp from "../molecules/Dp";
+import Dp from "../molecules/ProfilePicture";
 
 // context import
 import { AppContext } from "next/app";
@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 
 import { TbHourglassEmpty } from "react-icons/tb";
 
-
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
   const [onEditAbout, setOnEditAbout] = useState(false);
@@ -26,30 +25,28 @@ const EditProfile = () => {
 
   const [about, setAbout] = useState("");
 
-
   const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
 
   const inputRef: any = useRef();
 
   const email = JSON.parse(localStorage.getItem("email") || "");
   const handleUpdateName = async () => {
-    const update = { name: userName }
+    const update = { name: userName };
 
     await updateProfileName(currentUser.id, update)
       .then((res) => {
-        localStorage.setItem('sender', JSON.stringify(res))
+        localStorage.setItem("sender", JSON.stringify(res));
         setOnEditName((prev) => !prev);
         toast.success("UserName updated", {
           position: "top-right",
           hideProgressBar: true,
           autoClose: 2000,
-        })
-        console.log(res)
+        });
+        console.log(res);
       })
       .catch((error) => {
-        console.log(error)
-      })
-
+        console.log(error);
+      });
   };
 
   const handleUpdateAbout = () => {
