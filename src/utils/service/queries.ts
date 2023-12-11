@@ -98,11 +98,13 @@ export const addGroupMembers = async (members: string[], room_id: string) => {
 };
 
 // Update profile name
-export const updateProfileName = async (id: string, update: {
-  name?: string,
-  image?: string
-}) => {
-  console.log('id', id)
-  return apiCall.PUT(SITE_URL + `/rooms/${id}`, update)
-}
-
+export const updateProfileName = async (
+  id: string,
+  update: {
+    name?: string;
+    image?: string;
+  }
+) => {
+  console.log("id", id);
+  return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
+};

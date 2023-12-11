@@ -78,6 +78,7 @@ function GroupSetup({ closeModal }: setupProps) {
           hideProgressBar: true,
           autoClose: 3000,
         });
+        console.log("error creating groups", res);
         console.log(res.message);
         return;
       } else {
