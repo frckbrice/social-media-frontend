@@ -68,14 +68,14 @@ export const uplaodImage = async (file: any) => {
 export const addGroupMembers = async (members: string[], room_id: string) => {
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
 
-  return members.map((member) => {
+  return members.map((memberId) => {
     apiCall.POST(SITE_URL + "/rooms_users", {
-      user_id: member,
+      user_id: memberId,
       room_id,
-      role: `${member === sender.user_id ? "admin" : "member"}`,
+      role: `${memberId === sender.user_id ? "admin" : "member"}`,
     });
 
-    socket.emit("connected", { room: room_id, owner: member });
+    // socket.emit("connected", { room: room_id, owner: memberId });
   });
 };
 

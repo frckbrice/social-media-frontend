@@ -26,7 +26,7 @@ import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { SITE_URL } from "@/utils/service/constant";
 import GroupSetup from "@/components/organisms/GroupSetup";
 import LogOutPopUp from "@/components/molecules/logOutPopup";
-import { socket } from "./[id]/page";
+import { socket } from "@/utils/services";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();

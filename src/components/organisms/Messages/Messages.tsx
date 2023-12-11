@@ -46,8 +46,10 @@ const Messages = (props: Props) => {
 
   const listOfMessages = props.messageList?.map((messages, i) => {
     if (
-      messages.receiver_room_id === props.currentUser.id &&
-      messages.sender_id !== props.currentUser.id
+      (messages.receiver_room_id === props.currentUser.id &&
+        messages.sender_id !== props.currentUser.id) ||
+      (messages.receiver_room_id !== props.currentUser.id &&
+        messages.sender_id !== props.currentUser.id)
     ) {
       // console.log("messages received: ", messages.content);
 
