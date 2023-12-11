@@ -17,39 +17,46 @@ import { toast } from "react-toastify";
 
 import { TbHourglassEmpty } from "react-icons/tb";
 
-
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
   const [onEditAbout, setOnEditAbout] = useState(false);
-  const { currentUser } = useAppContext();
+  const { currentUser, setCurrentUser } = useAppContext();
   const [userName, setUserName] = useState(currentUser?.name);
 
   const [about, setAbout] = useState("");
-
 
   const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
 
   const inputRef: any = useRef();
 
   const email = JSON.parse(localStorage.getItem("email") || "");
+
   const handleUpdateName = async () => {
-    const update = { name: userName }
+    const update = { name: userName };
+    if (!update.name) {
+      toast.error("UserName can not be empty!", {
+        position: "top-right",
+        hideProgressBar: true,
+        autoClose: 2000,
+      });
+      return;
+    }
 
     await updateProfileName(currentUser.id, update)
       .then((res) => {
-        localStorage.setItem('sender', JSON.stringify(res))
+        localStorage.setItem("sender", JSON.stringify(res));
+        setCurrentUser(res);
         setOnEditName((prev) => !prev);
         toast.success("UserName updated", {
           position: "top-right",
           hideProgressBar: true,
           autoClose: 2000,
-        })
-        console.log(res)
+        });
+        console.log(res);
       })
       .catch((error) => {
-        console.log(error)
-      })
-
+        console.log(error);
+      });
   };
 
   const handleUpdateAbout = () => {
@@ -64,7 +71,21 @@ const EditProfile = () => {
     const photoUrl = await uplaodImage(file);
     if (photoUrl) {
       setProfilePhoto(photoUrl);
-      // console.log(photoUrl);
+
+      await updateProfileName(currentUser.id, { image: photoUrl })
+        .then((res) => {
+          localStorage.setItem("sender", JSON.stringify(res));
+          setCurrentUser(res);
+          toast.success("image updated", {
+            position: "top-right",
+            hideProgressBar: true,
+            autoClose: 2000,
+          });
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
