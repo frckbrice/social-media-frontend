@@ -85,7 +85,7 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
           members.length ? " h-[339px] bigScreen:h-[460px]" : ""
         }  h-[390px] bigScreen:h-[calc(100vh-167px-74px-4.5vh)] overflow-y-scroll overflow-x-hidden`}
       >
-        {userList.map((user: User) => (
+        {userList.map((user: any) => (
           <ContactCard
             user={user}
             key={user.id}
