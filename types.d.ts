@@ -1,11 +1,9 @@
 type User = {
   id: string;
   image: string;
-
   name: string;
   updatedAt?: string;
   createdAt?: string;
-
   phone: string;
   email: string;
 };
@@ -32,7 +30,7 @@ type RoomUser = {
 type Room = {
   id: string;
   image: string;
-  isGroup?: false;
+  isGroup?: boolean;
   my_id: string;
   name: string;
   updatedAt?: string;

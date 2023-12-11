@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import Dp from "../molecules/Dp";
+import Dp from "../molecules/ProfilePicture";
 
 // context import
 import { AppContext } from "next/app";
@@ -50,7 +50,7 @@ const EditProfile = () => {
       });
       console.log("this is new user OBJECT", data);
     } catch (error) {
-      console.error(error); 
+      console.error(error);
     }
     setOnEditName((prev) => !prev);
   };

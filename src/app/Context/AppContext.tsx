@@ -71,12 +71,7 @@ export const AppContextProvider = ({ children }: any) => {
       setChatRooms(res);
     });
 
-    // getCurrentUser().then((res) => {
-    //   // setCurrentUser(res);
-    //   console.log(res);
-    // });
     setCurrentUser(JSON.parse(localStorage.getItem("sender") || "{}"));
-    console.log(JSON.parse(localStorage.getItem("sender") || "{}"));
   }, []);
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;

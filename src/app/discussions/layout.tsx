@@ -26,8 +26,7 @@ import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { SITE_URL } from "@/utils/service/constant";
 import GroupSetup from "@/components/organisms/GroupSetup";
 import LogOutPopUp from "@/components/molecules/logOutPopup";
-import io from "socket.io-client";
-const socket = io("http://localhost:3001");
+import { socket } from "./[id]/page";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -39,17 +38,12 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showCreateGrp, setShowCreateGrp] = useState(false);
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [currentUser] = useState<Room | null>((): Room | null => {
-    if (typeof localStorage !== "undefined") {
-      const fromLocalStorage =
-        JSON.parse(localStorage.getItem("sender") as string) || {};
-      if (fromLocalStorage) return fromLocalStorage;
-    }
-    return null;
-  });
 
-  const { allUsers } = useAppContext();
-  const [chatRooms, setChatRooms] = useState<Room[]>([]);
+  const { currentUser, allUsers, chatRooms, setChatRooms } = useAppContext();
+  // const [chatRooms, setChatRooms] = useState<Room[]>([]);
+  const [filterChats, setFilterChats] = useState<User[]>(chatRooms);
+  const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
+
   let olduser: string = chatRooms[0]?.original_dm_roomID as string;
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
@@ -67,28 +61,42 @@ function Discussion({ children }: { children: React.ReactNode }) {
       label: "Logout",
       function: () => {
         setShowPopup((prev) => !prev);
-
         setShowDropdown((prev) => !prev);
       },
     },
   ];
 
-  // filter all users
-  const filterAllUsers = (e: { target: { value: any } }) => {
-    const mainUserData = allUsers;
+  // HANDLE ALL USERS FILTER
+  const filterAllUsers = (e: any) => {
+    const searchName = e.target.value;
+    const filteredResults = usersDisplay.filter((user) => {
+      return user.name.toLowerCase().includes(searchName.toLowerCase());
+    });
+    if (!filteredResults.length || !searchName.length) {
+      return setUsersDisplay(allUsers);
+    }
+    setUsersDisplay(filteredResults);
+    // console.log("filterAllUsers", filteredResults);
+    // console.log("keyword", e.target.value);
+  };
 
-    console.log("keyword", e.target.value);
+  // HANDLE FILTER CHAT ROOMS
+  const filterChatRoom = (e: any) => {
+    // const searchName = e.target.value;
+    const filteredResults = chatRooms.filter((user) => {
+      return user.name.toLowerCase().includes(e.target.value.toLowerCase());
+    });
+    if (!filteredResults.length || !e.target.value.length) {
+      setFilterChats(chatRooms);
+      return;
+    }
+    setFilterChats(filteredResults);
   };
 
   // FETCH CHAT ROOMS
   useEffect(() => {
-    getAllRooms().then((res) => {
-      if (res.length) {
-        // console.log(res);
-        setChatRooms(res);
-      }
-    });
-  }, []);
+    setFilterChats(chatRooms);
+  }, [chatRooms]);
 
   // HANDLE START CHAT
   const handleStartChat = async (user: Room) => {
@@ -193,11 +201,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             )}
           </div>
           <div className="flex items-center px-4 py-2 gap-5 border-b border-b-bgGray">
-            <SearchInput
-              handleFilter={(e: { target: { value: any } }) =>
-                console.log(e.target.value)
-              }
-            />
+            <SearchInput handleFilter={filterChatRoom} />
             <button className="text-slate-400">
               <BiMenuAltRight size={20} />
             </button>
@@ -274,7 +278,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             title="New group"
             clickToClose={() => setOpenGroupSetup((prev) => !prev)}
           >
-            <GroupSetup />
+            <GroupSetup closeModal={() => setOpenGroupSetup((prev) => !prev)} />
           </ProfileCard>
         )}
         <div

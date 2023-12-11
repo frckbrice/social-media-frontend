@@ -18,28 +18,16 @@ import {
 } from "react-icons/fa";
 import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
-import io from "socket.io-client";
-
-export const socket = io("http://localhost:3001", {
-  // [1] Important as fuck
-  path: "/socket.io/",
-  reconnectionDelay: 1000,
-  reconnection: true,
-  reconnectionAttempts: 10,
-  transports: ["websocket"],
-  agent: false, // [2] Please don't set this to true
-  upgrade: false,
-  rejectUnauthorized: false,
-});
+import { socket } from "@/utils/services";
 
 // const socket = io();
 
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
-import { sendError } from "next/dist/server/api-utils";
 import Messages from "@/components/organisms/Messages/Messages";
 import { IoMdArrowBack } from "react-icons/io";
 import Pulsation from "@/components/molecules/Pulsation";
+import { useAppContext } from "@/app/Context/AppContext";
 
 const Chats = () => {
   const param = useParams();
@@ -50,16 +38,7 @@ const Chats = () => {
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
   const [typingStatus, setTypingStatus] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-  const [currentUser, setCurrentUser] = useState<Room | null>(
-    (): Room | null => {
-      if (typeof localStorage !== "undefined") {
-        const fromLocalStorage =
-          JSON.parse(localStorage.getItem("sender") as string) || {};
-        if (fromLocalStorage) return fromLocalStorage;
-      }
-      return null;
-    }
-  );
+  const { currentUser } = useAppContext();
 
   const [receiver, setReceiver] = useState<Room | null>((): Room | null => {
     if (typeof localStorage !== "undefined") {

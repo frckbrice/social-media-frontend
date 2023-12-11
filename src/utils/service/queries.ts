@@ -2,7 +2,7 @@ import { supabase } from "../supabase/client";
 import { SITE_URL } from "./constant";
 import ApiCall from "./httpClient";
 import { LOCAL_STORAGE } from "./storage";
-import { socket } from "@/app/discussions/[id]/page";
+import { socket } from "../services";
 
 const apiCall = new ApiCall();
 
@@ -28,13 +28,7 @@ export const getCurrentUser = async () => {
 };
 
 // CREATE CHAT ROOM
-export const createRoom = async (user: {
-  name: string;
-  image?: string;
-  isGroup: boolean;
-  user_id: string;
-  my_id: string | undefined;
-}) => {
+export const createRoom = async (user: Partial<Room>) => {
   return apiCall.POST(SITE_URL + "/rooms", user);
 };
 
@@ -68,18 +62,6 @@ export const uplaodImage = async (file: any) => {
     console.log("group icon download url", imageUrl.data.publicUrl);
     return imageUrl.data.publicUrl;
   }
-};
-
-// CREAT GROUP
-
-export const createGroup = async (groupData: {
-  name: string;
-  image: string;
-  my_id: string;
-  user_id: string;
-  isGroup: boolean;
-}) => {
-  return apiCall.POST(SITE_URL + "/rooms", groupData);
 };
 
 // Add Group Members
