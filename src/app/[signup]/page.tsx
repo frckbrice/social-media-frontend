@@ -71,7 +71,7 @@ const Signupb = () => {
           onClick={() => handleInputChange()}
           className={`border ${
             isLoading ? "cursor-not-allowed disabled:cursor-wait" : ""
-          } p-4 px-5 text-base font-extrabold bg-themecolor text-black rounded`}
+          } p-4 px-5 text-base font-extrabold bg-themecolor text-white rounded`}
         >
           {isLoading ? <Pulsation /> : "Agree and Continue"}
         </button>

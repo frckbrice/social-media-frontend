@@ -13,34 +13,44 @@ import { RiPencilFill } from "react-icons/ri";
 import { updateProfileName, uplaodImage } from "@/utils/service/queries";
 import { IoMdClose } from "react-icons/io";
 import { SITE_URL } from "@/utils/service/constant";
+import { toast } from "react-toastify";
 
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
   const [onEditAbout, setOnEditAbout] = useState(false);
   const { currentUser } = useAppContext();
   const [userName, setUserName] = useState(currentUser?.name);
-  const [about, setAbout] = useState("")
+  const [about, setAbout] = useState("");
 
   const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
 
   const inputRef: any = useRef();
 
-  const email = JSON.parse(localStorage.getItem('email') || '')
+  const email = JSON.parse(localStorage.getItem("email") || "");
   const handleUpdateName = async () => {
     try {
-      const payload = {name: userName}
+      const payload = { name: userName };
       const response = await fetch(SITE_URL + `/rooms/${currentUser.id}`, {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify(payload),
-      })
+      });
       if (!response.ok) {
-        throw new Error('unable to update profile name')
+        toast.error("unable to update profile name...!", {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
+        throw new Error("unable to update profile name");
       }
-      const data = response.json()
-      console.log('this is new user OBJECT', data)
-
+      const data = await response.json();
+      toast.success("profile name updated...!", {
+        position: "top-right",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+      console.log("this is new user OBJECT", data);
     } catch (error) {
-      console.error(error)
+      console.error(error); 
     }
     setOnEditName((prev) => !prev);
   };
@@ -85,12 +95,13 @@ const EditProfile = () => {
               </button> */}
               <button
                 className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
-                onClick={handleUpdateName}>
+                onClick={handleUpdateName}
+              >
                 <BsCheck2 size={20} />
               </button>
               <span
                 className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
-                onClick={() => setOnEditName(prev => !prev)}
+                onClick={() => setOnEditName((prev) => !prev)}
               >
                 <IoMdClose size={23} />
               </span>
