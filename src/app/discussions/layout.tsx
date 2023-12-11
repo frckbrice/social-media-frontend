@@ -26,7 +26,6 @@ import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { SITE_URL } from "@/utils/service/constant";
 import GroupSetup from "@/components/organisms/GroupSetup";
 import LogOutPopUp from "@/components/molecules/logOutPopup";
-import { socket } from "@/utils/services";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -38,13 +37,22 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showCreateGrp, setShowCreateGrp] = useState(false);
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [currentUsers, setCurrentUsers] = useState<Room | null>(
+    (): Room | null => {
+      if (typeof localStorage !== "undefined") {
+        const fromLocalStorage =
+          JSON.parse(localStorage.getItem("sender") as string) || {};
+        if (fromLocalStorage) return fromLocalStorage;
+      }
+      return null;
+    }
+  );
 
   const { currentUser, allUsers, chatRooms, setChatRooms } = useAppContext();
   // const [chatRooms, setChatRooms] = useState<Room[]>([]);
-  const [filterChats, setFilterChats] = useState<User[]>(chatRooms);
+  const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
   const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
 
-  let olduser: string = chatRooms[0]?.original_dm_roomID as string;
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
   };
@@ -61,19 +69,23 @@ function Discussion({ children }: { children: React.ReactNode }) {
       label: "Logout",
       function: () => {
         setShowPopup((prev) => !prev);
+
         setShowDropdown((prev) => !prev);
       },
     },
   ];
 
+  // console.log("paramName", paramName);
+
   // HANDLE ALL USERS FILTER
-  const filterAllUsers = (e: any) => {
+  const filterAllUsers = (e: { target: { value: any } }) => {
     const searchName = e.target.value;
     const filteredResults = usersDisplay.filter((user) => {
       return user.name.toLowerCase().includes(searchName.toLowerCase());
     });
     if (!filteredResults.length || !searchName.length) {
-      return setUsersDisplay(allUsers);
+      setUsersDisplay(allUsers);
+      return;
     }
     setUsersDisplay(filteredResults);
     // console.log("filterAllUsers", filteredResults);
@@ -81,18 +93,19 @@ function Discussion({ children }: { children: React.ReactNode }) {
   };
 
   // HANDLE FILTER CHAT ROOMS
-  const filterChatRoom = (e: any) => {
-    // const searchName = e.target.value;
+  const filterChatRoom = (e: { target: { value: any } }) => {
+    const searchName = e.target.value;
     const filteredResults = chatRooms.filter((user) => {
-      return user.name.toLowerCase().includes(e.target.value.toLowerCase());
+      return user.name.toLowerCase().includes(searchName.toLowerCase());
     });
-    if (!filteredResults.length || !e.target.value.length) {
+    if (!filteredResults.length || !searchName.length) {
       setFilterChats(chatRooms);
       return;
     }
     setFilterChats(filteredResults);
+    // console.log("FilterChats", filteredResults);
+    // console.log("keyword", e.target.value);
   };
-
   // FETCH CHAT ROOMS
   useEffect(() => {
     setFilterChats(chatRooms);
@@ -126,25 +139,6 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   const handleClose = () => {
     setShowPopup((prev) => !prev);
-  };
-
-  const handleClick = (user: Room) => {
-    const data = {
-      sender_id: currentUser?.id,
-      receiver_room_id: user.original_dm_roomID,
-    };
-    console.log(data);
-    socket.emit("roomMessages", data);
-
-    router.push(`/discussions/${user.original_dm_roomID}`);
-    localStorage.setItem("receiver", JSON.stringify(user));
-
-    if (olduser !== user.original_dm_roomID) {
-      socket.emit("disconnected", olduser);
-      console.log(olduser);
-      olduser = user.original_dm_roomID as string;
-      console.log(olduser);
-    }
   };
 
   return (
@@ -206,16 +200,25 @@ function Discussion({ children }: { children: React.ReactNode }) {
               <BiMenuAltRight size={20} />
             </button>
           </div>
-          {chatRooms?.length ? (
+          {filterChats.length ? (
             <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
-              {chatRooms?.map((user: Room) => (
+              {filterChats?.map((user) => (
                 <ContactCard
+                  // id={user?.id as string}
+                  // name={user.name}
+                  // email={user.email}
                   user={user}
                   key={user.id}
-                  onClick={() => handleClick(user)}
+                  onClick={() => {
+                    LOCAL_STORAGE.save("activeChat", user);
+                    router.push(`/discussions/${user.id}`);
+                  }}
                   notification={""}
-                  active={user.unread_count ? true : false}
+                  active={false}
+                  // updatedAt={"11/30/2023"}
+                  // image={user.image}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}
+                  updatedAt={user.updatedAt || ""}
                 />
               ))}
             </div>
@@ -250,6 +253,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
               <SearchInput handleFilter={filterAllUsers} />
             </div>
             <DisplayUsers
+              users={!usersDisplay.length ? allUsers : usersDisplay}
               contactClick={handleStartChat}
               goToCreateGrt={() => {
                 setShowAllContacts((prev) => !prev);

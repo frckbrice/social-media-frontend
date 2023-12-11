@@ -49,6 +49,8 @@ const Chats = () => {
     return null;
   });
 
+  const activeChat = JSON.parse(localStorage.getItem("activeChat") as string) || {};
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   let oldReceiver: string = "";
@@ -153,9 +155,8 @@ const Chats = () => {
     <>
       <div className="w-full flex justify-between">
         <div
-          className={`relative flex flex-col h-full w-full mobile:max-sm:${
-            showInfoCard ? "hidden" : "visible"
-          }`}
+          className={`relative flex flex-col h-full w-full mobile:max-sm:${showInfoCard ? "hidden" : "visible"
+            }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
             <div className="flex items-center hover:cursor-ponter">
@@ -186,7 +187,10 @@ const Chats = () => {
             </div>
             <div className="flex items-center text-gray-500 text-xl">
               <FaSearch className="mr-8" />
-              <FaEllipsisV className="mr-2" />
+              <FaEllipsisV
+                onClick={handleAvatarClick}
+                className="mr-2 hover:cursor-pointer  hover:bg-gray-300 rounded-full w-fit self-center"
+              />
             </div>
           </div>
 
@@ -260,14 +264,16 @@ const Chats = () => {
         {showInfoCard && (
           <ContactInfo
             id={""}
-            title={"Contact info"}
+            title={` ${activeChat.isGroup ? "Group info" : "Contact info"}`}
             onClose={() => setShowInfoCard((prev) => !prev)}
             picture={
-              "https://i.pinimg.com/564x/fe/85/c3/fe85c35b97c3f14082ac2edfb25eba44.jpg"
+              activeChat?.image ||
+              "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
             }
-            name={"Caleb matins"}
+            name={activeChat?.name}
             about={"made of gold"}
-            email={"calebmatins@gmail.com"}
+            email={activeChat?.email}
+            isGroup={activeChat.isGroup}
           />
         )}
       </div>
