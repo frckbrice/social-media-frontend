@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 import Avatar from "@/components/atoms/Avatar";
@@ -18,16 +18,16 @@ import {
 } from "react-icons/fa";
 import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
-import io from "socket.io-client";
+import { socket } from "@/utils/services";
 
-const socket = io("http://localhost:3001", {
-  transports: ["websocket"],
-});
+// const socket = io();
 
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
-import { sendError } from "next/dist/server/api-utils";
+import Messages from "@/components/organisms/Messages/Messages";
 import { IoMdArrowBack } from "react-icons/io";
+import Pulsation from "@/components/molecules/Pulsation";
+import { useAppContext } from "@/app/Context/AppContext";
 
 const Chats = () => {
   const param = useParams();
@@ -36,37 +36,60 @@ const Chats = () => {
 
   const [message, setMessage] = useState<string>("");
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
-  const [currentUser, setCurrentUser] = useState<Room | null>(
-    (): Room | null => {
-      if (typeof localStorage !== "undefined") {
-        const fromLocalStorage =
-          JSON.parse(localStorage.getItem("sender") as string) || {};
-        if (fromLocalStorage) return fromLocalStorage;
-      }
-      return null;
+  const [typingStatus, setTypingStatus] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const { currentUser } = useAppContext();
+
+  const [receiver, setReceiver] = useState<Room | null>((): Room | null => {
+    if (typeof localStorage !== "undefined") {
+      const fromLocalStorage =
+        JSON.parse(localStorage.getItem("receiver") as string) || {};
+      if (fromLocalStorage) return fromLocalStorage;
     }
-  );
+    return null;
+  });
 
-  const activeChat =
-    JSON.parse(localStorage.getItem("activeChat") as string) || {};
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // useEffect(() => {
+  let oldReceiver: string = "";
+
   socket.on("message", (data) => {
-    console.log("received: ", data);
-    setReceivedMessages([...receivedMessages, data]);
+    // console.log("message received: ", data);
+    if (Array.isArray(data)) {
+      setReceivedMessages([...receivedMessages, ...data]);
+    } else setReceivedMessages([...receivedMessages, data]);
+  });
+
+  socket.on("connect_error", (err) => {
+    console.log(`connection error due to ${err}`);
   });
 
   useEffect(() => {
-    socket.emit("joinRoom", { name: currentUser?.name, room: param.id });
-  }, [param.id, currentUser?.name]);
-  const [showDropdown, setShowDropdown] = useState(false);
+    socket.emit("connected", {
+      start: true,
+      room: param.id,
+      owner: currentUser?.id,
+    });
+    setReceivedMessages([]);
+
+    setReceiver(() => JSON.parse(localStorage.getItem("receiver") || "{}"));
+    //  if (inputRef && inputRef.current) {
+    //    !inputRef.current.value ? setTypingStatus("") : null;
+    //  }
+  }, [param.id, currentUser?.name, currentUser?.id]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
-  const handleSendMessage = (e?: any) => {
-    e.preventDefault();
+  // if (oldReceiver !== receiver?.original_dm_roomID) {
+  //   socket.volatile.emit("disconnected", oldReceiver);
+  //   oldReceiver = receiver?.original_dm_roomID as string;
+  // }
+
+  // socket.volatile.emit("disconnected", currentUser?.id);
+
+  const handleSendMessage = () => {
     // Handle sending message logic here
 
     const messageObject: Partial<Message> = {
@@ -88,12 +111,24 @@ const Chats = () => {
   };
 
   const handleKeyDown = (e: any) => {
-    if (e.key === "Enter") handleSendMessage();
+    if (e.key === "Enter") {
+      setTypingStatus("");
+      handleSendMessage();
+    }
+    console.log(typingStatus);
+    socket.emit("typing", {
+      receiver: receiver,
+      currentUser: currentUser,
+    });
   };
-
+  socket.on("typingResponse", (data) => setTypingStatus(data));
   const handlePlusIconClick = () => {
     setShowDropdown((prevState) => !prevState);
   };
+
+  function handleBlur(e: any) {
+    if (!e.target.value) setTypingStatus("");
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -111,6 +146,8 @@ const Chats = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [showDropdown]);
+
+  // console.log(receivedMessages);
 
   return (
     <>
@@ -133,25 +170,23 @@ const Chats = () => {
                   size={4}
                   onClick={handleAvatarClick}
                   profilePicture={
-                    activeChat?.image ||
+                    receiver?.image ||
                     "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
                   }
                 />
               </>
 
               <div className="ml-4 ">
-                <p className="text-md hover:cursor-pointer ">
-                  {activeChat.name}
-                </p>
-                {/* <span className="text-gray-500 text-xs">online/offline</span> */}
+                <p className="text-md">{receiver?.name}</p>
+                <span className="text-gray-500 text-xs">
+                  {/* {typingStatus ? <Pulsation /> : ""} */}
+                  {typingStatus ? typingStatus : ""}
+                </span>
               </div>
             </div>
             <div className="flex items-center text-gray-500 text-xl">
               <FaSearch className="mr-8" />
-              <FaEllipsisV
-                onClick={handleAvatarClick}
-                className="mr-2 hover:cursor-pointer  hover:bg-gray-300 rounded-full w-fit self-center"
-              />
+              <FaEllipsisV className="mr-2" />
             </div>
           </div>
 
@@ -162,9 +197,15 @@ const Chats = () => {
             }}
             className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
           >
-            {receivedMessages?.map((message, i) => (
+            {/* {receivedMessages?.map((message, i) => (
               <div key={i}>{message} </div>
-            ))}
+            ))} */}
+
+            <Messages
+              messageList={receivedMessages}
+              currentUser={currentUser as Room}
+              receiver={receiver as Room}
+            />
           </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
@@ -192,6 +233,14 @@ const Chats = () => {
               onChange={handleChange}
               className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6 "
               onKeyDown={handleKeyDown}
+              onBlur={handleBlur}
+              ref={(node) => {
+                if (node) {
+                  if (!node.value) {
+                    setTypingStatus("");
+                  }
+                }
+              }}
             />
             {message.length === 0 ? (
               <button>
@@ -211,16 +260,14 @@ const Chats = () => {
         {showInfoCard && (
           <ContactInfo
             id={""}
-            title={` ${activeChat.isGroup ? "Group info" : "Contact info"}`}
+            title={"Contact info"}
             onClose={() => setShowInfoCard((prev) => !prev)}
             picture={
-              activeChat?.image ||
-              "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+              "https://i.pinimg.com/564x/fe/85/c3/fe85c35b97c3f14082ac2edfb25eba44.jpg"
             }
-            name={activeChat?.name}
+            name={"Caleb matins"}
             about={"made of gold"}
-            email={activeChat?.email}
-            isGroup={activeChat.isGroup}
+            email={"calebmatins@gmail.com"}
           />
         )}
       </div>

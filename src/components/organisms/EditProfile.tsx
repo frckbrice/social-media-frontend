@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import Dp from "../molecules/Dp";
+import Dp from "../molecules/ProfilePicture";
 
 // context import
 import { AppContext } from "next/app";
@@ -45,7 +45,6 @@ const EditProfile = () => {
     await updateProfileName(currentUser.id, update)
       .then((res) => {
         localStorage.setItem("sender", JSON.stringify(res));
-        setCurrentUser(res);
         setOnEditName((prev) => !prev);
         toast.success("UserName updated", {
           position: "top-right",
@@ -53,6 +52,7 @@ const EditProfile = () => {
           autoClose: 2000,
         });
         console.log(res);
+        setCurrentUser(res);
       })
       .catch((error) => {
         console.log(error);

@@ -4,13 +4,12 @@ import ContactCard from "./ContactCard";
 import { useAppContext } from "@/app/Context/AppContext";
 
 type Props = {
-  users: any;
-  contactClick: (user: User) => void;
+  contactClick: (user: Room) => void;
   goToCreateGrt: () => void;
 };
 
-const DisplayUsers = ({ contactClick, goToCreateGrt, users }: Props) => {
-  // const { allUsers } = useAppContext();
+const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
+  const { allUsers } = useAppContext();
 
   return (
     <div className=" h-[calc(100vh-161px)] bigScreen:h-[calc(95vh-153px)] overflow-x-hidden overflow-y-scroll">
@@ -28,15 +27,14 @@ const DisplayUsers = ({ contactClick, goToCreateGrt, users }: Props) => {
         CONTACTS ON WAXCHAT
       </p>
 
-      {users?.map((user: Room) => (
+      {allUsers?.map((user: Room) => (
         <ContactCard
           user={user}
           key={user.id}
-          onClick={() => contactClick(user as User)}
+          onClick={() => contactClick(user)}
           notification={""}
           active={false}
           className={""}
-          updatedAt={""}
         />
       ))}
     </div>

@@ -6,7 +6,7 @@ import { AiFillStar } from "react-icons/ai";
 import { FaDigitalOcean } from "react-icons/fa";
 import { BsFillBookmarkFill, BsX } from "react-icons/bs";
 import { TbBellFilled } from "react-icons/tb";
-import Dp from "../molecules/Dp";
+import Dp from "../molecules/ProfilePicture";
 import ContactAction from "../molecules/ContactAction";
 
 import { MdLock } from "react-icons/md";

@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useRef } from "react";
-import Dp from "../molecules/Dp";
+import ProfilPicture from "../molecules/ProfilePicture";
 import { toast } from "react-toastify";
 
 // Icons Import
 import { VscPassFilled } from "react-icons/vsc";
 import {
   addGroupMembers,
-  createGroup,
+  createRoom,
   uplaodImage,
 } from "@/utils/service/queries";
 import { useAppContext } from "@/app/Context/AppContext";
@@ -21,17 +21,14 @@ function GroupSetup({ closeModal }: setupProps) {
   const [groupIcon, setGroupIcon] = useState("");
   //   const [file, setFile] = useState<FileList | null>();
 
-  const { currentUser, chatRooms, setChatRooms } = useAppContext();
+  const { currentUser, setChatRooms } = useAppContext();
 
   const handleImageUpload = async (e: any) => {
-    // setFile(e.target.files[0]);
     const file = e.target.files[0];
     const groupAvatar = await uplaodImage(file);
     if (groupAvatar) {
       setGroupIcon(groupAvatar);
-      //   console.log("Group icon", groupAvatar);
     }
-    // console.log(e.target.files[0]);
   };
 
   //   console.log(file);
@@ -57,12 +54,12 @@ function GroupSetup({ closeModal }: setupProps) {
       return;
     }
 
-    const members = JSON.parse(localStorage.getItem("group_members") || "");
+    const members = JSON.parse(localStorage.getItem("group_members") || "[]");
     let membersIDs = members.map((member: User) => member.id);
     if (!members.find((member: string) => member === currentUser.user_id)) {
       membersIDs = [...membersIDs, currentUser.user_id];
     }
-    console.log("membersId,", membersIDs);
+    // console.log("membersId,", membersIDs);
 
     const groupData = {
       name: groupName,
@@ -71,7 +68,7 @@ function GroupSetup({ closeModal }: setupProps) {
       my_id: currentUser.user_id,
       isGroup: true,
     };
-    await createGroup(groupData).then(async (res) => {
+    await createRoom(groupData).then(async (res) => {
       if (res.error) {
         toast.error("Failed to create Group...!", {
           position: "top-right",
@@ -106,7 +103,7 @@ function GroupSetup({ closeModal }: setupProps) {
 
   return (
     <div className=" h-full">
-      <Dp
+      <ProfilPicture
         image={groupIcon}
         content={"Change group icon"}
         onClick={() => inputRef.current.click()}
