@@ -14,7 +14,9 @@ import { updateProfileName, uplaodImage } from "@/utils/service/queries";
 import { IoMdClose } from "react-icons/io";
 import { SITE_URL } from "@/utils/service/constant";
 import { toast } from "react-toastify";
+
 import { TbHourglassEmpty } from "react-icons/tb";
+
 
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
@@ -22,11 +24,14 @@ const EditProfile = () => {
   const { currentUser } = useAppContext();
   const [userName, setUserName] = useState(currentUser?.name);
 
+  const [about, setAbout] = useState("");
+
+
   const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
 
   const inputRef: any = useRef();
 
-  const email = JSON.parse(localStorage.getItem('email') || '')
+  const email = JSON.parse(localStorage.getItem("email") || "");
   const handleUpdateName = async () => {
     const update = { name: userName }
 
@@ -44,6 +49,7 @@ const EditProfile = () => {
       .catch((error) => {
         console.log(error)
       })
+
   };
 
   const handleUpdateAbout = () => {
@@ -86,12 +92,13 @@ const EditProfile = () => {
               </button> */}
               <button
                 className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
-                onClick={handleUpdateName}>
+                onClick={handleUpdateName}
+              >
                 <BsCheck2 size={20} />
               </button>
               <span
                 className=" mr-0 cursor-pointer hover:bg-gray-300 rounded-full w-fit self-center"
-                onClick={() => setOnEditName(prev => !prev)}
+                onClick={() => setOnEditName((prev) => !prev)}
               >
                 <IoMdClose size={23} />
               </span>

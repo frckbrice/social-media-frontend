@@ -169,6 +169,9 @@ const ContactInfo = ({
       {showAddMembers && (
         <>
           <Overlay onClick={() => setShowAddMembers((prev) => !prev)} />
+          <div className="z-40 fixed">
+            <h2>hello world</h2>
+          </div>
         </>
       )}
     </div>
