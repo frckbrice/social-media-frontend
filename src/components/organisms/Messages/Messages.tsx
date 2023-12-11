@@ -21,13 +21,13 @@ type Props = {
 const Messages = (props: Props) => {
   const divMessageRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    console.log("useeffect fired");
+    // console.log("useeffect fired");
     if (divMessageRef && divMessageRef.current) {
       const scrollPosition =
         divMessageRef.current.scrollHeight -
         divMessageRef.current.getBoundingClientRect().height;
 
-      console.log(scrollPosition);
+      // console.log(scrollPosition);
       divMessageRef.current.scrollTo({
         top: scrollPosition,
         left: 0,

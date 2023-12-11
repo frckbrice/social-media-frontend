@@ -7,8 +7,6 @@ export const formatLastMessageTime = (date: any) => {
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
 
-  console.log(diff, seconds, minutes, hours);
-
   if (seconds < 60) {
     return "Just now";
   } else if (minutes < 60) {
@@ -19,13 +17,13 @@ export const formatLastMessageTime = (date: any) => {
       minute: "numeric",
       hour12: true,
     });
-    console.log(time);
+
     return time;
   } else if (hours < 48 && hours > 24) {
     return ` yesterday,`;
   } else {
     const day = timetoformat.toLocaleString("en-US", { weekday: "long" });
-    console.log(day);
+
     return `${day}`;
   }
 };

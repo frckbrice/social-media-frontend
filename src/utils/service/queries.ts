@@ -2,6 +2,7 @@ import { supabase } from "../supabase/client";
 import { SITE_URL } from "./constant";
 import ApiCall from "./httpClient";
 import { LOCAL_STORAGE } from "./storage";
+import { socket } from "@/app/discussions/[id]/page";
 
 const apiCall = new ApiCall();
 
@@ -91,12 +92,13 @@ export const addGroupMembers = async (members: string[], room_id: string) => {
       room_id,
       role: `${member === sender.user_id ? "admin" : "member"}`,
     });
+
+    socket.emit("connected", { room: room_id, owner: member });
   });
 };
 
 // Update profile name
 export const updateProfileName = async (name: string, id: string) => {
-  console.log('id', id)
-  return apiCall.PUT(SITE_URL + `/rooms/${id}`, name)
-}
-
+  console.log("id", id);
+  return apiCall.PUT(SITE_URL + `/rooms/${id}`, name);
+};

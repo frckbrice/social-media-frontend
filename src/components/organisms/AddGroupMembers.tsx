@@ -93,7 +93,6 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
             notification={""}
             active={false}
             className={""}
-            updatedAt={""}
           />
         ))}
       </div>

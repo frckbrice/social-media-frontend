@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 import Avatar from "@/components/atoms/Avatar";
@@ -20,7 +20,7 @@ import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3001", {
+export const socket = io("http://localhost:3001", {
   // [1] Important as fuck
   path: "/socket.io/",
   reconnectionDelay: 1000,
@@ -39,6 +39,7 @@ import DropdownModal from "@/components/atoms/DropdownModal";
 import { sendError } from "next/dist/server/api-utils";
 import Messages from "@/components/organisms/Messages/Messages";
 import { IoMdArrowBack } from "react-icons/io";
+import Pulsation from "@/components/molecules/Pulsation";
 
 const Chats = () => {
   const param = useParams();
@@ -47,6 +48,7 @@ const Chats = () => {
 
   const [message, setMessage] = useState<string>("");
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
+  const [typingStatus, setTypingStatus] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentUser, setCurrentUser] = useState<Room | null>(
     (): Room | null => {
@@ -67,6 +69,8 @@ const Chats = () => {
     }
     return null;
   });
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   let oldReceiver: string = "";
 
@@ -90,16 +94,19 @@ const Chats = () => {
     setReceivedMessages([]);
 
     setReceiver(() => JSON.parse(localStorage.getItem("receiver") || "{}"));
+    //  if (inputRef && inputRef.current) {
+    //    !inputRef.current.value ? setTypingStatus("") : null;
+    //  }
   }, [param.id, currentUser?.name, currentUser?.id]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
-  if (oldReceiver !== receiver?.id) {
-    oldReceiver = receiver?.id as string;
-    socket.volatile.emit("disconnected", oldReceiver);
-  }
+  // if (oldReceiver !== receiver?.original_dm_roomID) {
+  //   socket.volatile.emit("disconnected", oldReceiver);
+  //   oldReceiver = receiver?.original_dm_roomID as string;
+  // }
 
   // socket.volatile.emit("disconnected", currentUser?.id);
 
@@ -125,12 +132,24 @@ const Chats = () => {
   };
 
   const handleKeyDown = (e: any) => {
-    if (e.key === "Enter") handleSendMessage();
+    if (e.key === "Enter") {
+      setTypingStatus("");
+      handleSendMessage();
+    }
+    console.log(typingStatus);
+    socket.emit("typing", {
+      receiver: receiver,
+      currentUser: currentUser,
+    });
   };
-
+  socket.on("typingResponse", (data) => setTypingStatus(data));
   const handlePlusIconClick = () => {
     setShowDropdown((prevState) => !prevState);
   };
+
+  function handleBlur(e: any) {
+    if (!e.target.value) setTypingStatus("");
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -180,7 +199,10 @@ const Chats = () => {
 
               <div className="ml-4 ">
                 <p className="text-md">{receiver?.name}</p>
-                {/* <span className="text-gray-500 text-xs">online/offline</span> */}
+                <span className="text-gray-500 text-xs">
+                  {/* {typingStatus ? <Pulsation /> : ""} */}
+                  {typingStatus ? typingStatus : ""}
+                </span>
               </div>
             </div>
             <div className="flex items-center text-gray-500 text-xl">
@@ -232,6 +254,14 @@ const Chats = () => {
               onChange={handleChange}
               className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6 "
               onKeyDown={handleKeyDown}
+              onBlur={handleBlur}
+              ref={(node) => {
+                if (node) {
+                  if (!node.value) {
+                    setTypingStatus("");
+                  }
+                }
+              }}
             />
             {message.length === 0 ? (
               <button>

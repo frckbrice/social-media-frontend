@@ -50,6 +50,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   const { allUsers } = useAppContext();
   const [chatRooms, setChatRooms] = useState<Room[]>([]);
+  let olduser: string = chatRooms[0]?.original_dm_roomID as string;
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
   };
@@ -83,7 +84,6 @@ function Discussion({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     getAllRooms().then((res) => {
       if (res.length) {
-        LOCAL_STORAGE.save("chat-rooms", res);
         // console.log(res);
         setChatRooms(res);
       }
@@ -113,7 +113,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
         }
       });
     }
-    LOCAL_STORAGE.save("chat-rooms", chatRooms);
+    // LOCAL_STORAGE.save("chat-rooms", chatRooms);
   };
 
   const handleClose = () => {
@@ -130,7 +130,13 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
     router.push(`/discussions/${user.original_dm_roomID}`);
     localStorage.setItem("receiver", JSON.stringify(user));
-    socket.emit("disconnected", data);
+
+    if (olduser !== user.original_dm_roomID) {
+      socket.emit("disconnected", olduser);
+      console.log(olduser);
+      olduser = user.original_dm_roomID as string;
+      console.log(olduser);
+    }
   };
 
   return (

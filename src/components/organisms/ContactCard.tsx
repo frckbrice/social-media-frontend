@@ -35,7 +35,7 @@ const ContactCard = ({
   return (
     <div
       onClick={onClick}
-      className={`flex  p-2 justify-between w-[100%] mobile:max-sm:w-full ${className} bigScreen:w-[100%] border-b hover:bg-bgGray items-center hover:cursor-pointer gap-5`}
+      className={`flex  p-2 pr-3 justify-between w-[100%] mobile:max-sm:w-full ${className} bigScreen:w-[100%] border-b hover:bg-bgGray items-center hover:cursor-pointer gap-5`}
     >
       <div className="flex items-center gap-5">
         <Avatar
