@@ -54,11 +54,11 @@ const ContactInfo = ({
       const data = response.json();
       console.log("deleted contact", data);
       localStorage.removeItem("activeChat");
-      toast.success('Chat deleted successfully', {
+      toast.success("Chat deleted successfully", {
         position: "top-right",
         hideProgressBar: true,
-        autoClose: 2000
-      })
+        autoClose: 2000,
+      });
       router.push("/discussions");
     } catch (error) {
       console.error(error);
