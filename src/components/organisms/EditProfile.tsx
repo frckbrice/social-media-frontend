@@ -31,7 +31,7 @@ const EditProfile = () => {
 
   const inputRef: any = useRef();
 
-  const email = localStorage.getItem("email");
+  const email = JSON.parse(localStorage.getItem("email") || "{}");
 
   const handleUpdateName = async () => {
     setIsLoading(true);
@@ -163,9 +163,7 @@ const EditProfile = () => {
       <div className="p-5 flex flex-col gap-5 text-primaryText">
         <span className="text-sm text-darkgreen">Email</span>
       </div>
-      <span className="text-sm font-normal p-5 text-primaryText">
-        {currentUser.email}
-      </span>
+      <span className="text-sm font-normal p-5 text-primaryText">{email}</span>
 
       {/* {!onEditAbout ? (
         <div className="px-5">

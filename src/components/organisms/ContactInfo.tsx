@@ -46,17 +46,17 @@ const ContactInfo = ({
   const [openCard, setOpenCard] = useState(false);
   const [showAddMembers, setShowAddMembers] = useState(false);
   const router = useRouter();
-  const [activeChat, setAtiveChat] = useState<Room>(
+  const [receiver, setReceiver] = useState<Room>(
     JSON.parse(localStorage.getItem("receiver") || "[]")
   );
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-  console.log("activeChat", activeChat);
+  console.log("receiver", receiver);
   const [members, setMembers] = useState<User[]>([]);
   const { allUsers } = useAppContext();
   const handleDelete = async () => {
     try {
       const response = await fetch(
-        SITE_URL + `/rooms/${activeChat.id}/${sender.user_id}`,
+        SITE_URL + `/rooms/${receiver.id}/${sender.user_id}`,
         {
           method: "DELETE",
         }
@@ -66,7 +66,7 @@ const ContactInfo = ({
       }
       const data = response.json();
       console.log("deleted contact", data);
-      localStorage.removeItem("activeChat");
+      localStorage.removeItem("receiver");
       toast.success("Chat deleted successfully", {
         position: "top-right",
         hideProgressBar: true,
@@ -76,10 +76,10 @@ const ContactInfo = ({
     } catch (error) {
       console.error(error);
     }
-    // await deleteSingleChat(activeChat.id, sender.user_id)
+    // await deleteSingleChat(receiver.id, sender.user_id)
     //   .then((res) => {
     //     console.log('deleted chat', res)
-    //     localStorage.removeItem('activeChat')
+    //     localStorage.removeItem('receiver')
     //     router.push("/discussions")
     //   })
     //   .catch((error) => {
@@ -105,15 +105,12 @@ const ContactInfo = ({
     let selectedMember: User[] = [];
     selectedMember.push(user);
     setMembers((prev) => [...prev, ...selectedMember]);
-
-    LOCAL_STORAGE.save("group_members", [...members, ...selectedMember]);
   };
 
   // handle remove member
   const HandleRemoveMember = (id: string) => {
     const filteredMembers = members.filter((member) => member.id !== id);
     setMembers(filteredMembers);
-    LOCAL_STORAGE.save("group_members", filteredMembers);
   };
 
   return (
@@ -133,7 +130,7 @@ const ContactInfo = ({
           </div>
         </div>
 
-        {!activeChat.isGroup ? (
+        {!receiver.isGroup ? (
           <>
             <div className="p-5 bg-white h-[87px]">
               <span className="text-sm text-primaryText">About</span>
