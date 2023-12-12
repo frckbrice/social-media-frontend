@@ -2,6 +2,8 @@
 
 import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 
+import { uploadFileToSupabase } from "@/utils/service/queries"
+
 import { useDropzone } from "react-dropzone";
 import Webcam from "react-webcam";
 
@@ -64,9 +66,19 @@ const Chats = () => {
     }
   };
 
-  const handleFileSelect = (acceptedFiles: File[]) => {
+  const handleFileSelect = async (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
-      setSelectedFile(acceptedFiles[0]);
+      const file = acceptedFiles[0];
+  
+      try {
+        const fileUrl = await uploadFileToSupabase(file);
+        if (fileUrl) {
+          console.log('File uploaded successfully:', fileUrl.data.publicUrl);
+          setSelectedFile(fileUrl.data.publicUrl);
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
     }
   };
 
