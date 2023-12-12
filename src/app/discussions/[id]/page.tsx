@@ -45,8 +45,6 @@ const Chats = () => {
   const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [recordingDuration, setRecordingDuration] = useState(0);
-  const [recordingInterval, setRecordingInterval] = useState<NodeJS.Timeout | null>(null);
 
   const webcamRef = useRef<Webcam | null>(null);
 
@@ -59,25 +57,12 @@ const Chats = () => {
   const handleCaptureVideo = () => {
     if (isRecording) {
       setIsRecording(false);
-      if (recordingInterval) {
-        clearInterval(recordingInterval);
-      }
-      setRecordingDuration(0);
-      setRecordingInterval(null);
       // Logic to stop video recording
     } else {
       setIsRecording(true);
-      const startTimestamp = Date.now();
-      const interval = setInterval(() => {
-        const currentTimestamp = Date.now();
-        const duration = Math.floor((currentTimestamp - startTimestamp) / 1000);
-        setRecordingDuration(duration);
-      }, 1000);
-      setRecordingInterval(interval);
       // Logic to start video recording
     }
   };
-  
 
   const handleFileSelect = (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -314,16 +299,6 @@ const Chats = () => {
           />
 
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
-
-          {isRecording && (
-    <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white text-lg">
-      {Math.floor(recordingDuration / 60)
-        .toString()
-        .padStart(2, "0")}
-      :
-      {(recordingDuration % 60).toString().padStart(2, "0")}
-    </div>
-  )}
             <Webcam
               audio={captureMode === "video"}
               ref={webcamRef}
