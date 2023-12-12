@@ -63,23 +63,23 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
   });
 
 
-  // const renderPreview = () => {
-  //   if (typeof file === "string") {
-  //     return <img src={file} alt="Captured" className="max-w-full h-80" />;
-  //   } else if (file) {
-  //     return (
-  //       <img
-  //         src={URL.createObjectURL(file)}
-  //         alt="Uploaded"
-  //         className="max-w-full mb-6 h-80"
-  //       />
-  //     );
-  //   } else {
-  //     return (
-  //       <p className="text-2xl text-gray-400">No preview available</p>
-  //     );
-  //   }
-  // };
+  const renderPreview = () => {
+    if (typeof file === "string") {
+      return <img src={file} alt="Captured" className="max-w-full h-80" />;
+    } else if (file) {
+      return (
+        <img
+          src={URL.createObjectURL(file)}
+          alt="Uploaded"
+          className="max-w-full mb-6 h-80"
+        />
+      );
+    } else {
+      return (
+        <p className="text-2xl text-gray-400">No preview available</p>
+      );
+    }
+  };
 
 
   return (
@@ -95,29 +95,8 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
 
       <div className="flex justify-center items-center flex-col my-20 h-auto">
 
-      {/* {renderPreview()} */}
-        {file && typeof file === "string" ? (
-          <div>
-            <img src={file} alt="Captured" className="max-w-full h-80" />
-          </div>
-        ) : file ? (
-          <div>
-            <img
-              src={URL.createObjectURL(file as Blob)}
-              alt="Uploaded"
-              className="max-w-full mb-6 h-80"
-            />
-            {/* <FaFile className="text-9xl mb-6 text-white" />
-            <p className="text-base text-gray-400">194 MB - DMG</p> */}
-          </div>
-        ) : (
-          <div className="hidden">
-            <img src="" alt="" />
-          </div>
-        )}
-        {!file && (
-          <p className="text-2xl text-gray-400">No preview available</p>
-        )}
+      {renderPreview()}
+      
       </div>
 
 
