@@ -45,6 +45,8 @@ const Chats = () => {
   const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [recordingDuration, setRecordingDuration] = useState(0);
+  const [recordingInterval, setRecordingInterval] = useState<NodeJS.Timeout | null>(null);
 
   const webcamRef = useRef<Webcam | null>(null);
 
@@ -57,12 +59,25 @@ const Chats = () => {
   const handleCaptureVideo = () => {
     if (isRecording) {
       setIsRecording(false);
+      if (recordingInterval) {
+        clearInterval(recordingInterval);
+      }
+      setRecordingDuration(0);
+      setRecordingInterval(null);
       // Logic to stop video recording
     } else {
       setIsRecording(true);
+      const startTimestamp = Date.now();
+      const interval = setInterval(() => {
+        const currentTimestamp = Date.now();
+        const duration = Math.floor((currentTimestamp - startTimestamp) / 1000);
+        setRecordingDuration(duration);
+      }, 1000);
+      setRecordingInterval(interval);
       // Logic to start video recording
     }
   };
+  
 
   const handleFileSelect = (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -200,7 +215,6 @@ const Chats = () => {
           </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
-
           <form
             onSubmit={handleSendMessage}
             className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
@@ -282,22 +296,6 @@ const Chats = () => {
             >
               <FaCamera className="text-pink-600 text-2xl" />
               <span className="text-gray-600">Camera</span>
-              {/* <button
-    className={`${
-      captureMode === "photo" ? "text-red-600" : "text-gray-600"
-    }`}
-    onClick={() => setCaptureMode("photo")}
-  >
-    <FaCamera className="text-2xl" />
-  </button>
-  <button
-    className={`${
-      captureMode === "video" ? "text-red-600" : "text-gray-600"
-    }`}
-    onClick={() => setCaptureMode("video")}
-  >
-    <FaVideo className="text-2xl" />
-  </button> */}
             </div>
 
             <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
@@ -308,55 +306,67 @@ const Chats = () => {
         </DropdownModal>
       )}
 
-{isCameraOpen && (
-  <div className="">
-    <FaTimes
-      onClick={() => setIsCameraOpen(false)}
-      className="absolute bottom-[79%] bg-themecolor left-1/3 text-2xl z-40 text-white cursor-pointer"
-    />
-
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <Webcam
-        audio={captureMode === "video"} // Enable audio only when capturing video
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        className="rounded-lg"
-      />
-      <button
-        onClick={
-          captureMode === "photo" ? handleCaptureImage : handleCaptureVideo
-        }
-        className="absolute bottom-36 left-1/2 transform -translate-x-1/2 mb-8 p-5 bg-themecolor text-gray-800 rounded-full shadow-md"
-      >
-        {captureMode === "photo" ? (
-          <FaCameraRetro className="text-2xl font-extrabold text-white" />
-        ) : (
-          <FaVideo className="text-2xl font-extrabold text-white" />
-        )}
-      </button>
       {isCameraOpen && (
-        <div className="absolute bottom-28 font-bold left-1/2 transform space-x-10 -translate-x-1/2">
-          <button
-            className={`${
-              captureMode === "photo" ? "text-yellow" : "text-gray-600"
-            }`}
-            onClick={() => setCaptureMode("photo")}
-          >
-            Photo
-          </button>
-          <button
-            className={`${
-              captureMode === "video" ? "text-white" : "text-gray-600"
-            }`}
-            onClick={() => setCaptureMode("video")}
-          >
-            Video
-          </button>
+        <div className="">
+          <FaTimes
+            onClick={() => setIsCameraOpen(false)}
+            className="absolute bottom-[79%] bg-themecolor left-1/3 text-2xl z-40 text-white cursor-pointer"
+          />
+
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
+
+          {isRecording && (
+    <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white text-lg">
+      {Math.floor(recordingDuration / 60)
+        .toString()
+        .padStart(2, "0")}
+      :
+      {(recordingDuration % 60).toString().padStart(2, "0")}
+    </div>
+  )}
+            <Webcam
+              audio={captureMode === "video"}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              className="rounded-lg"
+            />
+            <button
+              onClick={
+                captureMode === "photo"
+                  ? handleCaptureImage
+                  : handleCaptureVideo
+              }
+              className="absolute bottom-36 left-1/2 transform -translate-x-1/2 mb-8 p-5 bg-themecolor text-gray-800 rounded-full shadow-md"
+            >
+              {captureMode === "photo" ? (
+                <FaCameraRetro className="text-2xl font-extrabold text-white" />
+              ) : (
+                <FaVideo className="text-2xl font-extrabold text-white" />
+              )}
+            </button>
+            {isCameraOpen && (
+              <div className="absolute bottom-28 font-bold left-1/2 transform space-x-10 -translate-x-1/2">
+                <button
+                  className={`${
+                    captureMode === "photo" ? "text-yellow" : "text-gray-600"
+                  }`}
+                  onClick={() => setCaptureMode("photo")}
+                >
+                  Photo
+                </button>
+                <button
+                  className={`${
+                    captureMode === "video" ? "text-white" : "text-gray-600"
+                  }`}
+                  onClick={() => setCaptureMode("video")}
+                >
+                  Video
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
-    </div>
-  </div>
-)}
     </>
   );
 };
