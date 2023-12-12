@@ -147,7 +147,7 @@ const Chats = () => {
     };
   }, [showDropdown]);
 
-  // console.log(receivedMessages);
+  console.log("this received msg", receivedMessages);
 
   return (
     <>
@@ -260,14 +260,15 @@ const Chats = () => {
         {showInfoCard && (
           <ContactInfo
             id={""}
-            title={"Contact info"}
+            title={`${receiver?.isGroup ? "Group info" : "Contact info"}  `}
             onClose={() => setShowInfoCard((prev) => !prev)}
             picture={
+              receiver?.image ||
               "https://i.pinimg.com/564x/fe/85/c3/fe85c35b97c3f14082ac2edfb25eba44.jpg"
             }
-            name={"Caleb matins"}
+            name={receiver?.name}
             about={"made of gold"}
-            email={"calebmatins@gmail.com"}
+            email={receiver?.email}
           />
         )}
       </div>

@@ -7,18 +7,27 @@ import { MdDelete } from "react-icons/md";
 import Overlay from "../atoms/Overlay";
 import Popups from "../atoms/Popups";
 import { IoMdPersonAdd } from "react-icons/io";
+import { VscPassFilled } from "react-icons/vsc";
+
 import { useRouter } from "next/navigation";
 import { SITE_URL } from "@/utils/service/constant";
 import { toast } from "react-toastify";
+import { IoCloseSharp } from "react-icons/io5";
+import SearchInput from "../atoms/SearchInput";
+import { useAppContext } from "@/app/Context/AppContext";
+import ContactCard from "./ContactCard";
+import AddGroupMembers from "./AddGroupMembers";
+import { LOCAL_STORAGE } from "@/utils/service/storage";
+import AddedMember from "../molecules/AddedMember";
 
 type ContactCardProps = {
   id: string;
   title: string;
   onClose: () => void;
   picture: string;
-  name: string;
+  name?: string;
   about: string;
-  email: string;
+  email?: string;
   isGroup?: boolean;
 };
 
@@ -37,9 +46,13 @@ const ContactInfo = ({
   const [openCard, setOpenCard] = useState(false);
   const [showAddMembers, setShowAddMembers] = useState(false);
   const router = useRouter();
-  const activeChat = JSON.parse(localStorage.getItem("activeChat") || "{}");
+  const [activeChat, setAtiveChat] = useState<Room>(
+    JSON.parse(localStorage.getItem("receiver") || "[]")
+  );
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-
+  console.log("activeChat", activeChat);
+  const [members, setMembers] = useState<User[]>([]);
+  const { allUsers } = useAppContext();
   const handleDelete = async () => {
     try {
       const response = await fetch(
@@ -75,6 +88,34 @@ const ContactInfo = ({
     setOnDelete((prev) => !prev);
   };
 
+  // Handle earch filter
+  const handleSearch = () => {};
+
+  // handle Add memeber
+  const handelAddMember = (user: User) => {
+    if (members.find((member) => member.id === user.id)) {
+      toast.error("already added...!", {
+        position: "top-right",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    let selectedMember: User[] = [];
+    selectedMember.push(user);
+    setMembers((prev) => [...prev, ...selectedMember]);
+
+    LOCAL_STORAGE.save("group_members", [...members, ...selectedMember]);
+  };
+
+  // handle remove member
+  const HandleRemoveMember = (id: string) => {
+    const filteredMembers = members.filter((member) => member.id !== id);
+    setMembers(filteredMembers);
+    LOCAL_STORAGE.save("group_members", filteredMembers);
+  };
+
   return (
     <div className="w-[45vw] z-20 mobile:max-sm:w-full bg-bgGray overflow-y-scroll ">
       <div className="flex items-center gap-5 p-4 border-l border-l-slate-300">
@@ -92,7 +133,7 @@ const ContactInfo = ({
           </div>
         </div>
 
-        {!isGroup ? (
+        {!activeChat.isGroup ? (
           <>
             <div className="p-5 bg-white h-[87px]">
               <span className="text-sm text-primaryText">About</span>
@@ -169,8 +210,54 @@ const ContactInfo = ({
       {showAddMembers && (
         <>
           <Overlay onClick={() => setShowAddMembers((prev) => !prev)} />
-          <div className="z-40 fixed">
-            <h2>hello world</h2>
+          <div className=" mobile:max-sm:w-full mobile:max-sm:top-0 mobile:max-sm:right-0 mobile:max-sm:h-screen mobile:max-sm:mt-0   z-40 fixed bg-white top-0 shadow-md right-[33vw] h-[90vh] mt-[5vh] w-[437px]">
+            <div className="flex gap-5 items-center relative bg-darkgreen p-4 text-white">
+              <button onClick={() => setShowAddMembers((prev) => !prev)}>
+                <IoCloseSharp size={20} />
+              </button>
+
+              <span>Add member</span>
+            </div>
+            <div className="">
+              <div className="p-4">
+                <SearchInput handleFilter={handleSearch} />
+              </div>
+
+              <div
+                className={`${
+                  !members.length ? "hidden" : "visble p-4 "
+                }p-4 flex flex-wrap gap-2 overflow-y-auto  max-h-[80px]`}
+              >
+                {members.map((member: User) => (
+                  <AddedMember
+                    key={member.id}
+                    name={member.name}
+                    image={member.image || ""}
+                    onClick={() => HandleRemoveMember(member.id)}
+                  />
+                ))}
+              </div>
+
+              <div
+                className={`w-full ${
+                  members.length ? "h-[calc(90vh-115px-80px)]" : ""
+                } h-[calc(90vh-115px)] mobile:max-sm:h-[calc(100vh-115px)]  overflow-x-auto `}
+              >
+                {allUsers.map((user) => (
+                  <ContactCard
+                    user={user}
+                    key={user.id}
+                    onClick={() => handelAddMember(user)}
+                    notification={""}
+                    active={false}
+                    className={""}
+                  />
+                ))}
+              </div>
+            </div>
+            <button className="absolute bg-white rounded-[50%] text-themecolor right-10 bottom-10">
+              <VscPassFilled size={60} />
+            </button>
           </div>
         </>
       )}

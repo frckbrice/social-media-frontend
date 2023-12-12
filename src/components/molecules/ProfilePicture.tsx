@@ -39,7 +39,7 @@ const Dp = ({ image, onClick, content }: Props) => {
               width: `200px`,
               height: `200px`,
             }}
-            className="  opacity-50 rounded-[50%] items-center hover:bg-[#131a23] h-full p-10 w-full  flex-col justify-center text-[0px] hover:text-[15px] text-center hover:visible text-white font-bold flex "
+            className="  opacity-70 rounded-[50%] items-center hover:bg-[#131a23] h-full p-10 w-full  flex-col justify-center text-[0px] hover:text-[15px] text-center hover:visible text-white  font-bold flex "
           >
             <span className="content flex flex-col justify-center items-center ">
               <FaCamera />
