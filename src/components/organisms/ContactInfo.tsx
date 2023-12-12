@@ -16,9 +16,9 @@ type ContactCardProps = {
   title: string;
   onClose: () => void;
   picture: string;
-  name: string;
+  name?: string;
   about: string;
-  email: string;
+  email?: string;
   isGroup?: boolean;
 };
 

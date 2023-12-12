@@ -23,16 +23,17 @@ const Messages = (props: Props) => {
   useEffect(() => {
     // console.log("useeffect fired");
     if (divMessageRef && divMessageRef.current) {
-      const scrollPosition =
-        divMessageRef.current.scrollHeight -
-        divMessageRef.current.getBoundingClientRect().height;
+      // const scrollPosition =
+      //   divMessageRef.current.scrollHeight -
+      //   divMessageRef.current.getBoundingClientRect().height;
 
-      // console.log(scrollPosition);
-      divMessageRef.current.scrollTo({
-        top: scrollPosition,
-        left: 0,
-        behavior: "smooth", // Enable smooth scrolling
-      });
+      // // console.log(scrollPosition);
+      // divMessageRef.current.scrollTo({
+      //   top: scrollPosition,
+      //   left: 0,
+      //   behavior: "smooth", // Enable smooth scrolling
+      // });
+      divMessageRef.current.scrollTop = divMessageRef.current.scrollHeight;
     }
     // divMessageRef.current.scrollTop = divMessageRef.current.scrollHeight;{}
   }, [props.messageList]);
