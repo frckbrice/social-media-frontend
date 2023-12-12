@@ -23,6 +23,8 @@ const EditProfile = () => {
   const { currentUser, setCurrentUser } = useAppContext();
   const [userName, setUserName] = useState(currentUser?.name);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [about, setAbout] = useState("");
 
   const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
@@ -32,6 +34,7 @@ const EditProfile = () => {
   const email = localStorage.getItem("email");
 
   const handleUpdateName = async () => {
+    setIsLoading(true);
     const update = { name: userName };
     if (!update.name) {
       toast.error("UserName can not be empty!", {
@@ -39,6 +42,8 @@ const EditProfile = () => {
         hideProgressBar: true,
         autoClose: 2000,
       });
+      setIsLoading(false);
+
       return;
     }
 
@@ -53,9 +58,11 @@ const EditProfile = () => {
         });
         console.log(res);
         setCurrentUser(res);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setIsLoading(false);
       });
   };
 
@@ -66,6 +73,7 @@ const EditProfile = () => {
   // Upload image
   const handleImageUpload = async (e: any) => {
     // console.log(e.target.files);
+    setIsLoading(true);
 
     const file = e.target.files[0];
     const photoUrl = await uplaodImage(file);
@@ -82,20 +90,25 @@ const EditProfile = () => {
             autoClose: 2000,
           });
           console.log(res);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.log(error);
+          setIsLoading(false);
         });
     }
   };
 
   return (
-    <div>
+    <div className="relative">
       <Dp
         image={profilePhoto || ""}
         content={"CHANGE PROFILE PHOTO"}
         onClick={() => inputRef.current.click()}
       />
+      {isLoading && (
+        <div className="loader m-auto absolute right-[45%] border-t-2 rounded-full border-themecolor bg-gray-300 animate-spin aspect-square w-8 flex justify-center items-center text-yellow-700"></div>
+      )}
       <div className="px-5 py-2 flex flex-col gap-5">
         <span className="text-sm text-darkgreen">your name</span>
 
