@@ -63,23 +63,23 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
   });
 
 
-  const renderPreview = () => {
-    if (typeof file === "string") {
-      return <img src={file} alt="Captured" className="max-w-full h-80" />;
-    } else if (file) {
-      return (
-        <img
-          src={URL.createObjectURL(file)}
-          alt="Uploaded"
-          className="max-w-full mb-6 h-80"
-        />
-      );
-    } else {
-      return (
-        <p className="text-2xl text-gray-400">No preview available</p>
-      );
-    }
-  };
+  // const renderPreview = () => {
+  //   if (typeof file === "string") {
+  //     return <img src={file} alt="Captured" className="max-w-full h-80" />;
+  //   } else if (file) {
+  //     return (
+  //       <img
+  //         src={URL.createObjectURL(file)}
+  //         alt="Uploaded"
+  //         className="max-w-full mb-6 h-80"
+  //       />
+  //     );
+  //   } else {
+  //     return (
+  //       <p className="text-2xl text-gray-400">No preview available</p>
+  //     );
+  //   }
+  // };
 
 
   return (
@@ -93,7 +93,9 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
         <p>{typeof file === "string" ? "Captured Image" : file.name}</p>
       </div>
 
-      <div className="flex justify-center items-center flex-col my-20">
+      <div className="flex justify-center items-center flex-col my-20 h-auto">
+
+      {/* {renderPreview()} */}
         {file && typeof file === "string" ? (
           <div>
             <img src={file} alt="Captured" className="max-w-full h-80" />
@@ -117,6 +119,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
           <p className="text-2xl text-gray-400">No preview available</p>
         )}
       </div>
+
 
       <div className="flex w-[90%]">
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">

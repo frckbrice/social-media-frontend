@@ -66,12 +66,12 @@ export const uplaodImage = async (file: any) => {
 
 
 //upload all file types to supabase 
-export const uploadFileToSupabase = async (file: File) => {
-  const fileName = `file_${Date.now()}.${file.name.split('.').pop()}`;
+// export const uploadFileToSupabase = async (file: File) => {
+//   const fileName = `file_${Date.now()}.${file.name.split('.').pop()}`;
 
-  const { data, error } = await supabase.storage
-    .from("your_bucket_name")
-    .upload(fileName, file);
+//   const { data, error } = await supabase.storage
+//     .from("your_bucket_name")
+//     .upload(fileName, file);
 
   if (error) {
     console.error("Error uploading file to Supabase:", error);
@@ -115,3 +115,13 @@ export const updateProfileName = async (
   console.log("id", id);
   return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
 };
+//   if (error) {
+//     console.error("Error uploading file to Supabase:", error);
+//   } else {
+//     const fileUrl = supabase.storage
+//       .from("your_bucket_name")
+//       .getPublicUrl(data.path);
+//     console.log("File download URL:", fileUrl);
+//     return fileUrl;
+//   }
+// };
