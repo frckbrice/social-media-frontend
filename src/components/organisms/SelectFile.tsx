@@ -20,10 +20,8 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
   const router = useRouter();
 
   const handleClear = () => {
-    // Add any additional logic you need before going back to the chats component
     router.back();
   };
-
 
   const handleMouseEnter = () => {
     setIsHovered(true);

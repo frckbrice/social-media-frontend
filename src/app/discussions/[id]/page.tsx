@@ -39,7 +39,6 @@ const Chats = () => {
   const [typingStatus, setTypingStatus] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const [showSelectFile, setShowSelectFile] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFileSelect = (acceptedFiles: File[]) => {
@@ -48,7 +47,7 @@ const Chats = () => {
     }
   };
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleFileSelect,
     multiple: false,
     // accept: "application/pdf",
@@ -257,29 +256,37 @@ const Chats = () => {
       {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
+            
             <div
               {...getRootProps()}
               className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
-              // onClick={handleDocumentClick}
             >
               <input {...getInputProps()} />
+              {isDragActive ? (
+            <p>Drop the files here...</p>
+          ) : (
+              <div>
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
+              </div>
+          )}
             </div>
 
-            <div
+
+            <div 
+              {...getRootProps()}
               className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
-              onClick={() => {
-                // Handle photos/videos upload logic here
-              }}
             >
+              <input {...getInputProps()} />
               <FaPhotoVideo className="text-blue-600 text-2xl" />
               <span className="text-gray-600">Photos & Videos</span>
             </div>
+
             <div className="flex items-center space-x-3 text-lg cursor-pointer">
               <FaCamera className="text-pink-600  text-2xl" />
               <span className="text-gray-600">Camera</span>
             </div>
+
             <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
               <FaUser className="text-blue-400 text-2xl" />
               <span className="text-gray-600">Contact</span>
