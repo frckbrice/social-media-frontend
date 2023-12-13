@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect, useRef } from "react";
+import React, { useState, ChangeEvent, useEffect, useRef, useRef } from "react";
 
 import { useDropzone } from "react-dropzone";
-
-import { useRouter } from "next/navigation";
+import Webcam from "react-webcam";
 
 import Avatar from "@/components/atoms/Avatar";
 import {
@@ -41,13 +40,25 @@ const Chats = () => {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const webcamRef = useRef<Webcam | null>(null);
+
+  const handleCaptureImage = () => {
+    const imageSrc = webcamRef.current?.getScreenshot() || null;
+    setCapturedImage(imageSrc);
+    setIsCameraOpen(false);
+  };
+
+
+
   const handleFileSelect = (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       setSelectedFile(acceptedFiles[0]);
     }
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleFileSelect,
     multiple: false,
     // accept: "application/pdf",
@@ -172,7 +183,6 @@ const Chats = () => {
               }}
               className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-y-auto p-4"
             >
-
             {selectedFile &&             {/* {receivedMessages?.map((message, i) => (
               <div key={i}>{message} </div>
             ))} */}
@@ -184,7 +194,6 @@ const Chats = () => {
             />
           
 <SelectFile file={selectedFile} />}
-            
           </div>
             {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
@@ -256,24 +265,16 @@ const Chats = () => {
       {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
-            
             <div
               {...getRootProps()}
               className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
             >
               <input {...getInputProps()} />
-              {isDragActive ? (
-            <p>Drop the files here...</p>
-          ) : (
-              <div>
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
-              </div>
-          )}
             </div>
 
-
-            <div 
+            <div
               {...getRootProps()}
               className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
             >
@@ -282,10 +283,13 @@ const Chats = () => {
               <span className="text-gray-600">Photos & Videos</span>
             </div>
 
-            <div className="flex items-center space-x-3 text-lg cursor-pointer">
-              <FaCamera className="text-pink-600  text-2xl" />
-              <span className="text-gray-600">Camera</span>
-            </div>
+            <div
+  className="flex items-center space-x-3 text-lg cursor-pointer"
+  onClick={() => setIsCameraOpen(true)}
+>
+  <FaCamera className="text-pink-600 text-2xl" />
+  <span className="text-gray-600">Camera</span>
+</div>
 
             <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
               <FaUser className="text-blue-400 text-2xl" />
@@ -293,6 +297,31 @@ const Chats = () => {
             </div>
           </div>
         </DropdownModal>
+      )}
+
+
+{isCameraOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            className="rounded-lg"
+          />
+          <button
+            onClick={handleCaptureImage}
+            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-8 px-4 py-2 bg-white text-gray-800 rounded-md shadow-md"
+          >
+            Capture
+          </button>
+        </div>
+      )}
+
+      {capturedImage && (
+        <div>
+          <h3>Preview:</h3>
+          <img src={capturedImage} alt="Captured" />
+        </div>
       )}
     </>
   );
