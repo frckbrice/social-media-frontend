@@ -42,7 +42,6 @@ const Chats = () => {
   const [selectedFile, setSelectedFile] = useState<File | string | null>(null);
 
   const [isCameraOpen, setIsCameraOpen] = useState(false);
-  // const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const webcamRef = useRef<Webcam | null>(null);
 
   const handleCaptureImage = () => {
@@ -175,13 +174,6 @@ const Chats = () => {
             }}
             className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
           >
-            {selectedFile && (
-              <SelectFile
-                file={selectedFile}
-                onCaptureImage={handleCaptureImage}
-                onClose={handleCloseSelectFile}
-              />
-            )}
             {/* {capturedImage && <SelectFile file={capturedImage} />} */}
                   <p className="text-md">{receiver?.name}</p>
                   <span className="text-gray-500 text-xs">
@@ -203,17 +195,13 @@ const Chats = () => {
               }}
               className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-y-auto p-4"
             >
-            {selectedFile &&             {/* {receivedMessages?.map((message, i) => (
-              <div key={i}>{message} </div>
-            ))} */}
-
+            
             <Messages
               messageList={receivedMessages}
               currentUser={currentUser as Room}
               receiver={receiver as Room}
             />
           
-<SelectFile file={selectedFile} />}
           </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
@@ -225,7 +213,6 @@ const Chats = () => {
             />
           )}
 
-          {/* {!selectedFile && ( */}
           <form
             onSubmit={handleSendMessage}
             className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
@@ -263,7 +250,6 @@ const Chats = () => {
               </button>
             )}
           </form>
-          {/* )} */}
         </div>
 
         {showInfoCard && (
@@ -318,22 +304,29 @@ const Chats = () => {
         </DropdownModal>
       )}
 
-      {isCameraOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            className="rounded-lg"
-          />
-          <button
-            onClick={handleCaptureImage}
-            className="absolute bottom-36 left-1/2 transform -translate-x-1/2 mb-8 p-5 bg-themecolor text-gray-800 rounded-full shadow-md"
-          >
-            <FaCameraRetro className="text-2xl font-extrabold text-white" />
-          </button>
-        </div>
-      )}
+{isCameraOpen && (
+  <div className="">
+    <FaTimes
+      onClick={() => setIsCameraOpen(false)}
+      className="absolute bottom-[79%] bg-themecolor left-1/3 text-2xl z-40 text-white cursor-pointer"
+    />
+
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <Webcam
+        audio={false}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+        className="rounded-lg"
+      />
+      <button
+        onClick={handleCaptureImage}
+        className="absolute bottom-36 left-1/2 transform -translate-x-1/2 mb-8 p-5 bg-themecolor text-gray-800 rounded-full shadow-md"
+      >
+        <FaCameraRetro className="text-2xl font-extrabold text-white" />
+      </button>
+    </div>
+  </div>
+)}
     </>
   );
 };

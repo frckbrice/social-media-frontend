@@ -97,23 +97,17 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
         <p>{typeof file === "string" ? "Captured Image" : file.name}</p>
       </div>
 
-<<<<<<< HEAD
-      <div className="flex justify-center items-center flex-col my-20 h-auto">
-
-      {renderPreview()}
-      
-=======
       <div className="flex justify-center items-center flex-col my-20">
         {file && typeof file === "string" ? (
           <div>
-            <img src={file} alt="Captured" className="max-w-full w-80 h-auto" />
+            <img src={file} alt="Captured" className="max-w-full h-80" />
           </div>
         ) : file ? (
           <div>
             <img
               src={URL.createObjectURL(file as Blob)}
               alt="Uploaded"
-              className="max-w-full w-80 mb-6 h-auto"
+              className="max-w-full mb-6 h-80"
             />
             {/* <FaFile className="text-9xl mb-6 text-white" />
             <p className="text-base text-gray-400">194 MB - DMG</p> */}
@@ -128,11 +122,9 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
         {!file && (
           <p className="text-2xl text-gray-400">No preview available</p>
         )}
->>>>>>> 44c7f8a (uploading camera)
       </div>
 
-      <div className="flex">
-
+      <div className="flex w-[90%]">
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
           type="text"
@@ -146,7 +138,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
       <div className="bg-themecolor rounded-full w-12 h-12 cursor-pointer flex items-center justify-center">
           <FaPaperPlane className="text-2xl text-white" />
         </div>
-
         </div>
       <p className=" border-b border-gray-300 my-6"></p>
 
@@ -181,13 +172,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
           )}
           {/* {isHovered && <span className=" bg-gray-300 text-sm px-2 py-1">Add file</span>} */}
         </div>
-
-        
       </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 44c7f8a (uploading camera)
     </div>)}
     </>
   );
