@@ -171,11 +171,6 @@ const Chats = () => {
     }
   };
 
-  // const handleFileSelect = (acceptedFiles: File[]) => {
-  //   if (acceptedFiles.length > 0) {
-  //     setSelectedFile(acceptedFiles[0]);
-  //   }
-  // };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleFileSelect,
@@ -366,6 +361,7 @@ const Chats = () => {
             </div>
 
             <div
+              {...getRootProps()}
               className="flex items-center space-x-3 text-lg cursor-pointer"
               onClick={() => setIsCameraOpen(true)}
             >
