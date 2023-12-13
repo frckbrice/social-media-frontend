@@ -98,7 +98,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
   // FETCH CHAT ROOMS
   useEffect(() => {
     setFilterChats(chatRooms);
-  }, [chatRooms]);
+    setUsersDisplay(allUsers);
+  }, [allUsers, chatRooms]);
 
   // HANDLE START CHAT
   const handleStartChat = async (user: Room) => {
@@ -209,7 +210,13 @@ function Discussion({ children }: { children: React.ReactNode }) {
             </button>
           </div>
           {chatRooms?.length ? (
-            <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
+            <div
+              style={{
+                scrollbarColor: "red",
+                scrollbarWidth: "thin",
+              }}
+              className="displayChats h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto"
+            >
               {filterChats?.map((user: Room) => (
                 <ContactCard
                   user={user}
