@@ -54,7 +54,7 @@ const Chats = () => {
   let oldReceiver: string = "";
 
   socket.on("message", (data) => {
-    // console.log("message received: ", data);
+    console.log("message received: ", data);
     if (Array.isArray(data)) {
       setReceivedMessages([...receivedMessages, ...data]);
     } else setReceivedMessages([...receivedMessages, data]);
@@ -73,9 +73,6 @@ const Chats = () => {
     setReceivedMessages([]);
 
     setReceiver(() => JSON.parse(localStorage.getItem("receiver") || "{}"));
-    //  if (inputRef && inputRef.current) {
-    //    !inputRef.current.value ? setTypingStatus("") : null;
-    //  }
   }, [param.id, currentUser?.name, currentUser?.id]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -117,11 +114,14 @@ const Chats = () => {
     }
     console.log(typingStatus);
     socket.emit("typing", {
-      receiver: receiver,
-      currentUser: currentUser,
+      receiver,
+      currentUser,
     });
   };
-  socket.on("typingResponse", (data) => setTypingStatus(data));
+  socket.on("typingResponse", (data) => {
+    console.log(data);
+    setTypingStatus(data);
+  });
   const handlePlusIconClick = () => {
     setShowDropdown((prevState) => !prevState);
   };
@@ -147,7 +147,10 @@ const Chats = () => {
     };
   }, [showDropdown]);
 
-  console.log("this received msg", receivedMessages);
+  console.log(receivedMessages);
+  socket.on("notify", (data) => {
+    console.log(data);
+  });
 
   return (
     <>
@@ -269,9 +272,9 @@ const Chats = () => {
               receiver?.image ||
               "https://i.pinimg.com/564x/fe/85/c3/fe85c35b97c3f14082ac2edfb25eba44.jpg"
             }
-            name={receiver?.name}
+            name={receiver?.name as string}
             about={"made of gold"}
-            email={receiver?.email}
+            email={receiver?.email as string}
           />
         )}
       </div>
