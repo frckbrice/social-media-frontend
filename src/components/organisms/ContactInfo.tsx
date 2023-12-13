@@ -207,7 +207,7 @@ const ContactInfo = ({
       {showAddMembers && (
         <>
           <Overlay onClick={() => setShowAddMembers((prev) => !prev)} />
-          <div className=" mobile:max-sm:w-full mobile:max-sm:top-0 mobile:max-sm:right-0 mobile:max-sm:h-screen mobile:max-sm:mt-0   z-40 fixed bg-white top-0 shadow-md right-[33vw] h-[90vh] mt-[5vh] w-[437px]">
+          <div className=" mobile:max-sm:w-full mobile:max-sm:top-0 mobile:max-sm:right-0 mobile:max-sm:h-screen mobile:max-sm:mt-0   z-40 fixed bg-white top-0 shadow-md right-[33vw] h-[90vh] mt-[5vh] w-[437px] bigScreen:w-[500px] bigScreen:right-[35%]">
             <div className="flex gap-5 items-center relative bg-darkgreen p-4 text-white">
               <button onClick={() => setShowAddMembers((prev) => !prev)}>
                 <IoCloseSharp size={20} />
