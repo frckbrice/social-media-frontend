@@ -39,7 +39,6 @@ import SelectFile from "@/components/organisms/SelectFile";
 
 const Chats = () => {
   const param = useParams();
-  const router = useRouter();
   const [showInfoCard, setShowInfoCard] = useState(false);
 
   const [message, setMessage] = useState<string>("");

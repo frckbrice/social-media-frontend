@@ -44,40 +44,40 @@ export const getAllRooms = async () => {
   return await res.json();
 };
 
-// UPLOAD IMAGE TO SUPABSE
-export const uplaodImage = async (file: any) => {
-  const fileValue = `groupIcon${Date.now()}.png`;
+// // UPLOAD IMAGE TO SUPABSE
+// export const uplaodImage = async (file: any) => {
+//   const fileValue = `groupIcon${Date.now()}.png`;
 
-  const { data, error } = await supabase.storage
-    .from("whatsapp_avatars/images")
-    .upload(fileValue, file);
+//   const { data, error } = await supabase.storage
+//     .from("whatsapp_avatars/images")
+//     .upload(fileValue, file);
 
-  if (error) {
-    console.error("error creatin group icon", error);
-  } else {
-    console.log("group icon data", data);
-    const imageUrl = supabase.storage
-      .from("whatsapp_avatars/images")
-      .getPublicUrl(data.path);
-    console.log("group icon download url", imageUrl.data.publicUrl);
-    return imageUrl.data.publicUrl;
-  }
-};
+//   if (error) {
+//     console.error("error creatin group icon", error);
+//   } else {
+//     console.log("group icon data", data);
+//     const imageUrl = supabase.storage
+//       .from("whatsapp_avatars/images")
+//       .getPublicUrl(data.path);
+//     console.log("group icon download url", imageUrl.data.publicUrl);
+//     return imageUrl.data.publicUrl;
+//   }
+// };
 
 
 //upload all file types to supabase 
-// export const uploadFileToSupabase = async (file: File) => {
-//   const fileName = `file_${Date.now()}.${file.name.split('.').pop()}`;
+export const uploadFileToSupabase = async (file: File) => {
+  const fileName = `file_${Date.now()}.${file.name.split('.').pop()}`;
 
-//   const { data, error } = await supabase.storage
-//     .from("your_bucket_name")
-//     .upload(fileName, file);
+  const { data, error } = await supabase.storage
+    .from("whatsapp_avatars/images")
+    .upload(fileName, file);
 
   if (error) {
     console.error("Error uploading file to Supabase:", error);
   } else {
     const fileUrl = supabase.storage
-      .from("your_bucket_name")
+      .from("whatsapp_avatars/images")
       .getPublicUrl(data.path);
     console.log("File download URL:", fileUrl);
     return fileUrl;
@@ -97,11 +97,6 @@ export const addGroupMembers = async (members: string[], room_id: string) => {
 
     // socket.emit("connected", { room: room_id, owner: memberId });
   });
-};
-
-// GET GROUP MEMBERS BY GROUP ID
-export const getGroupMembers = async (id: string) => {
-  return apiCall.GET(SITE_URL + `/rooms_users/all_participants/${id}`);
 };
 
 // Update profile name
