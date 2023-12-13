@@ -131,8 +131,8 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
 >>>>>>> 44c7f8a (uploading camera)
       </div>
 
+      <div className="flex">
 
-      <div className="flex w-[90%]">
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
           type="text"
@@ -146,6 +146,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
       <div className="bg-themecolor rounded-full w-12 h-12 cursor-pointer flex items-center justify-center">
           <FaPaperPlane className="text-2xl text-white" />
         </div>
+
         </div>
       <p className=" border-b border-gray-300 my-6"></p>
 
@@ -180,6 +181,8 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
           )}
           {/* {isHovered && <span className=" bg-gray-300 text-sm px-2 py-1">Add file</span>} */}
         </div>
+
+        
       </div>
 <<<<<<< HEAD
 
