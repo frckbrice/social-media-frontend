@@ -1,6 +1,6 @@
 "use client";
 
-import { uploadFileToSupabase } from "@/utils/service/queries"
+import { uploadFileToSupabase } from "@/utils/service/queries";
 import { useDropzone } from "react-dropzone";
 import Webcam from "react-webcam";
 import ContactInfo from "@/components/organisms/ContactInfo";
@@ -37,14 +37,12 @@ import Pulsation from "@/components/molecules/Pulsation";
 import { useAppContext } from "@/app/Context/AppContext";
 
 const Chats = () => {
-
   const [selectedFile, setSelectedFile] = useState<File | string | null>(null);
   const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
   const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const webcamRef = useRef<Webcam | null>(null);
-
 
   const param = useParams();
   const router = useRouter();
@@ -136,8 +134,6 @@ const Chats = () => {
     if (!e.target.value) setTypingStatus("");
   }
 
-
-
   const handleCaptureImage = () => {
     const imageSrc = webcamRef.current?.getScreenshot() || null;
     setSelectedFile(imageSrc);
@@ -153,24 +149,24 @@ const Chats = () => {
       // Logic to start video recording
     }
   };
-  
+
   const handleFileSelect = async (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
-  
+
       try {
         const filePreviewUrl = URL.createObjectURL(file);
         setSelectedFile(file);
         setFilePreviewUrl(filePreviewUrl);
-  
+
         const fileUrl = await uploadFileToSupabase(file);
         if (fileUrl) {
-          console.log('File uploaded successfully:', fileUrl.data.publicUrl);
+          console.log("File uploaded successfully:", fileUrl.data.publicUrl);
           setSelectedFile(null);
           setFilePreviewUrl(null);
         }
       } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error("Error uploading file:", error);
       }
     }
   };
@@ -277,12 +273,12 @@ const Chats = () => {
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
           {selectedFile && (
-              <SelectFile
-                file={selectedFile}
-                onCaptureImage={handleCaptureImage}
-                onClose={handleCloseSelectFile}
-              />
-            )}
+            <SelectFile
+              file={selectedFile}
+              onCaptureImage={handleCaptureImage}
+              onClose={handleCloseSelectFile}
+            />
+          )}
 
           <div
             onSubmit={handleSendMessage}
@@ -350,42 +346,42 @@ const Chats = () => {
 
       {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
-        <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
-          <div
-            {...getRootProps()}
-            className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
-          >
-            <input {...getInputProps()} />
-            <FaFileInvoice className="text-purple-500 text-2xl" />
-            <span className="text-gray-600">Document</span>
-          </div>
+          <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
+            <div
+              {...getRootProps()}
+              className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
+            >
+              <input {...getInputProps()} />
+              <FaFileInvoice className="text-purple-500 text-2xl" />
+              <span className="text-gray-600">Document</span>
+            </div>
 
-          <div
-            {...getRootProps()}
-            className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
-          >
-            <input {...getInputProps()} />
-            <FaPhotoVideo className="text-blue-600 text-2xl" />
-            <span className="text-gray-600">Photos & Videos</span>
-          </div>
+            <div
+              {...getRootProps()}
+              className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
+            >
+              <input {...getInputProps()} />
+              <FaPhotoVideo className="text-blue-600 text-2xl" />
+              <span className="text-gray-600">Photos & Videos</span>
+            </div>
 
-          <div
-            className="flex items-center space-x-3 text-lg cursor-pointer"
-            onClick={() => setIsCameraOpen(true)}
-          >
-            <FaCamera className="text-pink-600 text-2xl" />
-            <span className="text-gray-600">Camera</span>
-          </div>
+            <div
+              className="flex items-center space-x-3 text-lg cursor-pointer"
+              onClick={() => setIsCameraOpen(true)}
+            >
+              <FaCamera className="text-pink-600 text-2xl" />
+              <span className="text-gray-600">Camera</span>
+            </div>
 
-          <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
-            <FaUser className="text-blue-400 text-2xl" />
-            <span className="text-gray-600">Contact</span>
+            <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
+              <FaUser className="text-blue-400 text-2xl" />
+              <span className="text-gray-600">Contact</span>
+            </div>
           </div>
-        </div>
-      </DropdownModal>
+        </DropdownModal>
       )}
 
-{isCameraOpen && (
+      {isCameraOpen && (
         <div className="">
           <FaTimes
             onClick={() => setIsCameraOpen(false)}
