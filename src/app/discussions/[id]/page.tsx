@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect, useRef, useRef } from "react";
+import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 
 import { useDropzone } from "react-dropzone";
 import Webcam from "react-webcam";
@@ -190,36 +190,6 @@ const Chats = () => {
             }}
             className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
           >
-<<<<<<< HEAD
-            {/* {capturedImage && <SelectFile file={capturedImage} />} */}
-                  <p className="text-md">{receiver?.name}</p>
-                  <span className="text-gray-500 text-xs">
-                  {/* {typingStatus ? <Pulsation /> : ""} */}
-                  {typingStatus ? typingStatus : ""}
-                </span>
-                </div>
-              </div>
-              <div className="flex items-center text-gray-500 text-xl">
-                <FaSearch className="mr-8" />
-                <FaEllipsisV className="mr-2" />
-              </div>
-            </div>
-  
-            <div
-              style={{
-                backgroundImage:
-                  "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
-              }}
-              className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-y-auto p-4"
-            >
-            
-            <Messages
-              messageList={receivedMessages}
-              currentUser={currentUser as Room}
-              receiver={receiver as Room}
-            />
-          
-=======
             {selectedFile && (
               <SelectFile
                 file={selectedFile}
@@ -227,7 +197,6 @@ const Chats = () => {
                 onClose={handleCloseSelectFile}
               />
             )}
->>>>>>> 79a697c (upload video)
           </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
