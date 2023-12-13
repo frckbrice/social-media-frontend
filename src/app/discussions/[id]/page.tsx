@@ -111,10 +111,6 @@ const Chats = () => {
     setShowDropdown((prevState) => !prevState);
   };
 
-  function handleBlur(e: any) {
-    if (!e.target.value) setTypingStatus("");
-  }
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -179,7 +175,13 @@ const Chats = () => {
             }}
             className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
           >
-            {selectedFile && <SelectFile file={selectedFile} onCaptureImage={handleCaptureImage} />}
+            {selectedFile && (
+              <SelectFile
+                file={selectedFile}
+                onCaptureImage={handleCaptureImage}
+                onClose={handleCloseSelectFile}
+              />
+            )}
             {/* {capturedImage && <SelectFile file={capturedImage} />} */}
                   <p className="text-md">{receiver?.name}</p>
                   <span className="text-gray-500 text-xs">
@@ -215,55 +217,54 @@ const Chats = () => {
           </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
-          {!selectedFile && (
-              <div
-                onSubmit={handleSendMessage}
-                className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
-                style={{ transition: "none" }}
-              >
-                <AiOutlineSmile className="mr-5 text-myG text-4xl" />
-                {showDropdown ? (
-                  <FaTimes
-                    className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
-                    onClick={handlePlusIconClick}
-                  />
-                ) : (
-                  <FaPlus
-                    className="text-gray-500 cursor-pointer"
-                    onClick={handlePlusIconClick}
-                  />
-                )}
-                <input
-                  type="text"
-                  placeholder="Type a message"
-                  value={message}
-                  onChange={handleChange}
-                  className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6 "
-              onKeyDown={handleKeyDown}
-              onBlur={handleBlur}
-              ref={(node) => {
-                if (node) {
-                  if (!node.value) {
-                    setTypingStatus("");
-                  }
-                }
-              }}
-                />
-                {message.length === 0 ? (
-                  <button>
-                    <FaMicrophone className="text-gray-600 mr-4" />
-                  </button>
-                ) : (
-                  <button>
-                    <FaPaperPlane
-                      className="mr-4 text-gray-500 cursor-pointer"
-                      onClick={handleSendMessage}
-                    />
-                  </button>
-                )}
-              </div>
+          {selectedFile && (
+            <SelectFile
+              file={selectedFile}
+              onCaptureImage={handleCaptureImage}
+              onClose={handleCloseSelectFile}
+            />
           )}
-          </div>
+
+          {/* {!selectedFile && ( */}
+          <form
+            onSubmit={handleSendMessage}
+            className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
+            style={{ transition: "none" }}
+          >
+            <AiOutlineSmile className="mr-5 text-myG text-4xl" />
+            {showDropdown ? (
+              <FaTimes
+                className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
+                onClick={handlePlusIconClick}
+              />
+            ) : (
+              <FaPlus
+                className="text-gray-500 cursor-pointer"
+                onClick={handlePlusIconClick}
+              />
+            )}
+            <input
+              type="text"
+              placeholder="Type a message"
+              value={message}
+              onChange={handleChange}
+              className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6"
+            />
+            {message.length === 0 ? (
+              <button>
+                <FaMicrophone className="text-gray-600 mr-4" />
+              </button>
+            ) : (
+              <button>
+                <FaPaperPlane
+                  className="mr-4 text-gray-500 cursor-pointer"
+                  onClick={handleSendMessage}
+                />
+              </button>
+            )}
+          </form>
+          {/* )} */}
+        </div>
 
         {showInfoCard && (
           <ContactInfo
@@ -329,11 +330,10 @@ const Chats = () => {
             onClick={handleCaptureImage}
             className="absolute bottom-36 left-1/2 transform -translate-x-1/2 mb-8 p-5 bg-themecolor text-gray-800 rounded-full shadow-md"
           >
-           <FaCameraRetro className="text-2xl font-extrabold text-white"/>
+            <FaCameraRetro className="text-2xl font-extrabold text-white" />
           </button>
         </div>
       )}
-
     </>
   );
 };

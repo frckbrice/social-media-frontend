@@ -18,14 +18,21 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
 
   const [isHovered, setIsHovered] = useState(false);
 
+  const [isOpen, setIsOpen] = useState(true);
+
   const handleCaptureImage = () => {
     const capturedImage = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...";
     onCaptureImage(capturedImage);
   };
 
   const handleClear = () => {
-    router.back();
+    setIsOpen(false);
+    onClose();
   };
+
+//   if (!isOpen) {
+//     return null;
+//   }
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -90,10 +97,38 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
         <p>{typeof file === "string" ? "Captured Image" : file.name}</p>
       </div>
 
+<<<<<<< HEAD
       <div className="flex justify-center items-center flex-col my-20 h-auto">
 
       {renderPreview()}
       
+=======
+      <div className="flex justify-center items-center flex-col my-20">
+        {file && typeof file === "string" ? (
+          <div>
+            <img src={file} alt="Captured" className="max-w-full w-80 h-auto" />
+          </div>
+        ) : file ? (
+          <div>
+            <img
+              src={URL.createObjectURL(file as Blob)}
+              alt="Uploaded"
+              className="max-w-full w-80 mb-6 h-auto"
+            />
+            {/* <FaFile className="text-9xl mb-6 text-white" />
+            <p className="text-base text-gray-400">194 MB - DMG</p> */}
+          </div>
+        ) : (
+          <div className="hidden">
+            <img src="" alt="" />
+          </div>
+        )}
+        {/* {!file && typeof file !== "string" && (
+  )} */}
+        {!file && (
+          <p className="text-2xl text-gray-400">No preview available</p>
+        )}
+>>>>>>> 44c7f8a (uploading camera)
       </div>
 
 
@@ -146,7 +181,10 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
           {/* {isHovered && <span className=" bg-gray-300 text-sm px-2 py-1">Add file</span>} */}
         </div>
       </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 44c7f8a (uploading camera)
     </div>)}
     </>
   );
