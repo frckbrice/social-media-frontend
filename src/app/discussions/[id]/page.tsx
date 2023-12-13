@@ -37,6 +37,7 @@ const Chats = () => {
   const [message, setMessage] = useState<string>("");
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
   const [typingStatus, setTypingStatus] = useState("");
+  const [connected, setConnected] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const { currentUser } = useAppContext();
 
@@ -150,6 +151,7 @@ const Chats = () => {
   console.log(receivedMessages);
   socket.on("notify", (data) => {
     console.log(data);
+    setConnected(data);
   });
 
   return (
@@ -182,7 +184,7 @@ const Chats = () => {
               <div className="ml-4 ">
                 <p className="text-md">{receiver?.name}</p>
                 <span className="text-gray-500 text-xs">
-                  {/* {typingStatus ? <Pulsation /> : ""} */}
+                  {connected ? connected : ""}
                   {typingStatus ? typingStatus : ""}
                 </span>
               </div>
