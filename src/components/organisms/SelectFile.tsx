@@ -17,7 +17,11 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const [isHovered, setIsHovered] = useState(false);
-  const router = useRouter();
+
+  const handleCaptureImage = () => {
+    const capturedImage = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...";
+    onCaptureImage(capturedImage);
+  };
 
   const handleClear = () => {
     router.back();
