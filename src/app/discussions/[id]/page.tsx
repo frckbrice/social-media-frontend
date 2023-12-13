@@ -76,47 +76,7 @@ const Chats = () => {
       handleFileDrop(Array.from(files));
     }
   };
-
   
-  const { currentUser } = useAppContext();
-
-  const [receiver, setReceiver] = useState<Room | null>((): Room | null => {
-    if (typeof localStorage !== "undefined") {
-      const fromLocalStorage =
-        JSON.parse(localStorage.getItem("receiver") as string) || {};
-      if (fromLocalStorage) return fromLocalStorage;
-    }
-    return null;
-  });
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  let oldReceiver: string = "";
-
-  socket.on("message", (data) => {
-    // console.log("message received: ", data);
-    if (Array.isArray(data)) {
-      setReceivedMessages([...receivedMessages, ...data]);
-    } else setReceivedMessages([...receivedMessages, data]);
-  });
-
-  socket.on("connect_error", (err) => {
-    console.log(`connection error due to ${err}`);
-  });
-
-  useEffect(() => {
-    socket.emit("connected", {
-      start: true,
-      room: param.id,
-      owner: currentUser?.id,
-    });
-    setReceivedMessages([]);
-
-    setReceiver(() => JSON.parse(localStorage.getItem("receiver") || "{}"));
-    //  if (inputRef && inputRef.current) {
-    //    !inputRef.current.value ? setTypingStatus("") : null;
-    //  }
-  }, [param.id, currentUser?.name, currentUser?.id]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -318,12 +278,17 @@ const Chats = () => {
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
             <div
               className="flex items-center space-x-3 text-lg cursor-pointer"
-              onClick={() => {
-                // Handle document upload logic here
-              }}
+              onClick={handleDocumentClick}
             >
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
+              <input
+                type="file"
+                id="fileInput"
+                accept="application/pdf"
+                hidden
+                onChange={handleFileInputChange}
+              />
             </div>
             <div
               className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
