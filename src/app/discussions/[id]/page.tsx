@@ -269,15 +269,9 @@ const Chats = () => {
               receiver?.image ||
               "https://i.pinimg.com/564x/fe/85/c3/fe85c35b97c3f14082ac2edfb25eba44.jpg"
             }
-<<<<<<< HEAD
             name={receiver?.name as string}
             about={"made of gold"}
             email={receiver?.email as string}
-=======
-            name={receiver?.name}
-            about={"made of gold"}
-            email={receiver?.email}
->>>>>>> 74999bad21fb96c45f40976437b898a02f876e47
           />
         )}
       </div>
