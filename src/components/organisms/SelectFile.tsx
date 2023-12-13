@@ -99,6 +99,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
       
       </div>
 
+
       <div className="flex w-[90%]">
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
@@ -148,10 +149,10 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
           {/* {isHovered && <span className=" bg-gray-300 text-sm px-2 py-1">Add file</span>} */}
         </div>
       </div>
+
     </div>)}
     </>
   );
 };
 
 export default SelectFile;
-  
