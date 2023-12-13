@@ -2,7 +2,7 @@
 
 import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 
-// import { uploadFileToSupabase } from "@/utils/service/queries"
+import { uploadFileToSupabase } from "@/utils/service/queries"
 
 import { useDropzone } from "react-dropzone";
 import Webcam from "react-webcam";
@@ -71,32 +71,32 @@ const Chats = () => {
     }
   };
   
-  // const handleFileSelect = async (acceptedFiles: File[]) => {
-  //   if (acceptedFiles.length > 0) {
-  //     const file = acceptedFiles[0];
-  
-  //     try {
-  //       const filePreviewUrl = URL.createObjectURL(file);
-  //       setSelectedFile(file);
-  //       setFilePreviewUrl(filePreviewUrl);
-  
-  //       const fileUrl = await uploadFileToSupabase(file);
-  //       if (fileUrl) {
-  //         console.log('File uploaded successfully:', fileUrl.data.publicUrl);
-  //         setSelectedFile(null);
-  //         setFilePreviewUrl(null);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error uploading file:', error);
-  //     }
-  //   }
-  // };
-
-  const handleFileSelect = (acceptedFiles: File[]) => {
+  const handleFileSelect = async (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
-      setSelectedFile(acceptedFiles[0]);
+      const file = acceptedFiles[0];
+  
+      try {
+        const filePreviewUrl = URL.createObjectURL(file);
+        setSelectedFile(file);
+        setFilePreviewUrl(filePreviewUrl);
+  
+        const fileUrl = await uploadFileToSupabase(file);
+        if (fileUrl) {
+          console.log('File uploaded successfully:', fileUrl.data.publicUrl);
+          setSelectedFile(null);
+          setFilePreviewUrl(null);
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
     }
   };
+
+  // const handleFileSelect = (acceptedFiles: File[]) => {
+  //   if (acceptedFiles.length > 0) {
+  //     setSelectedFile(acceptedFiles[0]);
+  //   }
+  // };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleFileSelect,
