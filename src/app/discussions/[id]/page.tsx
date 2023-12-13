@@ -58,7 +58,7 @@ const Chats = () => {
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: ["application/pdf", "image/*", "video/*"],
+    // accept: ["application/pdf", "image/*", "video/*"],
     multiple: true,
     onDrop: handleFileDrop,
   });

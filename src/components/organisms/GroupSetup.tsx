@@ -30,6 +30,7 @@ function GroupSetup({ closeModal }: setupProps) {
     if (groupAvatar) {
       setGroupIcon(groupAvatar);
     }
+    console.log(e.target.files[0]);
   };
 
   //   console.log(file);
