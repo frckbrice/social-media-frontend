@@ -15,6 +15,7 @@ import {
   FaFileInvoice,
   FaPhotoVideo,
   FaUser,
+  FaVideo,
   FaCameraRetro,
   FaCamera,
   FaPaperPlane,
@@ -41,13 +42,26 @@ const Chats = () => {
 
   const [selectedFile, setSelectedFile] = useState<File | string | null>(null);
 
+  const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+
   const webcamRef = useRef<Webcam | null>(null);
 
   const handleCaptureImage = () => {
     const imageSrc = webcamRef.current?.getScreenshot() || null;
     setSelectedFile(imageSrc);
     setIsCameraOpen(false);
+  };
+
+  const handleCaptureVideo = () => {
+    if (isRecording) {
+      setIsRecording(false);
+      // Logic to stop video recording
+    } else {
+      setIsRecording(true);
+      // Logic to start video recording
+    }
   };
 
   const handleFileSelect = (acceptedFiles: File[]) => {
@@ -108,6 +122,8 @@ const Chats = () => {
   socket.on("typingResponse", (data) => setTypingStatus(data));
   const handlePlusIconClick = () => {
     setShowDropdown((prevState) => !prevState);
+    setCaptureMode("photo");
+    setIsCameraOpen(false);
   };
 
   useEffect(() => {
@@ -174,6 +190,7 @@ const Chats = () => {
             }}
             className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
           >
+<<<<<<< HEAD
             {/* {capturedImage && <SelectFile file={capturedImage} />} */}
                   <p className="text-md">{receiver?.name}</p>
                   <span className="text-gray-500 text-xs">
@@ -202,16 +219,18 @@ const Chats = () => {
               receiver={receiver as Room}
             />
           
+=======
+            {selectedFile && (
+              <SelectFile
+                file={selectedFile}
+                onCaptureImage={handleCaptureImage}
+                onClose={handleCloseSelectFile}
+              />
+            )}
+>>>>>>> 79a697c (upload video)
           </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
-          {selectedFile && (
-            <SelectFile
-              file={selectedFile}
-              onCaptureImage={handleCaptureImage}
-              onClose={handleCloseSelectFile}
-            />
-          )}
 
           <form
             onSubmit={handleSendMessage}
@@ -294,6 +313,22 @@ const Chats = () => {
             >
               <FaCamera className="text-pink-600 text-2xl" />
               <span className="text-gray-600">Camera</span>
+              {/* <button
+    className={`${
+      captureMode === "photo" ? "text-red-600" : "text-gray-600"
+    }`}
+    onClick={() => setCaptureMode("photo")}
+  >
+    <FaCamera className="text-2xl" />
+  </button>
+  <button
+    className={`${
+      captureMode === "video" ? "text-red-600" : "text-gray-600"
+    }`}
+    onClick={() => setCaptureMode("video")}
+  >
+    <FaVideo className="text-2xl" />
+  </button> */}
             </div>
 
             <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
@@ -313,17 +348,43 @@ const Chats = () => {
 
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <Webcam
-        audio={false}
+        audio={captureMode === "video"} // Enable audio only when capturing video
         ref={webcamRef}
         screenshotFormat="image/jpeg"
         className="rounded-lg"
       />
       <button
-        onClick={handleCaptureImage}
+        onClick={
+          captureMode === "photo" ? handleCaptureImage : handleCaptureVideo
+        }
         className="absolute bottom-36 left-1/2 transform -translate-x-1/2 mb-8 p-5 bg-themecolor text-gray-800 rounded-full shadow-md"
       >
-        <FaCameraRetro className="text-2xl font-extrabold text-white" />
+        {captureMode === "photo" ? (
+          <FaCameraRetro className="text-2xl font-extrabold text-white" />
+        ) : (
+          <FaVideo className="text-2xl font-extrabold text-white" />
+        )}
       </button>
+      {isCameraOpen && (
+        <div className="absolute bottom-28 font-bold left-1/2 transform space-x-10 -translate-x-1/2">
+          <button
+            className={`${
+              captureMode === "photo" ? "text-yellow" : "text-gray-600"
+            }`}
+            onClick={() => setCaptureMode("photo")}
+          >
+            Photo
+          </button>
+          <button
+            className={`${
+              captureMode === "video" ? "text-white" : "text-gray-600"
+            }`}
+            onClick={() => setCaptureMode("video")}
+          >
+            Video
+          </button>
+        </div>
+      )}
     </div>
   </div>
 )}
