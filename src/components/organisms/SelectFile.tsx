@@ -17,6 +17,13 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
+
+  const handleClear = () => {
+    // Add any additional logic you need before going back to the chats component
+    router.back();
+  };
+
 
   const handleMouseEnter = () => {
     setIsHovered(true);
