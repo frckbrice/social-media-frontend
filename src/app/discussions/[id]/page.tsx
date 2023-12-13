@@ -21,6 +21,7 @@ import {
   FaCameraRetro,
   FaCamera,
   FaPaperPlane,
+  FaArrowLeft,
 } from "react-icons/fa";
 import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
@@ -188,7 +189,7 @@ const Chats = () => {
                   onClick={() => router.push("/discussions")}
                   className="sm:hidden mr-3 relative "
                 >
-                  <IoMdArrowBack size={20} />
+                  <FaArrowLeft size={20} />
                 </button>
                 <Avatar
                     size={4}
