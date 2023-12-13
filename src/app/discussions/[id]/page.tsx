@@ -58,7 +58,7 @@ const Chats = () => {
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    // accept: ["application/pdf", "image/*", "video/*"],
+    accept: ["application/pdf", "image/*", "video/*"],
     multiple: true,
     onDrop: handleFileDrop,
   });
@@ -318,17 +318,12 @@ const Chats = () => {
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
             <div
               className="flex items-center space-x-3 text-lg cursor-pointer"
-              onClick={handleDocumentClick}
+              onClick={() => {
+                // Handle document upload logic here
+              }}
             >
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
-              <input
-                type="file"
-                id="fileInput"
-                accept="application/pdf"
-                hidden
-                onChange={handleFileInputChange}
-              />
             </div>
             <div
               className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
@@ -339,7 +334,6 @@ const Chats = () => {
               <FaPhotoVideo className="text-blue-600 text-2xl" />
               <span className="text-gray-600">Photos & Videos</span>
             </div>
-
             <div className="flex items-center space-x-3 text-lg cursor-pointer">
               <FaCamera className="text-pink-600  text-2xl" />
               <span className="text-gray-600">Camera</span>
@@ -351,6 +345,14 @@ const Chats = () => {
           </div>
         </DropdownModal>
       )}
+<div {...getRootProps()} className="dropzone">
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p>Drop the files here...</p>
+        ) : (
+          <p>Drag and drop files here, or click to select files</p>
+        )}
+      </div>
 
       {uploadedFiles.map((file, index) => (
         <div key={index}>
@@ -358,6 +360,7 @@ const Chats = () => {
           <button onClick={() => handleRemoveFile(index)}>Remove</button>
         </div>
       ))}
+
 
     </>
   );
