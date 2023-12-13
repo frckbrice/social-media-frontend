@@ -82,24 +82,24 @@ export const updateProfileName = async (
 // };
 
 // // UPLOAD IMAGE TO SUPABSE
-// export const uplaodImage = async (file: any) => {
-//   const fileValue = `groupIcon${Date.now()}.png`;
+export const uplaodImage = async (file: any) => {
+  const fileValue = `groupIcon${Date.now()}.png`;
 
-//   const { data, error } = await supabase.storage
-//     .from("whatsapp_avatars/images")
-//     .upload(fileValue, file);
+  const { data, error } = await supabase.storage
+    .from("whatsapp_avatars/images")
+    .upload(fileValue, file);
 
-//   if (error) {
-//     console.error("error creatin group icon", error);
-//   } else {
-//     console.log("group icon data", data);
-//     const imageUrl = supabase.storage
-//       .from("whatsapp_avatars/images")
-//       .getPublicUrl(data.path);
-//     console.log("group icon download url", imageUrl.data.publicUrl);
-//     return imageUrl.data.publicUrl;
-//   }
-// };
+  if (error) {
+    console.error("error creatin group icon", error);
+  } else {
+    console.log("group icon data", data);
+    const imageUrl = supabase.storage
+      .from("whatsapp_avatars/images")
+      .getPublicUrl(data.path);
+    console.log("group icon download url", imageUrl.data.publicUrl);
+    return imageUrl.data.publicUrl;
+  }
+};
 
 
 //upload all file types to supabase 

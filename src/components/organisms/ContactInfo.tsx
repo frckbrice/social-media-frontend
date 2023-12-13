@@ -19,7 +19,7 @@ import ContactCard from "./ContactCard";
 import AddGroupMembers from "./AddGroupMembers";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import AddedMember from "../molecules/AddedMember";
-import { getGroupMembers } from "@/utils/service/queries";
+import { addGroupMembers } from "@/utils/service/queries";
 
 type ContactCardProps = {
   id: string;
@@ -32,7 +32,7 @@ type ContactCardProps = {
   isGroup?: boolean;
 };
 
-const ContactInfo = async ({
+const ContactInfo = ({
   id,
   name,
   title,
@@ -89,9 +89,6 @@ const ContactInfo = async ({
     setOnDelete((prev) => !prev);
   };
 
-  const allParticipants = await getGroupMembers(receiver.id).then((res) =>
-    res.json()
-  );
 
   // Handle earch filter
   const handleSearch = () => {};
