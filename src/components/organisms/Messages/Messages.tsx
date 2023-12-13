@@ -33,6 +33,7 @@ const Messages = (props: Props) => {
       //   left: 0,
       //   behavior: "smooth", // Enable smooth scrolling
       // });
+      window.scrollTo(0, document.body.scrollHeight);
       divMessageRef.current.scrollTop = divMessageRef.current.scrollHeight;
     }
     // divMessageRef.current.scrollTop = divMessageRef.current.scrollHeight;{}
@@ -43,7 +44,7 @@ const Messages = (props: Props) => {
 
   let content;
 
-  console.log("this is the list", props.messageList);
+  // console.log("this is the list", props.messageList);
 
   const listOfMessages = props.messageList?.map((messages, i) => {
     if (

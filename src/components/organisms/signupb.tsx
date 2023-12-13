@@ -14,7 +14,8 @@ const Signupb = () => {
         <span className="text-themecolor">Terms of Service</span>
       </h4>
       <button className="border p-4 px-5 text-base font-extrabold text-black rounded">
-        {<PulseLoader />}
+        {/* {<PulseLoader />} */}
+        loding...
       </button>
       <p className="text-2xl mt-6 font-extrabold text-themecolor">success</p>
     </div>
