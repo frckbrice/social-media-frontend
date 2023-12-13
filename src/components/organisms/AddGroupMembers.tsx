@@ -5,6 +5,7 @@ import ContactCard from "./ContactCard";
 import AddedMember from "../molecules/AddedMember";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { FaCircleArrowRight } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
 type Props = {
   users: any;
@@ -40,7 +41,11 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
   // HANDLE ADD GROUP MAMBERS
   const handelAddMembers = (user: User) => {
     if (members.find((member) => member.id === user.id)) {
-      alert("already added");
+      toast.error("already added...!", {
+        position: "top-right",
+        hideProgressBar: true,
+        autoClose: 3000,
+      });
       return;
     }
 

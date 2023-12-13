@@ -34,6 +34,7 @@ const Messages = (props: Props) => {
       //   behavior: "smooth", // Enable smooth scrolling
       // });
       window.scrollTo(0, document.body.scrollHeight);
+      divMessageRef.current.scrollTop = divMessageRef.current.scrollHeight;
     }
     // divMessageRef.current.scrollTop = divMessageRef.current.scrollHeight;{}
   }, [props.messageList]);

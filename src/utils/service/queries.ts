@@ -64,6 +64,26 @@ export const uplaodImage = async (file: any) => {
   }
 };
 
+// UPLOAD pdf TO SUPABSE
+export const uplaodPDF = async (file: any) => {
+  const fileValue = `groupIcon${Date.now()}.pdf`;
+
+  const { data, error } = await supabase.storage
+    .from("whatsapp_avatars/images")
+    .upload(fileValue, file);
+
+  if (error) {
+    console.error("error uploading PDF", error);
+  } else {
+    console.log("PDF data", data);
+    const fileUrl = supabase.storage
+      .from("whatsapp_avatars/images")
+      .getPublicUrl(data.path);
+    console.log("File download url", fileUrl.data.publicUrl);
+    return fileUrl.data.publicUrl;
+  }
+};
+
 // Add Group Members
 export const addGroupMembers = async (members: string[], room_id: string) => {
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
@@ -77,6 +97,11 @@ export const addGroupMembers = async (members: string[], room_id: string) => {
 
     // socket.emit("connected", { room: room_id, owner: memberId });
   });
+};
+
+// GET GROUP MEMBERS BY GROUP ID
+export const getGroupMembers = async (id: string) => {
+  return apiCall.GET(SITE_URL + `/rooms_users/all_participants/${id}`);
 };
 
 // Update profile name

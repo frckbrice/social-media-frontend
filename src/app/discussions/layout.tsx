@@ -41,8 +41,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   const { currentUser, allUsers, chatRooms, setChatRooms } = useAppContext();
   // const [chatRooms, setChatRooms] = useState<Room[]>([]);
-  const [filterChats, setFilterChats] = useState<User[]>(chatRooms);
-  const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
+  const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
+  const [usersDisplay, setUsersDisplay] = useState<Room[]>(allUsers);
 
   let olduser: string = chatRooms[0]?.original_dm_roomID as string;
   const handleCloseModal = () => {
@@ -82,11 +82,13 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   // HANDLE FILTER CHAT ROOMS
   const filterChatRoom = (e: any) => {
-    // const searchName = e.target.value;
+    const searchName = e.target.value;
+    console.log(searchName);
+
     const filteredResults = chatRooms.filter((user) => {
-      return user.name.toLowerCase().includes(e.target.value.toLowerCase());
+      return user.name.toLowerCase().includes(searchName.toLowerCase());
     });
-    if (!filteredResults.length || !e.target.value.length) {
+    if (!filteredResults.length || !searchName.length) {
       setFilterChats(chatRooms);
       return;
     }
@@ -214,7 +216,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
           </div>
           {chatRooms?.length ? (
             <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
-              {chatRooms?.map((user: Room) => (
+              {filterChats?.map((user: Room) => (
                 <ContactCard
                   user={user}
                   key={user.id}
@@ -261,6 +263,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                 setShowAllContacts((prev) => !prev);
                 setShowCreateGrp((prev) => !prev);
               }}
+              users={usersDisplay}
             />
           </ProfileCard>
         )}
