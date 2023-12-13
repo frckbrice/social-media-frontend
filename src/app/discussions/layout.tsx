@@ -109,7 +109,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
         my_id: currentUser?.user_id.toString(),
       }).then((res: any) => {
         if (res) {
-          router.push(`/discussions/${res.original_dm_roomID}`);
+          res.isGroup
+            ? router.push(`/discussions/${res.id}`)
+            : router.push(`/discussions/${res.original_dm_roomID}`);
           localStorage.setItem("receiver", JSON.stringify(res));
           setChatRooms(() =>
             chatRooms?.find((room: Room) => room.id === res.id)
@@ -131,12 +133,14 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const handleClick = (user: Room) => {
     const data = {
       sender_id: currentUser?.id,
-      receiver_room_id: user.original_dm_roomID,
+      receiver_room_id: user.isGroup ? user.id : user.original_dm_roomID,
     };
     console.log(data);
     socket.emit("roomMessages", data);
 
-    router.push(`/discussions/${user.original_dm_roomID}`);
+    user.isGroup
+      ? router.push(`/discussions/${user.id}`)
+      : router.push(`/discussions/${user.original_dm_roomID}`);
     localStorage.setItem("receiver", JSON.stringify(user));
 
     if (olduser !== user.original_dm_roomID) {
@@ -145,6 +149,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
       olduser = user.original_dm_roomID as string;
       console.log(olduser);
     }
+
+    //  socket.emit("updateMessage", {});
   };
 
   return (

@@ -37,7 +37,7 @@ export const createRoom = async (user: Partial<Room>) => {
 export const getAllRooms = async () => {
   console.log("getallrooms fired");
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-  const res = await fetch(SITE_URL + `/rooms/my_dm/${sender?.user_id}`, {
+  const res = await fetch(SITE_URL + `/rooms_users/my_dm/${sender?.user_id}`, {
     next: { revalidate: 30 },
   });
 

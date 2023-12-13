@@ -11,7 +11,7 @@ type Props = {
   onClick: () => void;
 };
 
-const Dp = ({ image, onClick, content }: Props) => {
+const ProfilPicture = ({ image, onClick, content }: Props) => {
   const { currentUser, allUsers } = useAppContext();
 
   const [openModal, setOpenModal] = useState(false);
@@ -74,4 +74,4 @@ const Dp = ({ image, onClick, content }: Props) => {
   );
 };
 
-export default Dp;
+export default ProfilPicture;
