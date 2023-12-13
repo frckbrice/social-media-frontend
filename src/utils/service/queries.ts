@@ -88,15 +88,17 @@ export const uplaodPDF = async (file: any) => {
 export const addGroupMembers = async (members: string[], room_id: string) => {
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
 
-  return members.map((memberId) => {
-    apiCall.POST(SITE_URL + "/rooms_users", {
-      user_id: memberId,
-      room_id,
-      role: `${memberId === sender.user_id ? "admin" : "member"}`,
-    });
+  return Promise.all(
+    members.map((memberId) => {
+      apiCall.POST(SITE_URL + "/rooms_users", {
+        user_id: memberId,
+        room_id,
+        role: `${memberId === sender.user_id ? "admin" : "member"}`,
+      });
 
-    // socket.emit("connected", { room: room_id, owner: memberId });
-  });
+      // socket.emit("connected", { room: room_id, owner: memberId });
+    })
+  );
 };
 
 // GET GROUP MEMBERS BY GROUP ID

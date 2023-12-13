@@ -20,7 +20,8 @@ import ContactCard from "./ContactCard";
 import AddGroupMembers from "./AddGroupMembers";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import AddedMember from "../molecules/AddedMember";
-import { getGroupMembers } from "@/utils/service/queries";
+import { addGroupMembers, getGroupMembers } from "@/utils/service/queries";
+import RoundedLoader from "../atoms/RoundedLoader";
 
 type ContactCardProps = {
   id: string;
@@ -55,6 +56,7 @@ const ContactInfo = ({
   const { allUsers } = useAppContext();
   const [participants, setParticipants] = useState<Participants[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<Room[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -116,7 +118,10 @@ const ContactInfo = ({
 
   // handle Add memeber
   const handelAddMember = (user: User) => {
-    if (participants.find((member) => member.user_id === user.id)) {
+    if (
+      participants.length &&
+      participants.find((member) => member.user_id === user.id)
+    ) {
       toast.warning("already a Member...!", {
         position: "top-right",
         hideProgressBar: true,
@@ -132,10 +137,21 @@ const ContactInfo = ({
       });
       return;
     }
-
     let selectedMember: User[] = [];
     selectedMember.push(user);
     setMembers((prev) => [...prev, ...selectedMember]);
+  };
+
+  // Add Members To Group
+  const handleAddToGroup = async () => {
+    let membersIDs = members.map((member: User) => member.id);
+    console.log("membersIDs", membersIDs);
+    const membersAdded = await addGroupMembers(membersIDs, receiver.id).then(
+      (res) => {
+        console.log("response", res);
+      }
+    );
+    console.log("membersAdded", membersAdded);
   };
 
   // handle remove member
@@ -185,7 +201,9 @@ const ContactInfo = ({
           ) : (
             <div>
               <div className="flex flex-col bg-white">
-                <p className="m-4">{participants.length} Members</p>
+                <p className="m-4">
+                  {`${participants.length ? participants.length : 0}`} Members
+                </p>
                 <button
                   onClick={() => setShowAddMembers((prev) => !prev)}
                   className="hover:bg-bgGray flex items-center p-4 gap-4"
@@ -285,9 +303,18 @@ const ContactInfo = ({
                   ))}
                 </div>
               </div>
-              <button className="absolute bg-white rounded-[50%] text-themecolor right-10 bottom-10">
-                <VscPassFilled size={60} />
-              </button>
+              <div className="absolute right-10 bottom-10">
+                {!isLoading ? (
+                  <button
+                    onClick={handleAddToGroup}
+                    className=" bg-white rounded-[50%] text-themecolor "
+                  >
+                    <VscPassFilled size={60} />
+                  </button>
+                ) : (
+                  <RoundedLoader />
+                )}
+              </div>
             </div>
           </>
         )}
