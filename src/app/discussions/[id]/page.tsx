@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, ChangeEvent, useEffect, useRef } from "react";
-import { useDropzone } from "react-dropzone";
 
 import { useRouter } from "next/navigation";
 
@@ -17,7 +16,6 @@ import {
   FaUser,
   FaCamera,
   FaPaperPlane,
-  FaFile,
 } from "react-icons/fa";
 import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
@@ -27,6 +25,7 @@ import { socket } from "@/utils/services";
 
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
+import SelectFile from "@/components/organisms/SelectFile";
 
 const Chats = () => {
   const param = useParams();
@@ -37,42 +36,6 @@ const Chats = () => {
   const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
   const [typingStatus, setTypingStatus] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-
-  const handleFileDrop = (acceptedFiles: File[]) => {
-    // Handle file upload logic here
-    setUploadedFiles((prevUploadedFiles) => [
-      ...prevUploadedFiles,
-      ...acceptedFiles,
-    ]);
-  };
-
-  const handleRemoveFile = (fileIndex: number) => {
-    setUploadedFiles((prevUploadedFiles) =>
-      prevUploadedFiles.filter((_, index) => index !== fileIndex)
-    );
-  };
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    // accept: ["application/pdf", "image/*", "video/*"],
-    multiple: true,
-    onDrop: handleFileDrop,
-  });
-
-  const handleDocumentClick = () => {
-    const input = document.getElementById("fileInput");
-    if (input) {
-      input.click();
-    }
-  };
-
-  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      handleFileDrop(Array.from(files));
-    }
-  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -202,6 +165,9 @@ const Chats = () => {
               currentUser={currentUser as Room}
               receiver={receiver as Room}
             />
+          
+<SelectFile />
+            
           </div>
             {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
@@ -272,9 +238,8 @@ const Chats = () => {
         <DropdownModal onClose={() => setShowDropdown(false)}>
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
             <div
-              {...getRootProps()}
               className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
-              onClick={handleDocumentClick}
+              // onClick={handleDocumentClick}
             >
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
@@ -301,61 +266,6 @@ const Chats = () => {
         </DropdownModal>
       )}
 
-      <div
-        className="dropzone w-full bg-red-600 top-0 z-30 h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] p-4 space-y-10"
-      >
-        <div className="h-14 bg-gray-600 flex items-center p-4">
-          <FaTimes
-            className="text-gray-800 text-2xl cursor-pointer"
-            // onClick={handlePlusIconClick}
-          />{" "}
-          {/* <p>{{file.name}}</p> */}
-        </div>
-        <div>
-          <p>No preview available</p>
-        </div>
-
-        <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
-          <input
-            type="text"
-            placeholder="Type a message"
-            value={message}
-            onChange={handleChange}
-            className="w-full bg-transparent text-sm border-0 focus:outline-none"
-          />
-          <AiOutlineSmile className="mr-5 text-myG text-4xl" />
-        </div>
-
-        <div className="flex space-x-4 justify-center">
-          {uploadedFiles.map((file, index) => (
-            <div
-              key={index}
-              className="border flex-col p-4 w-16 h-16 hover:bg-gray-500"
-            >
-              <button
-                onClick={() => handleRemoveFile(index)}
-                className="text-sm"
-              >
-                <FaTimes />
-              </button>
-
-              <FaFile className="text-5xl" />
-            </div>
-          ))}
-
-          <div {...getRootProps()} className="dropzone">
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here...</p>
-            ) : (
-              <p className="border p-4 w-16 h-16 hover:bg-gray-500">
-                <FaPlus className="cursor-pointer " />
-              </p>
-            )}
-          </div>
-        </div>
-
-      </div>
     </>
   );
 };
