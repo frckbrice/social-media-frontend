@@ -20,7 +20,7 @@ import DropdownModal from "@/components/atoms/DropdownModal";
 import DisplayUsers from "@/components/organisms/DisplayUsers";
 import AddGroupMembers from "@/components/organisms/AddGroupMembers";
 import { useAppContext } from "../Context/AppContext";
-import { createRoom, getAllRooms } from "@/utils/service/queries";
+import { createRoom, getAllRooms, shuffleArr } from "@/utils/service/queries";
 import { json } from "node:stream/consumers";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { SITE_URL } from "@/utils/service/constant";
@@ -39,11 +39,15 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  const { currentUser, allUsers, chatRooms, setChatRooms } = useAppContext();
+  const { currentUser, allUsers, chatRooms, setChatRooms, allGroups, setAllGroups } = useAppContext();
   // const [chatRooms, setChatRooms] = useState<Room[]>([]);
-  const [filterChats, setFilterChats] = useState<User[]>(chatRooms);
+  
   const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
+  const [joinedArray, setJoinedArray] = useState<Room[]>(shuffleArr([...allGroups.flat(), ...chatRooms]))
 
+  // const joinedArray: Room[] = shuffleArr([...allGroups.flat(), ...chatRooms])
+  console.log('joined array', joinedArray)
+  const [filterChats, setFilterChats] = useState<User[]>(chatRooms);
   let olduser: string = chatRooms[0]?.original_dm_roomID as string;
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
@@ -83,12 +87,12 @@ function Discussion({ children }: { children: React.ReactNode }) {
   // HANDLE FILTER CHAT ROOMS
   const filterChatRoom = (e: any) => {
     // const searchName = e.target.value;
-    const filteredResults = chatRooms.filter((user) => {
+    const filteredResults = joinedArray.filter((user) => {
       return user.name.toLowerCase().includes(e.target.value.toLowerCase());
     });
     if (!filteredResults.length || !e.target.value.length) {
       setFilterChats(chatRooms);
-      return;
+      return; 
     }
     setFilterChats(filteredResults);
   };
@@ -109,7 +113,11 @@ function Discussion({ children }: { children: React.ReactNode }) {
         my_id: currentUser?.user_id.toString(),
       }).then((res: any) => {
         if (res) {
-          router.push(`/discussions/${res.original_dm_roomID}`);
+          if (!res.isGroup) {
+            router.push(`/discussions/${res.original_dm_roomID}`);
+          } else {
+            router.push(`/discussions/${res.id}`);
+          }
           localStorage.setItem("receiver", JSON.stringify(res));
           setChatRooms(() =>
             chatRooms?.find((room: Room) => room.id === res.id)
@@ -136,7 +144,12 @@ function Discussion({ children }: { children: React.ReactNode }) {
     console.log(data);
     socket.emit("roomMessages", data);
 
-    router.push(`/discussions/${user.original_dm_roomID}`);
+    if (!user.isGroup) {
+      router.push(`/discussions/${user.original_dm_roomID}`);
+    } else {
+      router.push(`/discussions/${user.id}`);
+    }
+
     localStorage.setItem("receiver", JSON.stringify(user));
 
     if (olduser !== user.original_dm_roomID) {
@@ -213,7 +226,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                   user={user}
                   key={user.id}
                   onClick={() => handleClick(user)}
-                  notification={""}
+                  notification={"Put last msg here"}
                   active={user.unread_count ? true : false}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}
                 />

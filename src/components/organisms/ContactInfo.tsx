@@ -37,23 +37,28 @@ const ContactInfo = ({
   const [openCard, setOpenCard] = useState(false);
   const [showAddMembers, setShowAddMembers] = useState(false);
   const router = useRouter();
-  const activeChat = JSON.parse(localStorage.getItem("activeChat") || "{}");
+  const receiver = JSON.parse(localStorage.getItem("receiver") || "{}");
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
 
   const handleDelete = async () => {
     try {
       const response = await fetch(
-        SITE_URL + `/rooms/${activeChat.id}/${sender.user_id}`,
+        SITE_URL + `/rooms/${receiver.id}/${sender.user_id}`,
         {
           method: "DELETE",
         }
       );
       if (!response.ok) {
+        toast.error('Failed to delete chat', {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 2000
+        })
         throw new Error("Failed to delete chat");
       }
       const data = response.json();
       console.log("deleted contact", data);
-      localStorage.removeItem("activeChat");
+      localStorage.removeItem("receiver");
       toast.success('Chat deleted successfully', {
         position: "top-right",
         hideProgressBar: true,
@@ -63,15 +68,6 @@ const ContactInfo = ({
     } catch (error) {
       console.error(error);
     }
-    // await deleteSingleChat(activeChat.id, sender.user_id)
-    //   .then((res) => {
-    //     console.log('deleted chat', res)
-    //     localStorage.removeItem('activeChat')
-    //     router.push("/discussions")
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
     setOnDelete((prev) => !prev);
   };
 
