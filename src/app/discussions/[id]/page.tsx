@@ -275,7 +275,7 @@ const Chats = () => {
 
       {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
-          <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[34%] transform -translate-x-1/2 shadow-lg">
+          <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
             <div className="flex items-center space-x-3 text-lg cursor-pointer">
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
