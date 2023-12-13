@@ -6,9 +6,10 @@ import { useAppContext } from "@/app/Context/AppContext";
 type Props = {
   contactClick: (user: Room) => void;
   goToCreateGrt: () => void;
+  users: Room[];
 };
 
-const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
+const DisplayUsers = ({ contactClick, goToCreateGrt, users }: Props) => {
   const { allUsers } = useAppContext();
 
   return (
@@ -27,7 +28,7 @@ const DisplayUsers = ({ contactClick, goToCreateGrt }: Props) => {
         CONTACTS ON WAXCHAT
       </p>
 
-      {allUsers?.map((user: Room) => (
+      {users?.map((user: Room) => (
         <ContactCard
           user={user}
           key={user.id}

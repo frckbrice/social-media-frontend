@@ -41,13 +41,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   const { currentUser, allUsers, chatRooms, setChatRooms, allGroups, setAllGroups } = useAppContext();
   // const [chatRooms, setChatRooms] = useState<Room[]>([]);
-  
-  const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
-  // const [joinedArray, setJoinedArray] = useState<Room[]>(shuffleArr([...allGroups.flat(), ...chatRooms]))
+  const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
+  const [usersDisplay, setUsersDisplay] = useState<Room[]>(chatRooms);
 
-  // const joinedArray: Room[] = shuffleArr([...allGroups.flat(), ...chatRooms])
-  // console.log('joined array', joinedArray)
-  const [filterChats, setFilterChats] = useState<User[]>(chatRooms);
   let olduser: string = chatRooms[0]?.original_dm_roomID as string;
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
@@ -86,11 +82,13 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   // HANDLE FILTER CHAT ROOMS
   const filterChatRoom = (e: any) => {
-    // const searchName = e.target.value;
+    const searchName = e.target.value;
+    console.log(searchName);
+
     const filteredResults = chatRooms.filter((user) => {
-      return user.name.toLowerCase().includes(e.target.value.toLowerCase());
+      return user.name.toLowerCase().includes(searchName.toLowerCase());
     });
-    if (!filteredResults.length || !e.target.value.length) {
+    if (!filteredResults.length || !searchName.length) {
       setFilterChats(chatRooms);
       return; 
     }
@@ -221,12 +219,12 @@ function Discussion({ children }: { children: React.ReactNode }) {
           </div>
           {chatRooms?.length ? (
             <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
-              {chatRooms?.map((user: Room) => (
+              {filterChats?.map((user: Room) => (
                 <ContactCard
                   user={user}
                   key={user.id}
                   onClick={() => handleClick(user)}
-                  notification={"Put last msg here"}
+                  notification={""}
                   active={user.unread_count ? true : false}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}
                 />
@@ -268,6 +266,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                 setShowAllContacts((prev) => !prev);
                 setShowCreateGrp((prev) => !prev);
               }}
+              users={usersDisplay}
             />
           </ProfileCard>
         )}

@@ -147,7 +147,7 @@ const Chats = () => {
     };
   }, [showDropdown]);
 
-  console.log('this received msg', receivedMessages);
+  console.log("this received msg", receivedMessages);
 
   return (
     <>
@@ -198,7 +198,7 @@ const Chats = () => {
               backgroundImage:
                 "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
             }}
-            className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
+            className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-y-auto p-4"
           >
             {/* {receivedMessages?.map((message, i) => (
               <div key={i}>{message} </div>
@@ -263,7 +263,7 @@ const Chats = () => {
         {showInfoCard && (
           <ContactInfo
             id={""}
-            title={"Contact info"}
+            title={`${receiver?.isGroup ? "Group info" : "Contact info"}  `}
             onClose={() => setShowInfoCard((prev) => !prev)}
             picture={
               receiver?.image ||
