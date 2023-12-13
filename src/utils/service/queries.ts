@@ -44,6 +44,43 @@ export const getAllRooms = async () => {
   return await res.json();
 };
 
+// Add Group Members
+export const addGroupMembers = async (members: string[], room_id: string) => {
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
+
+  return members.map((memberId) => {
+    apiCall.POST(SITE_URL + "/rooms_users", {
+      user_id: memberId,
+      room_id,
+      role: `${memberId === sender.user_id ? "admin" : "member"}`,
+    });
+
+    // socket.emit("connected", { room: room_id, owner: memberId });
+  });
+};
+
+// Update profile name
+export const updateProfileName = async (
+  id: string,
+  update: {
+    name?: string;
+    image?: string;
+  }
+) => {
+  console.log("id", id);
+  return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
+};
+//   if (error) {
+//     console.error("Error uploading file to Supabase:", error);
+//   } else {
+//     const fileUrl = supabase.storage
+//       .from("your_bucket_name")
+//       .getPublicUrl(data.path);
+//     console.log("File download URL:", fileUrl);
+//     return fileUrl;
+//   }
+// };
+
 // // UPLOAD IMAGE TO SUPABSE
 // export const uplaodImage = async (file: any) => {
 //   const fileValue = `groupIcon${Date.now()}.png`;
@@ -83,40 +120,3 @@ export const uploadFileToSupabase = async (file: File) => {
     return fileUrl;
   }
 };
-
-// Add Group Members
-export const addGroupMembers = async (members: string[], room_id: string) => {
-  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-
-  return members.map((memberId) => {
-    apiCall.POST(SITE_URL + "/rooms_users", {
-      user_id: memberId,
-      room_id,
-      role: `${memberId === sender.user_id ? "admin" : "member"}`,
-    });
-
-    // socket.emit("connected", { room: room_id, owner: memberId });
-  });
-};
-
-// Update profile name
-export const updateProfileName = async (
-  id: string,
-  update: {
-    name?: string;
-    image?: string;
-  }
-) => {
-  console.log("id", id);
-  return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
-};
-//   if (error) {
-//     console.error("Error uploading file to Supabase:", error);
-//   } else {
-//     const fileUrl = supabase.storage
-//       .from("your_bucket_name")
-//       .getPublicUrl(data.path);
-//     console.log("File download URL:", fileUrl);
-//     return fileUrl;
-//   }
-// };
