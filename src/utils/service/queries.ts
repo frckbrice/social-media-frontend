@@ -99,6 +99,11 @@ export const addGroupMembers = async (members: string[], room_id: string) => {
   });
 };
 
+// GET GROUP MEMBERS BY GROUP ID
+export const getGroupMembers = async (id: string) => {
+  return apiCall.GET(SITE_URL + `/rooms_users/all_participants/${id}`);
+};
+
 // Update profile name
 export const updateProfileName = async (
   id: string,
