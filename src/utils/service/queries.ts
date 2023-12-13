@@ -64,23 +64,23 @@ export const uplaodImage = async (file: any) => {
   }
 };
 
-// UPLOAD pdf TO SUPABSE
-export const uplaodPDF = async (file: any) => {
-  const fileValue = `groupIcon${Date.now()}.pdf`;
+
+//upload all file types to supabase 
+export const uploadFileToSupabase = async (file: File) => {
+  const fileName = `file_${Date.now()}.${file.name.split('.').pop()}`;
 
   const { data, error } = await supabase.storage
-    .from("whatsapp_avatars/images")
-    .upload(fileValue, file);
+    .from("your_bucket_name")
+    .upload(fileName, file);
 
   if (error) {
-    console.error("error uploading PDF", error);
+    console.error("Error uploading file to Supabase:", error);
   } else {
-    console.log("PDF data", data);
     const fileUrl = supabase.storage
-      .from("whatsapp_avatars/images")
+      .from("your_bucket_name")
       .getPublicUrl(data.path);
-    console.log("File download url", fileUrl.data.publicUrl);
-    return fileUrl.data.publicUrl;
+    console.log("File download URL:", fileUrl);
+    return fileUrl;
   }
 };
 
