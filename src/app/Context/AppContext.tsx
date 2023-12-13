@@ -75,7 +75,7 @@ export const AppContextProvider = ({ children }: any) => {
 
     // Get all chats rooms
     getAllRooms().then((res) => {
-      console.log('hello', res);
+      console.log('theses are chat rooms', res)
       setChatRooms(res);
     });
 

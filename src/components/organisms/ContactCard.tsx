@@ -49,7 +49,6 @@ const ContactCard = ({
           <div className="flex justify-between w-[22.5vw] bigScreen:w-[24vw] mobile:max-sm:w-[70vw] my-auto  gap-10">
             <div>
               <p className="">{user.name}</p>
-              <span className="text-primaryText text-xs">{notification}</span>
             </div>
             <span className="text-primaryText text-xs">
               {formatLastMessageTime(user.updatedAt)}

@@ -36,7 +36,7 @@ export const createRoom = async (user: Partial<Room>) => {
 export const getAllRooms = async () => {
   console.log("getallrooms fired");
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-  const res = await fetch(SITE_URL + `/rooms/my_dm/${sender?.user_id}`, {
+  const res = await fetch(SITE_URL + `/rooms_users/my_dm/${sender?.user_id}`, {
     next: { revalidate: 30 },
   });
 
@@ -46,7 +46,7 @@ export const getAllRooms = async () => {
 // GET ALL GROUPS OF SINGLE USER
 export const getAllGroups = async () => {
   const sender = JSON.parse(localStorage.getItem('sender') || '{}')
-  const res = await fetch(SITE_URL + `/rooms/all_groups/${sender?.user_id}`, {
+  const res = await fetch(SITE_URL + `/rooms_users/all_groups/${sender?.user_id}`, {
     next: {revalidate: 30}
   })
   return await res.json()

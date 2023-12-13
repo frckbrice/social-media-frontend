@@ -43,10 +43,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
   // const [chatRooms, setChatRooms] = useState<Room[]>([]);
   
   const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
-  const [joinedArray, setJoinedArray] = useState<Room[]>(shuffleArr([...allGroups.flat(), ...chatRooms]))
+  // const [joinedArray, setJoinedArray] = useState<Room[]>(shuffleArr([...allGroups.flat(), ...chatRooms]))
 
   // const joinedArray: Room[] = shuffleArr([...allGroups.flat(), ...chatRooms])
-  console.log('joined array', joinedArray)
+  // console.log('joined array', joinedArray)
   const [filterChats, setFilterChats] = useState<User[]>(chatRooms);
   let olduser: string = chatRooms[0]?.original_dm_roomID as string;
   const handleCloseModal = () => {
@@ -87,7 +87,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   // HANDLE FILTER CHAT ROOMS
   const filterChatRoom = (e: any) => {
     // const searchName = e.target.value;
-    const filteredResults = joinedArray.filter((user) => {
+    const filteredResults = chatRooms.filter((user) => {
       return user.name.toLowerCase().includes(e.target.value.toLowerCase());
     });
     if (!filteredResults.length || !e.target.value.length) {
