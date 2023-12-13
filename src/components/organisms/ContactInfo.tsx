@@ -63,6 +63,11 @@ const ContactInfo = async ({
         }
       );
       if (!response.ok) {
+        toast.error('Failed to delete chat', {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 2000
+        })
         throw new Error("Failed to delete chat");
       }
       const data = response.json();
@@ -77,15 +82,6 @@ const ContactInfo = async ({
     } catch (error) {
       console.error(error);
     }
-    // await deleteSingleChat(receiver.id, sender.user_id)
-    //   .then((res) => {
-    //     console.log('deleted chat', res)
-    //     localStorage.removeItem('receiver')
-    //     router.push("/discussions")
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
     setOnDelete((prev) => !prev);
   };
 

@@ -33,7 +33,6 @@ export const createRoom = async (user: Partial<Room>) => {
 };
 
 // GET ALL ROOMS
-
 export const getAllRooms = async () => {
   console.log("getallrooms fired");
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
@@ -44,6 +43,15 @@ export const getAllRooms = async () => {
   return await res.json();
 };
 
+// GET ALL GROUPS OF SINGLE USER
+export const getAllGroups = async () => {
+  const sender = JSON.parse(localStorage.getItem('sender') || '{}')
+  const res = await fetch(SITE_URL + `/rooms_users/all_groups/${sender?.user_id}`, {
+    next: {revalidate: 30}
+  })
+  return await res.json()
+}
+3
 // UPLOAD IMAGE TO SUPABSE
 export const uplaodImage = async (file: any) => {
   const fileValue = `groupIcon${Date.now()}.png`;
@@ -114,4 +122,14 @@ export const updateProfileName = async (
 ) => {
   console.log("id", id);
   return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
+};
+
+// function that mixed up two arrays
+export const shuffleArr = (arr: any[]) => {
+  if (arr.length <= 1) return arr;
+  for (let i = arr.length - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 };

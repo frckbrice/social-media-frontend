@@ -163,13 +163,14 @@ const Chats = () => {
           }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
-            <div className="flex items-center hover:cursor-ponter">
+            <div
+              className="flex items-center hover:cursor-ponter">
               <>
                 <button
                   onClick={() => router.push("/discussions")}
                   className="sm:hidden mr-3 relative "
                 >
-                  <IoMdArrowBack size={20} />
+                  <IoMdArrowBack size={200} />
                 </button>
                 <Avatar
                   size={4}
@@ -191,7 +192,9 @@ const Chats = () => {
             </div>
             <div className="flex items-center text-gray-500 text-xl">
               <FaSearch className="mr-8" />
-              <FaEllipsisV className="mr-2" />
+              <FaEllipsisV
+                onClick={handleAvatarClick}
+                className="mr-2 hover:cursor-pointer" />
             </div>
           </div>
 
