@@ -4,7 +4,6 @@ import ApiCall from "./httpClient";
 import { LOCAL_STORAGE } from "./storage";
 import { socket } from "../services";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 
 const apiCall = new ApiCall();
 
@@ -132,7 +131,6 @@ export const updateProfileName = async (
 
 // DELETE A CHAT 
 export const handleDelete = async () => {
-  const router = useRouter()
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
   const receiver = JSON.parse(localStorage.getItem("receiver") || "{}")
   try {
@@ -153,7 +151,7 @@ export const handleDelete = async () => {
       hideProgressBar: true,
       autoClose: 2000,
     });
-    router.push("/discussions");
+    
   } catch (error) {
     console.error(error);
   }

@@ -261,6 +261,16 @@ const Chats = () => {
   // FXN TO DELETE CHAT
   const handleDeleteChat = async () => {
     await handleDelete()
+      .then((err) => {
+        router.push('/discussion')
+      })
+      .catch((err) => {
+        toast.error('Unable to delete discussion', {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 2000,
+        })
+      })
     setOnDelete((prev) => !prev);
   }
 

@@ -5,6 +5,7 @@ import React, { useState, ChangeEvent } from "react";
 import { useDropzone } from "react-dropzone";
 import { FaPlus, FaTimes, FaPaperPlane, FaFile } from "react-icons/fa";
 import { AiOutlineSmile } from "react-icons/ai";
+import Image from "next/image";
 
 interface SelectFileProps {
   file: File | string;
@@ -65,10 +66,10 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
 
   const renderPreview = () => {
     if (typeof file === "string") {
-      return <img src={file} alt="Captured" className="max-w-full h-80" />;
+      return <Image src={file} alt="Captured" className="max-w-full h-80" />;
     } else if (file) {
       return (
-        <img
+        <Image
           src={URL.createObjectURL(file)}
           alt="Uploaded"
           className="max-w-full mb-6 h-80"

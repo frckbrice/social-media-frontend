@@ -60,6 +60,16 @@ const ContactInfo = ({
 
   const handleDeleteChat = async () => {
     await handleDelete()
+      .then((res) => {
+        router.push("/discussions");
+      })
+      .catch((err) => {
+        toast.error('Unable to delete discussion', {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 2000,
+        })
+      })
     setOnDelete((prev) => !prev);
   }
 
@@ -131,7 +141,7 @@ const ContactInfo = ({
   };
 
   // handleClickContact
-  const handleClickContact = (_user: User) => {};
+  const handleClickContact = (_user: User) => { };
 
   return (
     <div className="w-[45vw] z-20 mobile:max-sm:w-full bg-bgGray ">
@@ -242,9 +252,8 @@ const ContactInfo = ({
                 </div>
 
                 <div
-                  className={`${
-                    !members.length ? "hidden" : "visble p-4 "
-                  }p-4 flex flex-wrap gap-2 overflow-y-auto  max-h-[80px]`}
+                  className={`${!members.length ? "hidden" : "visble p-4 "
+                    }p-4 flex flex-wrap gap-2 overflow-y-auto  max-h-[80px]`}
                 >
                   {members.map((member: User) => (
                     <AddedMember
@@ -257,9 +266,8 @@ const ContactInfo = ({
                 </div>
 
                 <div
-                  className={`w-full ${
-                    members.length ? "h-[calc(90vh-115px-80px)]" : ""
-                  } h-[calc(90vh-115px)] mobile:max-sm:h-[calc(100vh-115px)]  overflow-x-auto `}
+                  className={`w-full ${members.length ? "h-[calc(90vh-115px-80px)]" : ""
+                    } h-[calc(90vh-115px)] mobile:max-sm:h-[calc(100vh-115px)]  overflow-x-auto `}
                 >
                   {filteredUsers.map((user) => (
                     <ContactCard
