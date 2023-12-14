@@ -1,6 +1,6 @@
 "use client";
 
-import { uploadFileToSupabase } from "@/utils/service/queries";
+import { handleDelete, uploadFileToSupabase } from "@/utils/service/queries";
 import { useDropzone } from "react-dropzone";
 import Webcam from "react-webcam";
 import ContactInfo from "@/components/organisms/ContactInfo";
@@ -24,6 +24,7 @@ import {
   FaCameraRetro,
   FaCamera,
   FaPaperPlane,
+  FaBullseye,
 } from "react-icons/fa";
 import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
@@ -35,6 +36,10 @@ import Messages from "@/components/organisms/Messages/Messages";
 import { IoMdArrowBack } from "react-icons/io";
 import Pulsation from "@/components/molecules/Pulsation";
 import { useAppContext } from "@/app/Context/AppContext";
+import Popups from "@/components/atoms/Popups";
+import Overlay from "@/components/atoms/Overlay";
+import { toast } from "react-toastify";
+import { SITE_URL } from "@/utils/service/constant";
 
 const Chats = () => {
   const [selectedFile, setSelectedFile] = useState<File | string | null>(null);
@@ -42,6 +47,8 @@ const Chats = () => {
   const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [rightDropDown, setRightDropDown] = useState(false)
+  const [onDelete, setOnDelete] = useState(false)
   const webcamRef = useRef<Webcam | null>(null);
 
   const param = useParams();
@@ -61,8 +68,6 @@ const Chats = () => {
     return null;
   });
 
-  const activeChat = JSON.parse(localStorage.getItem("activeChat") as string) || {};
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   let oldReceiver: string = "";
@@ -77,6 +82,33 @@ const Chats = () => {
   socket.on("connect_error", (err) => {
     console.log(`connection error due to ${err}`);
   });
+
+  const dropDownLIst = [
+    {
+      label: "Contact info",
+      function: () => {
+        // setShowCreateGrp((prev) => !prev);
+        // setShowDropdown((prev) => !prev);
+        setShowInfoCard(prev => !prev);
+        setRightDropDown(prev => !prev)
+      },
+    },
+    {
+      label: "Close discussion",
+      function: () => {
+        router.push('/discussions')
+        setRightDropDown(prev => !prev)
+      },
+    },
+    {
+      label: "Delete discussion",
+      function: () => {
+        // setShowPopup((prev) => !prev);
+        setOnDelete(prev => !prev)
+        setRightDropDown(prev => !prev)
+      },
+    }
+  ];
 
   useEffect(() => {
     socket.emit("connected", {
@@ -190,7 +222,7 @@ const Chats = () => {
     setMessage(e.target.value);
   };
 
-  
+
 
   const handleCloseSelectFile = () => {
     setSelectedFile(null);
@@ -217,6 +249,20 @@ const Chats = () => {
   socket.on("notify", (data) => {
     console.log(data);
   });
+
+  function handleCloseModal(): void {
+    throw new Error("Function not implemented.");
+  }
+
+  function handleOpenDropdown() {
+    setRightDropDown(prev => !prev)
+  }
+
+  // FXN TO DELETE CHAT
+  const handleDeleteChat = async () => {
+    await handleDelete()
+    setOnDelete((prev) => !prev);
+  }
 
   return (
     <>
@@ -254,12 +300,46 @@ const Chats = () => {
 
             <div className="flex items-center text-gray-500 text-xl">
               <FaSearch className="mr-8" />
-              <FaEllipsisV
-                onClick={handleAvatarClick}
-                className="mr-2 hover:cursor-pointer  hover:bg-gray-300 rounded-full w-fit self-center"
-              />
+              <button>
+                <FaEllipsisV
+                  onClick={() => handleOpenDropdown()}
+                  className="mr-2 hover:cursor-pointer  hover:bg-gray-300 rounded-full w-fit self-center"
+                />
+              </button>
             </div>
+            {rightDropDown && (
+              <div className="absolute z-40 top-10 right-4">
+                <DropdownModal onClose={handleCloseModal}>
+                  <ul className="py-2 w-full flex. flex-col gap-4">
+                    {dropDownLIst.map((item, index) => (
+                      <li
+                        className="px-5 py-2 hover:bg-bgGray hover:cursor-pointer text-sm text-primaryText"
+                        key={index}
+                        onClick={item.function}
+                      >
+                        {item.label}
+                      </li>
+                    ))}
+                  </ul>
+                </DropdownModal>
+              </div>
+            )}
           </div>
+          {onDelete && (
+            <>
+              <Overlay
+                transparent={false}
+                onClick={() => setOnDelete((prev) => !prev)}
+              />
+              <Popups
+                title={"Delete this chat?"}
+                content={""}
+                actionText={"Delete chat"}
+                onCancel={() => setOnDelete((prev) => !prev)}
+                onAction={() => handleDeleteChat()}
+              />
+            </>
+          )}
 
           <div
             style={{
@@ -417,17 +497,15 @@ const Chats = () => {
             {isCameraOpen && (
               <div className="absolute bottom-28 font-bold left-1/2 transform space-x-10 -translate-x-1/2">
                 <button
-                  className={`${
-                    captureMode === "photo" ? "text-yellow" : "text-gray-500"
-                  }`}
+                  className={`${captureMode === "photo" ? "text-yellow" : "text-gray-500"
+                    }`}
                   onClick={() => setCaptureMode("photo")}
                 >
                   Photo
                 </button>
                 <button
-                  className={`${
-                    captureMode === "video" ? "text-white" : "text-gray-500"
-                  }`}
+                  className={`${captureMode === "video" ? "text-white" : "text-gray-500"
+                    }`}
                   onClick={() => setCaptureMode("video")}
                 >
                   Video

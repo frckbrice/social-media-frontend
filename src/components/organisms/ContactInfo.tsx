@@ -20,7 +20,7 @@ import ContactCard from "./ContactCard";
 import AddGroupMembers from "./AddGroupMembers";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import AddedMember from "../molecules/AddedMember";
-import { addGroupMembers, getGroupMembers } from "@/utils/service/queries";
+import { addGroupMembers, getGroupMembers, handleDelete } from "@/utils/service/queries";
 import RoundedLoader from "../atoms/RoundedLoader";
 
 type ContactCardProps = {
@@ -58,40 +58,10 @@ const ContactInfo = ({
   const [filteredUsers, setFilteredUsers] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(
-        SITE_URL + `/rooms/${receiver.id}/${sender.user_id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to delete chat");
-      }
-      const data = response.json();
-      console.log("deleted contact", data);
-      localStorage.removeItem("receiver");
-      toast.success("Chat deleted successfully", {
-        position: "top-right",
-        hideProgressBar: true,
-        autoClose: 2000,
-      });
-      router.push("/discussions");
-    } catch (error) {
-      console.error(error);
-    }
-    // await deleteSingleChat(receiver.id, sender.user_id)
-    //   .then((res) => {
-    //     console.log('deleted chat', res)
-    //     localStorage.removeItem('receiver')
-    //     router.push("/discussions")
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
+  const handleDeleteChat = async () => {
+    await handleDelete()
     setOnDelete((prev) => !prev);
-  };
+  }
 
   useEffect(() => {
     if (receiver.isGroup) {
@@ -250,7 +220,7 @@ const ContactInfo = ({
               content={""}
               actionText={"Delete chat"}
               onCancel={() => setOnDelete((prev) => !prev)}
-              onAction={() => handleDelete()}
+              onAction={() => handleDeleteChat()}
             />
           </>
         )}

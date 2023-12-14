@@ -3,6 +3,8 @@ import { SITE_URL } from "./constant";
 import ApiCall from "./httpClient";
 import { LOCAL_STORAGE } from "./storage";
 import { socket } from "../services";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const apiCall = new ApiCall();
 
@@ -126,4 +128,34 @@ export const updateProfileName = async (
 ) => {
   console.log("id", id);
   return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
+};
+
+// DELETE A CHAT 
+export const handleDelete = async () => {
+  const router = useRouter()
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
+  const receiver = JSON.parse(localStorage.getItem("receiver") || "{}")
+  try {
+    const response = await fetch(
+      SITE_URL + `/rooms/${receiver.id}/${sender.user_id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to delete chat");
+    }
+    const data = response.json();
+    console.log("deleted contact", data);
+    localStorage.removeItem("receiver");
+    toast.success("Chat deleted successfully", {
+      position: "top-right",
+      hideProgressBar: true,
+      autoClose: 2000,
+    });
+    router.push("/discussions");
+  } catch (error) {
+    console.error(error);
+  }
+  // setOnDelete((prev) => !prev);
 };
