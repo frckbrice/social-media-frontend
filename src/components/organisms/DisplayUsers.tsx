@@ -36,6 +36,7 @@ const DisplayUsers = ({ contactClick, goToCreateGrt, users }: Props) => {
           notification={""}
           active={false}
           className={""}
+          updatedAt={""}
         />
       ))}
     </div>

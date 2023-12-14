@@ -12,9 +12,9 @@ interface CardProps {
   // image: string | "";
   onClick: () => void;
   notification: string | "";
-  active?: boolean;
-  // updatedAt: string;
-  className?: string | "";
+  active: boolean;
+  updatedAt?: string;
+  className: string | "";
   user: Room;
 }
 

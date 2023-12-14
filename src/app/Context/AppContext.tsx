@@ -35,6 +35,7 @@ const initialState: DataType = {
     image: "",
     my_id: "",
     user_id: "",
+    role: "",
   },
   setCurrentUser: () => { },
   allUsers: [],

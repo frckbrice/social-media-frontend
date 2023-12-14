@@ -1,5 +1,12 @@
 "use client";
 
+import { handleDelete, uploadFileToSupabase } from "@/utils/service/queries";
+import { useDropzone } from "react-dropzone";
+import Webcam from "react-webcam";
+import ContactInfo from "@/components/organisms/ContactInfo";
+import DropdownModal from "@/components/atoms/DropdownModal";
+import SelectFile from "@/components/organisms/SelectFile";
+
 import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
@@ -13,28 +20,47 @@ import {
   FaFileInvoice,
   FaPhotoVideo,
   FaUser,
+  FaVideo,
+  FaCameraRetro,
   FaCamera,
   FaPaperPlane,
+  FaBullseye,
 } from "react-icons/fa";
 import { useParams } from "next/navigation";
 import { AiOutlineSmile } from "react-icons/ai";
 import { socket } from "@/utils/services";
 
 // const socket = io();
+<<<<<<< HEAD
 // import { revalidateData } from "@/utils/services";
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
+=======
+
+>>>>>>> 7f4a1f5beba4c9a4d8eff96e0509168800fed292
 import Messages from "@/components/organisms/Messages/Messages";
 import { IoMdArrowBack } from "react-icons/io";
 import Pulsation from "@/components/molecules/Pulsation";
 import { useAppContext } from "@/app/Context/AppContext";
+import Popups from "@/components/atoms/Popups";
+import Overlay from "@/components/atoms/Overlay";
+import { toast } from "react-toastify";
+import { SITE_URL } from "@/utils/service/constant";
 
 // export const revalidate = 0;
 const Chats = () => {
+  const [selectedFile, setSelectedFile] = useState<File | string | null>(null);
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+  const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [rightDropDown, setRightDropDown] = useState(false)
+  const [onDelete, setOnDelete] = useState(false)
+  const webcamRef = useRef<Webcam | null>(null);
+
   const param = useParams();
   const router = useRouter();
   const [showInfoCard, setShowInfoCard] = useState(false);
-
   const [message, setMessage] = useState<string>("");
   const [receivedMessages, setReceivedMessages] = useState<Message[]>([]);
   const [typingStatus, setTypingStatus] = useState("");
@@ -76,6 +102,33 @@ const Chats = () => {
     setTypingStatus("");
     setDisconnectedUser(data);
   });
+
+  const dropDownLIst = [
+    {
+      label: "Contact info",
+      function: () => {
+        // setShowCreateGrp((prev) => !prev);
+        // setShowDropdown((prev) => !prev);
+        setShowInfoCard(prev => !prev);
+        setRightDropDown(prev => !prev)
+      },
+    },
+    {
+      label: "Close discussion",
+      function: () => {
+        router.push('/discussions')
+        setRightDropDown(prev => !prev)
+      },
+    },
+    {
+      label: "Delete discussion",
+      function: () => {
+        // setShowPopup((prev) => !prev);
+        setOnDelete(prev => !prev)
+        setRightDropDown(prev => !prev)
+      },
+    }
+  ];
 
   useEffect(() => {
     socket.emit("connected", {
@@ -151,13 +204,65 @@ const Chats = () => {
     setTypingStatus(data);
   });
 
-  const handlePlusIconClick = () => {
-    setShowDropdown((prevState) => !prevState);
-  };
-
   function handleBlur(e: any) {
     if (!e.target.value) setTypingStatus("");
   }
+
+  const handlePlusIconClick = () => {
+    setShowDropdown((prevState) => !prevState);
+    setCaptureMode("photo");
+    setIsCameraOpen(false);
+  };
+
+  const handleCaptureImage = () => {
+    const imageSrc = webcamRef.current?.getScreenshot() || null;
+    setSelectedFile(imageSrc);
+    setIsCameraOpen(false);
+  };
+
+  const handleCaptureVideo = () => {
+    if (isRecording) {
+      setIsRecording(false);
+      // Logic to stop video recording
+    } else {
+      setIsRecording(true);
+      // Logic to start video recording
+    }
+  };
+
+  const handleFileSelect = async (acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0];
+
+      try {
+        const filePreviewUrl = URL.createObjectURL(file);
+        setSelectedFile(file);
+        setFilePreviewUrl(filePreviewUrl);
+
+        const fileUrl = await uploadFileToSupabase(file);
+        if (fileUrl) {
+          console.log("File uploaded successfully:", fileUrl.data.publicUrl);
+          setSelectedFile(null);
+          setFilePreviewUrl(null);
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
+    }
+  };
+
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: handleFileSelect,
+    multiple: false,
+    // accept: "application/pdf",
+  });
+
+
+
+  const handleCloseSelectFile = () => {
+    setSelectedFile(null);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -188,13 +293,36 @@ const Chats = () => {
     setConnected(data);
   });
 
+  function handleCloseModal(): void {
+    throw new Error("Function not implemented.");
+  }
+
+  function handleOpenDropdown() {
+    setRightDropDown(prev => !prev)
+  }
+
+  // FXN TO DELETE CHAT
+  const handleDeleteChat = async () => {
+    await handleDelete()
+      .then(() => {
+        router.push('/discussion')
+      })
+      .catch(() => {
+        toast.error('Unable to delete discussion', {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 2000,
+        })
+      })
+    setOnDelete((prev) => !prev);
+  }
+
   return (
     <>
       <div className="w-full flex justify-between">
         <div
-          className={`relative flex flex-col h-full w-full mobile:max-sm:${
-            showInfoCard ? "hidden" : "visible"
-          }`}
+          className={`relative flex flex-col h-full w-full mobile:max-sm:${showInfoCard ? "hidden" : "visible"
+            }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
             <div className="flex items-center hover:cursor-ponter">
@@ -229,14 +357,53 @@ const Chats = () => {
                 </span>
               </div>
             </div>
+
             <div className="flex items-center text-gray-500 text-xl">
               <FaSearch className="mr-8" />
               <FaEllipsisV
                 onClick={handleAvatarClick}
                 className="mr-2 hover:cursor-pointer"
               />
+              <button>
+                <FaEllipsisV
+                  onClick={() => handleOpenDropdown()}
+                  className="mr-2 hover:cursor-pointer  hover:bg-gray-300 rounded-full w-fit self-center"
+                />
+              </button>
             </div>
+            {rightDropDown && (
+              <div className="absolute z-40 top-10 right-4">
+                <DropdownModal onClose={handleCloseModal}>
+                  <ul className="py-2 w-full flex. flex-col gap-4">
+                    {dropDownLIst.map((item, index) => (
+                      <li
+                        className="px-5 py-2 hover:bg-bgGray hover:cursor-pointer text-sm text-primaryText"
+                        key={index}
+                        onClick={item.function}
+                      >
+                        {item.label}
+                      </li>
+                    ))}
+                  </ul>
+                </DropdownModal>
+              </div>
+            )}
           </div>
+          {onDelete && (
+            <>
+              <Overlay
+                transparent={false}
+                onClick={() => setOnDelete((prev) => !prev)}
+              />
+              <Popups
+                title={"Delete this chat?"}
+                content={""}
+                actionText={"Delete chat"}
+                onCancel={() => setOnDelete((prev) => !prev)}
+                onAction={() => handleDeleteChat()}
+              />
+            </>
+          )}
 
           <div
             style={{
@@ -252,6 +419,14 @@ const Chats = () => {
               receiver={receiver as Room}
             />
           </div>
+
+          {selectedFile && (
+            <SelectFile
+              file={selectedFile}
+              onCaptureImage={handleCaptureImage}
+              onClose={handleCloseSelectFile}
+            />
+          )}
 
           <div
             onSubmit={handleSendMessage}
@@ -319,25 +494,90 @@ const Chats = () => {
 
       {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
-          <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[34%] transform -translate-x-1/2 shadow-lg">
-            <div className="flex items-center space-x-3 text-lg cursor-pointer">
+          <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
+            <div
+              {...getRootProps()}
+              className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
+            >
+              <input {...getInputProps()} />
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
             </div>
-            <div className="flex items-center py-5 space-x-3 text-lg cursor-pointer">
+
+            <div
+              {...getRootProps()}
+              className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
+            >
+              <input {...getInputProps()} />
               <FaPhotoVideo className="text-blue-600 text-2xl" />
               <span className="text-gray-600">Photos & Videos</span>
             </div>
-            <div className="flex items-center space-x-3 text-lg cursor-pointer">
-              <FaCamera className="text-pink-600  text-2xl" />
+
+            <div
+              {...getRootProps()}
+              className="flex items-center space-x-3 text-lg cursor-pointer"
+              onClick={() => setIsCameraOpen(true)}
+            >
+              <FaCamera className="text-pink-600 text-2xl" />
               <span className="text-gray-600">Camera</span>
             </div>
+
             <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
               <FaUser className="text-blue-400 text-2xl" />
               <span className="text-gray-600">Contact</span>
             </div>
           </div>
         </DropdownModal>
+      )}
+
+      {isCameraOpen && (
+        <div className="">
+          <FaTimes
+            onClick={() => setIsCameraOpen(false)}
+            className="absolute bottom-[79%] bg-themecolor left-1/3 text-2xl z-40 text-white cursor-pointer"
+          />
+
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
+            <Webcam
+              audio={captureMode === "video"}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              className="rounded-lg"
+            />
+            <button
+              onClick={
+                captureMode === "photo"
+                  ? handleCaptureImage
+                  : handleCaptureVideo
+              }
+              className="absolute bottom-36 left-1/2 transform -translate-x-1/2 mb-8 p-5 bg-themecolor text-gray-800 rounded-full shadow-md"
+            >
+              {captureMode === "photo" ? (
+                <FaCameraRetro className="text-2xl font-extrabold text-white" />
+              ) : (
+                <FaVideo className="text-2xl font-extrabold text-white" />
+              )}
+            </button>
+            {isCameraOpen && (
+              <div className="absolute bottom-28 font-bold left-1/2 transform space-x-10 -translate-x-1/2">
+                <button
+                  className={`${captureMode === "photo" ? "text-yellow" : "text-gray-500"
+                    }`}
+                  onClick={() => setCaptureMode("photo")}
+                >
+                  Photo
+                </button>
+                <button
+                  className={`${captureMode === "video" ? "text-white" : "text-gray-500"
+                    }`}
+                  onClick={() => setCaptureMode("video")}
+                >
+                  Video
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </>
   );
