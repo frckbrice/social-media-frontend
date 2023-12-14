@@ -21,7 +21,7 @@ import { AiOutlineSmile } from "react-icons/ai";
 import { socket } from "@/utils/services";
 
 // const socket = io();
-
+// import { revalidateData } from "@/utils/services";
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
 import Messages from "@/components/organisms/Messages/Messages";
@@ -29,17 +29,19 @@ import { IoMdArrowBack } from "react-icons/io";
 import Pulsation from "@/components/molecules/Pulsation";
 import { useAppContext } from "@/app/Context/AppContext";
 
+// export const revalidate = 0;
 const Chats = () => {
   const param = useParams();
   const router = useRouter();
   const [showInfoCard, setShowInfoCard] = useState(false);
 
   const [message, setMessage] = useState<string>("");
-  const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
+  const [receivedMessages, setReceivedMessages] = useState<Message[]>([]);
   const [typingStatus, setTypingStatus] = useState("");
   const [connected, setConnected] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const { currentUser } = useAppContext();
+  const [disconnectedUser, setDisconnectedUser] = useState<string>("");
 
   const [receiver, setReceiver] = useState<Room | null>((): Room | null => {
     if (typeof localStorage !== "undefined") {
@@ -51,11 +53,12 @@ const Chats = () => {
   });
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const divMessageRef = useRef<HTMLDivElement | null>(null);
 
   let oldReceiver: string = "";
 
   socket.on("message", (data) => {
-    console.log("message received: ", data);
+    // console.log("message received: ", data);
     if (Array.isArray(data)) {
       setReceivedMessages([...receivedMessages, ...data]);
     } else setReceivedMessages([...receivedMessages, data]);
@@ -63,29 +66,52 @@ const Chats = () => {
 
   socket.on("connect_error", (err) => {
     console.log(`connection error due to ${err}`);
+    setConnected("");
+  });
+
+  socket.on("disconnected", (data) => {
+    console.log(data);
+    socket.disconnect();
+    setConnected("");
+    setTypingStatus("");
+    setDisconnectedUser(data);
   });
 
   useEffect(() => {
     socket.emit("connected", {
-      start: true,
       room: param.id,
       owner: currentUser?.id,
     });
     setReceivedMessages([]);
 
     setReceiver(() => JSON.parse(localStorage.getItem("receiver") || "{}"));
+    const data = {
+      sender_id: currentUser?.id,
+      receiver_room_id: param.id,
+    };
+
+    socket.emit("roomMessages", data);
   }, [param.id, currentUser?.name, currentUser?.id]);
+
+  useEffect(() => {
+    if (divMessageRef && divMessageRef.current) {
+      divMessageRef.current.scrollTo(0, divMessageRef.current.scrollHeight);
+    }
+    socket.on("updateMessage", (data) => {
+      console.log("update message", data);
+      const index = receivedMessages?.findIndex(
+        (msg: Message) => msg.id === data.id
+      );
+      if (index !== -1) {
+        receivedMessages[index].reaction = data.reaction;
+        setReceivedMessages(receivedMessages);
+      }
+    });
+  }, [receivedMessages]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
-
-  // if (oldReceiver !== receiver?.original_dm_roomID) {
-  //   socket.volatile.emit("disconnected", oldReceiver);
-  //   oldReceiver = receiver?.original_dm_roomID as string;
-  // }
-
-  // socket.volatile.emit("disconnected", currentUser?.id);
 
   const handleSendMessage = () => {
     // Handle sending message logic here
@@ -115,14 +141,16 @@ const Chats = () => {
     }
     console.log(typingStatus);
     socket.emit("typing", {
-      receiver,
-      currentUser,
+      room: param.id,
+      owner: currentUser?.id,
     });
   };
+
   socket.on("typingResponse", (data) => {
     console.log(data);
     setTypingStatus(data);
   });
+
   const handlePlusIconClick = () => {
     setShowDropdown((prevState) => !prevState);
   };
@@ -147,8 +175,14 @@ const Chats = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [showDropdown]);
-
-  console.log(receivedMessages);
+  // setTimeout(async () => {
+  //   console.log("timing");
+  //   const data = await revalidateData(currentUser.id);
+  //   const intermediate = data;
+  //   console.log(data);
+  //   setReceivedMessages(intermediate);
+  // }, 100);
+  // console.log(receivedMessages);
   socket.on("notify", (data) => {
     console.log(data);
     setConnected(data);
@@ -163,8 +197,7 @@ const Chats = () => {
           }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
-            <div
-              className="flex items-center hover:cursor-ponter">
+            <div className="flex items-center hover:cursor-ponter">
               <>
                 <button
                   onClick={() => router.push("/discussions")}
@@ -182,10 +215,16 @@ const Chats = () => {
                 />
               </>
 
-              <div className="ml-4 ">
+              <div className="ml-4 flex flex-col justify-center items-start ">
                 <p className="text-md">{receiver?.name}</p>
                 <span className="text-gray-500 text-xs">
-                  {connected ? connected : ""}
+                  {connected
+                    ? connected
+                    : disconnectedUser
+                    ? disconnectedUser
+                    : ""}
+                </span>
+                <span className="text-xs">
                   {typingStatus ? typingStatus : ""}
                 </span>
               </div>
@@ -194,7 +233,8 @@ const Chats = () => {
               <FaSearch className="mr-8" />
               <FaEllipsisV
                 onClick={handleAvatarClick}
-                className="mr-2 hover:cursor-pointer" />
+                className="mr-2 hover:cursor-pointer"
+              />
             </div>
           </div>
 
@@ -203,19 +243,15 @@ const Chats = () => {
               backgroundImage:
                 "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
             }}
-            className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-y-auto p-4"
+            className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-y-auto p-4 overflow-x-clip "
+            ref={divMessageRef}
           >
-            {/* {receivedMessages?.map((message, i) => (
-              <div key={i}>{message} </div>
-            ))} */}
-
             <Messages
               messageList={receivedMessages}
               currentUser={currentUser as Room}
               receiver={receiver as Room}
             />
           </div>
-          {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
           <div
             onSubmit={handleSendMessage}

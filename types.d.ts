@@ -13,11 +13,12 @@ type Message = {
   sender_id: string;
   receiver_room_id: string;
   content: string;
-  timestamp: string;
+  updatedAt: string;
   reaction: string;
   sender_name: string;
   sender_phone: string;
   is_read: boolean;
+  createdAt: string;
 };
 
 type RoomUser = {

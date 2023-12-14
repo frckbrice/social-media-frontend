@@ -8,7 +8,7 @@ type Props = {
 export default function SenderMessages({ message }: Props) {
   return (
     <div className="box arrow-right">
-      <div className=" py-3 text-[#111b21]">
+      <div className=" py-[3px] px-[5px] w-fit text-[#111b21]">
         <div className=" inline-flex max-w-full text-[12.8px] font-[500] text-[#b4876e] item-center ">
           <span className=" pr-1 min-w-[8ch] flex-1 overflow-ellipsis whitespace-nowrap overflow-hidden before:~ ">
             {message.sender_name}
@@ -21,7 +21,7 @@ export default function SenderMessages({ message }: Props) {
         <div className=" flex flex-col gap-1">
           <p> {message.content}</p>
           <span className="flex justify-end">
-            {message?.timestamp?.split("T")[1].split(".")[0].slice(0, 5)}{" "}
+            {new Date(message.updatedAt).toLocaleTimeString("en-GB")}{" "}
           </span>
         </div>
       </div>

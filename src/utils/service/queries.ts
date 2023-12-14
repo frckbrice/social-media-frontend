@@ -34,10 +34,21 @@ export const createRoom = async (user: Partial<Room>) => {
 
 // GET ALL ROOMS
 export const getAllRooms = async () => {
-  console.log("getallrooms fired");
-  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
+  console.log("end of test");
+  const currentUser: string | null = localStorage.getItem("currentUser");
+  if (typeof currentUser !== "string") return;
+  const sender = JSON.parse(currentUser);
   const res = await fetch(SITE_URL + `/rooms_users/my_dm/${sender?.user_id}`, {
-    next: { revalidate: 30 },
+    cache: "no-store",
+  });
+
+  return await res.json();
+};
+
+// GET ALL unreadmessages
+export const getUnreadMessages = async () => {
+  const res = await fetch(SITE_URL + "/unread-messages", {
+    cache: "no-store",
   });
 
   return await res.json();
@@ -45,13 +56,16 @@ export const getAllRooms = async () => {
 
 // GET ALL GROUPS OF SINGLE USER
 export const getAllGroups = async () => {
-  const sender = JSON.parse(localStorage.getItem('sender') || '{}')
-  const res = await fetch(SITE_URL + `/rooms_users/all_groups/${sender?.user_id}`, {
-    next: {revalidate: 30}
-  })
-  return await res.json()
-}
-3
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
+  const res = await fetch(
+    SITE_URL + `/rooms_users/all_groups/${sender?.user_id}`,
+    {
+      next: { revalidate: 30 },
+    }
+  );
+  return await res.json();
+};
+
 // UPLOAD IMAGE TO SUPABSE
 export const uplaodImage = async (file: any) => {
   const fileValue = `groupIcon${Date.now()}.png`;

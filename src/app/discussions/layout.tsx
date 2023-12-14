@@ -27,6 +27,7 @@ import { SITE_URL } from "@/utils/service/constant";
 import GroupSetup from "@/components/organisms/GroupSetup";
 import LogOutPopUp from "@/components/molecules/logOutPopup";
 import { socket } from "@/utils/services";
+import { disconnect } from "process";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -39,8 +40,15 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  const { currentUser, allUsers, chatRooms, setChatRooms, allGroups, setAllGroups } = useAppContext();
-  // const [chatRooms, setChatRooms] = useState<Room[]>([]);
+  const {
+    currentUser,
+    allUsers,
+    chatRooms,
+    setChatRooms,
+    allGroups,
+    setAllGroups,
+  } = useAppContext();
+  const [disconnectedUser, setDisconnectedUser] = useState<Room>(chatRooms[0]);
   const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
   const [usersDisplay, setUsersDisplay] = useState<Room[]>(chatRooms);
 
@@ -90,7 +98,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
     });
     if (!filteredResults.length || !searchName.length) {
       setFilterChats(chatRooms);
-      return; 
+      return;
     }
     setFilterChats(filteredResults);
   };
@@ -133,6 +141,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   };
 
   const handleClick = (user: Room) => {
+    user.unread_count = 0;
     const data = {
       sender_id: currentUser?.id,
       receiver_room_id: user.isGroup ? user.id : user.original_dm_roomID,
@@ -145,11 +154,13 @@ function Discussion({ children }: { children: React.ReactNode }) {
       : router.push(`/discussions/${user.original_dm_roomID}`);
     localStorage.setItem("receiver", JSON.stringify(user));
 
-    if (olduser !== user.original_dm_roomID) {
-      socket.emit("disconnected", olduser);
-      console.log(olduser);
-      olduser = user.original_dm_roomID as string;
-      console.log(olduser);
+    if (disconnectedUser !== user) {
+      socket.emit("disconnected", {
+        room: disconnectedUser,
+        owner: currentUser,
+      });
+
+      setDisconnectedUser(user);
     }
 
     //  socket.emit("updateMessage", {});

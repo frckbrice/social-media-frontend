@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 import { SITE_URL } from "./service/constant";
+import { getAllRooms, getUnreadMessages } from "./service/queries";
 
 export const socket = io(SITE_URL || "", {
   // [1] Important as fuck
@@ -12,3 +13,5 @@ export const socket = io(SITE_URL || "", {
   upgrade: false,
   rejectUnauthorized: false,
 });
+
+// import openpgp from "openpgp";

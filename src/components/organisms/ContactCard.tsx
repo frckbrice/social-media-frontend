@@ -59,8 +59,9 @@ const ContactCard = ({
               {user.last_message}
             </span>
             <span
-              className={`text-white self-center bg-themecolor p-1 rounded-[50%] text-xs ${!active ? "hidden" : "visible"
-                }`}
+              className={`text-white self-center bg-themecolor p-1 rounded-[50%] text-xs ${
+                !active ? "hidden" : "visible"
+              }`}
             >
               {user.unread_count}
             </span>

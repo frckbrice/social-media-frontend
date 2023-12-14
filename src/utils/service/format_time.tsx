@@ -23,3 +23,5 @@ export const formatLastMessageTime = (date: any) => {
     return timetoformat.toLocaleString("en-US", { weekday: "long" });
   }
 };
+
+// functions to encrypt and decrypt messages

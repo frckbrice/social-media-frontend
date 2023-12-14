@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .box {
-  width: fit-content;
+  width: auto;
   height: auto;
   background-color: hsla(0, 0%, 100%, 0.95);
   color: #0b0c0d;
