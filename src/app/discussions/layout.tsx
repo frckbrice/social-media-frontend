@@ -51,7 +51,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const { currentUser, allUsers, chatRooms, setChatRooms } = useAppContext();
   // const [chatRooms, setChatRooms] = useState<Room[]>([]);
   const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
-  const [usersDisplay, setUsersDisplay] = useState<User[]>(allUsers);
+  const [usersDisplay, setUsersDisplay] = useState<Room[]>(allUsers);
 
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
@@ -93,8 +93,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
   };
 
   // HANDLE FILTER CHAT ROOMS
-  const filterChatRoom = (e: { target: { value: any } }) => {
+  const filterChatRoom = (e: any) => {
     const searchName = e.target.value;
+    console.log(searchName);
+
     const filteredResults = chatRooms.filter((user) => {
       return user.name.toLowerCase().includes(searchName.toLowerCase());
     });
@@ -160,7 +162,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
               size={4}
               profilePicture={
                 currentUser?.image ||
-                "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+                "https://example.com/default-profile-image.jpg"
               }
             />
 
@@ -202,7 +204,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
           </div>
           {filterChats.length ? (
             <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
-              {filterChats?.map((user) => (
+              {filterChats?.map((user: Room) => (
                 <ContactCard
                   // id={user?.id as string}
                   // name={user.name}
@@ -259,6 +261,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
                 setShowAllContacts((prev) => !prev);
                 setShowCreateGrp((prev) => !prev);
               }}
+              // users={usersDisplay}
             />
           </ProfileCard>
         )}

@@ -4,9 +4,9 @@ import ContactCard from "./ContactCard";
 import { useAppContext } from "@/app/Context/AppContext";
 
 type Props = {
-  users: any;
   contactClick: (user: Room) => void;
   goToCreateGrt: () => void;
+  users: Room[];
 };
 
 const DisplayUsers = ({ contactClick, goToCreateGrt, users }: Props) => {

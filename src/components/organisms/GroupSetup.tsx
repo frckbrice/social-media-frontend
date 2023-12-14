@@ -9,6 +9,7 @@ import {
   addGroupMembers,
   createRoom,
   uplaodImage,
+  // uploadFileToSupabase,
 } from "@/utils/service/queries";
 import { useAppContext } from "@/app/Context/AppContext";
 
@@ -19,6 +20,7 @@ type setupProps = {
 function GroupSetup({ closeModal }: setupProps) {
   const [groupName, setGroupName] = useState("");
   const [groupIcon, setGroupIcon] = useState("");
+  const [isLoading, setIsloading] = useState(false);
   //   const [file, setFile] = useState<FileList | null>();
 
   const { currentUser, setChatRooms } = useAppContext();
@@ -29,6 +31,7 @@ function GroupSetup({ closeModal }: setupProps) {
     if (groupAvatar) {
       setGroupIcon(groupAvatar);
     }
+    console.log(e.target.files[0]);
   };
 
   //   console.log(file);
@@ -36,12 +39,15 @@ function GroupSetup({ closeModal }: setupProps) {
   const inputRef: any = useRef();
 
   const handleCreateGroup = async () => {
+    setIsloading(true);
     if (!groupName) {
       toast.warning("upload group icon first...!", {
         position: "top-right",
         hideProgressBar: true,
         autoClose: 3000,
       });
+      setIsloading(false);
+
       return;
     }
 
@@ -51,6 +57,8 @@ function GroupSetup({ closeModal }: setupProps) {
         hideProgressBar: true,
         autoClose: 3000,
       });
+      setIsloading(false);
+
       return;
     }
 
@@ -75,7 +83,10 @@ function GroupSetup({ closeModal }: setupProps) {
           hideProgressBar: true,
           autoClose: 3000,
         });
+        console.log("error creating groups", res);
         console.log(res.message);
+        setIsloading(false);
+
         return;
       } else {
         await addGroupMembers(membersIDs, res.id).then((response) => {
@@ -96,6 +107,7 @@ function GroupSetup({ closeModal }: setupProps) {
       autoClose: 3000,
     });
     setGroupName("");
+    setIsloading(false);
     localStorage.removeItem("group_members");
     closeModal();
   };
@@ -127,12 +139,16 @@ function GroupSetup({ closeModal }: setupProps) {
       />
 
       <div className="bg-bgGray absolute w-full bottom-0 flex items-center py-3 ">
-        <button
-          onClick={handleCreateGroup}
-          className="w-[2.5rem] text-themecolor  m-auto"
-        >
-          <VscPassFilled size={50} />
-        </button>
+        {isLoading ? (
+          <div className="loader m-auto border-t-2 rounded-full border-themecolor bg-gray-300 animate-spin aspect-square w-8 flex justify-center items-center text-yellow-700"></div>
+        ) : (
+          <button
+            onClick={handleCreateGroup}
+            className="w-[2.5rem] text-themecolor  m-auto"
+          >
+            <VscPassFilled size={50} />
+          </button>
+        )}
       </div>
     </div>
   );

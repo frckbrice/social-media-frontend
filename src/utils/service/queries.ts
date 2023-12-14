@@ -44,26 +44,6 @@ export const getAllRooms = async () => {
   return await res.json();
 };
 
-// UPLOAD IMAGE TO SUPABSE
-export const uplaodImage = async (file: any) => {
-  const fileValue = `groupIcon${Date.now()}.png`;
-
-  const { data, error } = await supabase.storage
-    .from("whatsapp_avatars/images")
-    .upload(fileValue, file);
-
-  if (error) {
-    console.error("error creatin group icon", error);
-  } else {
-    console.log("group icon data", data);
-    const imageUrl = supabase.storage
-      .from("whatsapp_avatars/images")
-      .getPublicUrl(data.path);
-    console.log("group icon download url", imageUrl.data.publicUrl);
-    return imageUrl.data.publicUrl;
-  }
-};
-
 // Add Group Members
 export const addGroupMembers = async (members: string[], room_id: string) => {
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
@@ -89,4 +69,54 @@ export const updateProfileName = async (
 ) => {
   console.log("id", id);
   return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
+};
+//   if (error) {
+//     console.error("Error uploading file to Supabase:", error);
+//   } else {
+//     const fileUrl = supabase.storage
+//       .from("your_bucket_name")
+//       .getPublicUrl(data.path);
+//     console.log("File download URL:", fileUrl);
+//     return fileUrl;
+//   }
+// };
+
+// // UPLOAD IMAGE TO SUPABSE
+export const uplaodImage = async (file: any) => {
+  const fileValue = `groupIcon${Date.now()}.png`;
+
+  const { data, error } = await supabase.storage
+    .from("whatsapp_avatars/images")
+    .upload(fileValue, file);
+
+  if (error) {
+    console.error("error creatin group icon", error);
+  } else {
+    console.log("group icon data", data);
+    const imageUrl = supabase.storage
+      .from("whatsapp_avatars/images")
+      .getPublicUrl(data.path);
+    console.log("group icon download url", imageUrl.data.publicUrl);
+    return imageUrl.data.publicUrl;
+  }
+};
+
+
+//upload all file types to supabase 
+export const uploadFileToSupabase = async (file: File) => {
+  const fileName = `file_${Date.now()}.${file.name.split('.').pop()}`;
+
+  const { data, error } = await supabase.storage
+    .from("whatsapp_avatars/images")
+    .upload(fileName, file);
+
+  if (error) {
+    console.error("Error uploading file to Supabase:", error);
+  } else {
+    const fileUrl = supabase.storage
+      .from("whatsapp_avatars/images")
+      .getPublicUrl(data.path);
+    console.log("File download URL:", fileUrl);
+    return fileUrl;
+  }
 };
