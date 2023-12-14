@@ -26,6 +26,7 @@ import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { SITE_URL } from "@/utils/service/constant";
 import GroupSetup from "@/components/organisms/GroupSetup";
 import LogOutPopUp from "@/components/molecules/logOutPopup";
+import { socket } from "@/utils/services";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -53,6 +54,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
   const [usersDisplay, setUsersDisplay] = useState<Room[]>(allUsers);
 
+  let olduser: string = chatRooms[0]?.original_dm_roomID as string;
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
   };
@@ -111,7 +113,8 @@ function Discussion({ children }: { children: React.ReactNode }) {
   // FETCH CHAT ROOMS
   useEffect(() => {
     setFilterChats(chatRooms);
-  }, [chatRooms]);
+    setUsersDisplay(allUsers);
+  }, [allUsers, chatRooms]);
 
   // HANDLE START CHAT
   const handleStartChat = async (user: Room) => {
@@ -124,7 +127,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
         my_id: currentUser?.user_id.toString(),
       }).then((res: any) => {
         if (res) {
-          router.push(`/discussions/${res.original_dm_roomID}`);
+          res.isGroup
+            ? router.push(`/discussions/${res.id}`)
+            : router.push(`/discussions/${res.original_dm_roomID}`);
           localStorage.setItem("receiver", JSON.stringify(res));
           setChatRooms(() =>
             chatRooms?.find((room: Room) => room.id === res.id)
@@ -141,6 +146,29 @@ function Discussion({ children }: { children: React.ReactNode }) {
 
   const handleClose = () => {
     setShowPopup((prev) => !prev);
+  };
+
+  const handleClick = (user: Room) => {
+    const data = {
+      sender_id: currentUser?.id,
+      receiver_room_id: user.isGroup ? user.id : user.original_dm_roomID,
+    };
+    console.log(data);
+    socket.emit("roomMessages", data);
+
+    user.isGroup
+      ? router.push(`/discussions/${user.id}`)
+      : router.push(`/discussions/${user.original_dm_roomID}`);
+    localStorage.setItem("receiver", JSON.stringify(user));
+
+    if (olduser !== user.original_dm_roomID) {
+      socket.emit("disconnected", olduser);
+      console.log(olduser);
+      olduser = user.original_dm_roomID as string;
+      console.log(olduser);
+    }
+
+    //  socket.emit("updateMessage", {});
   };
 
   return (
@@ -202,25 +230,22 @@ function Discussion({ children }: { children: React.ReactNode }) {
               <BiMenuAltRight size={20} />
             </button>
           </div>
-          {filterChats.length ? (
-            <div className="h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto">
+          {chatRooms?.length ? (
+            <div
+              style={{
+                scrollbarColor: "red",
+                scrollbarWidth: "thin",
+              }}
+              className="displayChats h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto"
+            >
               {filterChats?.map((user: Room) => (
                 <ContactCard
-                  // id={user?.id as string}
-                  // name={user.name}
-                  // email={user.email}
                   user={user}
                   key={user.id}
-                  onClick={() => {
-                    LOCAL_STORAGE.save("activeChat", user);
-                    router.push(`/discussions/${user.id}`);
-                  }}
+                  onClick={() => handleClick(user)}
                   notification={""}
-                  active={false}
-                  // updatedAt={"11/30/2023"}
-                  // image={user.image}
+                  active={user.unread_count ? true : false}
                   className={`${paramName === user.id ? "bg-bgGray" : ""}`}
-                  updatedAt={user.updatedAt || ""}
                 />
               ))}
             </div>

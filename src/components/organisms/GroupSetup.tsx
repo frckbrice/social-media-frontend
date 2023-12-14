@@ -93,7 +93,7 @@ function GroupSetup({ closeModal }: setupProps) {
           console.log("groupMembers: ", response);
         });
         console.log("created group", res);
-        setChatRooms((prev) => [res, ...prev]);
+        // setChatRooms((prev) => [res, ...prev]);
         return res;
       }
     });

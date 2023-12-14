@@ -28,6 +28,7 @@ type RoomUser = {
 };
 
 type Room = {
+  role: string;
   id: string;
   image: string;
   isGroup?: boolean;
@@ -46,4 +47,16 @@ type Room = {
 type AddMembersProps = {
   members: string[];
   room_id: string;
+};
+
+type Participants = {
+  id: string;
+  name: string;
+  image: string;
+  isGroup?: boolean;
+  user_id: string;
+  my_id: string;
+  updatedAt?: string;
+  createdAt?: string;
+  role: string;
 };

@@ -35,41 +35,14 @@ export const createRoom = async (user: Partial<Room>) => {
 // GET ALL ROOMS
 
 export const getAllRooms = async () => {
-  console.log("getallrooms fired");
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-  const res = await fetch(SITE_URL + `/rooms/my_dm/${sender?.user_id}`, {
+  const res = await fetch(SITE_URL + `/rooms_users/my_dm/${sender?.user_id}`, {
     next: { revalidate: 30 },
   });
 
   return await res.json();
 };
 
-// Add Group Members
-export const addGroupMembers = async (members: string[], room_id: string) => {
-  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-
-  return members.map((memberId) => {
-    apiCall.POST(SITE_URL + "/rooms_users", {
-      user_id: memberId,
-      room_id,
-      role: `${memberId === sender.user_id ? "admin" : "member"}`,
-    });
-
-    // socket.emit("connected", { room: room_id, owner: memberId });
-  });
-};
-
-// Update profile name
-export const updateProfileName = async (
-  id: string,
-  update: {
-    name?: string;
-    image?: string;
-  }
-) => {
-  console.log("id", id);
-  return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
-};
 //   if (error) {
 //     console.error("Error uploading file to Supabase:", error);
 //   } else {
@@ -119,4 +92,38 @@ export const uploadFileToSupabase = async (file: File) => {
     console.log("File download URL:", fileUrl);
     return fileUrl;
   }
+};
+
+// Add Group Members
+export const addGroupMembers = async (members: string[], room_id: string) => {
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
+
+  return Promise.all(
+    members.map((memberId) => {
+      apiCall.POST(SITE_URL + "/rooms_users", {
+        user_id: memberId,
+        room_id,
+        role: `${memberId === sender.user_id ? "admin" : "member"}`,
+      });
+
+      // socket.emit("connected", { room: room_id, owner: memberId });
+    })
+  );
+};
+
+// GET GROUP MEMBERS BY GROUP ID
+export const getGroupMembers = async (id: string) => {
+  return apiCall.GET(SITE_URL + `/rooms_users/all_participants/${id}`);
+};
+
+// Update profile name
+export const updateProfileName = async (
+  id: string,
+  update: {
+    name?: string;
+    image?: string;
+  }
+) => {
+  console.log("id", id);
+  return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
 };
