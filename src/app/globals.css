@@ -59,6 +59,15 @@
   transform: rotate(136deg);
 }
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c6c6c5;
+  height: 40px;
+}
+
 .pulsating-circle {
   position: relative;
   left: 50%;
