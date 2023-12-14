@@ -31,13 +31,6 @@ import { AiOutlineSmile } from "react-icons/ai";
 import { socket } from "@/utils/services";
 
 // const socket = io();
-<<<<<<< HEAD
-// import { revalidateData } from "@/utils/services";
-import ContactInfo from "@/components/organisms/ContactInfo";
-import DropdownModal from "@/components/atoms/DropdownModal";
-=======
-
->>>>>>> 7f4a1f5beba4c9a4d8eff96e0509168800fed292
 import Messages from "@/components/organisms/Messages/Messages";
 import { IoMdArrowBack } from "react-icons/io";
 import Pulsation from "@/components/molecules/Pulsation";
@@ -54,8 +47,8 @@ const Chats = () => {
   const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [rightDropDown, setRightDropDown] = useState(false)
-  const [onDelete, setOnDelete] = useState(false)
+  const [rightDropDown, setRightDropDown] = useState(false);
+  const [onDelete, setOnDelete] = useState(false);
   const webcamRef = useRef<Webcam | null>(null);
 
   const param = useParams();
@@ -109,25 +102,25 @@ const Chats = () => {
       function: () => {
         // setShowCreateGrp((prev) => !prev);
         // setShowDropdown((prev) => !prev);
-        setShowInfoCard(prev => !prev);
-        setRightDropDown(prev => !prev)
+        setShowInfoCard((prev) => !prev);
+        setRightDropDown((prev) => !prev);
       },
     },
     {
       label: "Close discussion",
       function: () => {
-        router.push('/discussions')
-        setRightDropDown(prev => !prev)
+        router.push("/discussions");
+        setRightDropDown((prev) => !prev);
       },
     },
     {
       label: "Delete discussion",
       function: () => {
         // setShowPopup((prev) => !prev);
-        setOnDelete(prev => !prev)
-        setRightDropDown(prev => !prev)
+        setOnDelete((prev) => !prev);
+        setRightDropDown((prev) => !prev);
       },
-    }
+    },
   ];
 
   useEffect(() => {
@@ -251,14 +244,11 @@ const Chats = () => {
     }
   };
 
-
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleFileSelect,
     multiple: false,
     // accept: "application/pdf",
   });
-
-
 
   const handleCloseSelectFile = () => {
     setSelectedFile(null);
@@ -298,31 +288,32 @@ const Chats = () => {
   }
 
   function handleOpenDropdown() {
-    setRightDropDown(prev => !prev)
+    setRightDropDown((prev) => !prev);
   }
 
   // FXN TO DELETE CHAT
   const handleDeleteChat = async () => {
     await handleDelete()
       .then(() => {
-        router.push('/discussion')
+        router.push("/discussion");
       })
       .catch(() => {
-        toast.error('Unable to delete discussion', {
+        toast.error("Unable to delete discussion", {
           position: "top-right",
           hideProgressBar: true,
           autoClose: 2000,
-        })
-      })
+        });
+      });
     setOnDelete((prev) => !prev);
-  }
+  };
 
   return (
     <>
       <div className="w-full flex justify-between">
         <div
-          className={`relative flex flex-col h-full w-full mobile:max-sm:${showInfoCard ? "hidden" : "visible"
-            }`}
+          className={`relative flex flex-col h-full w-full mobile:max-sm:${
+            showInfoCard ? "hidden" : "visible"
+          }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
             <div className="flex items-center hover:cursor-ponter">
@@ -561,15 +552,17 @@ const Chats = () => {
             {isCameraOpen && (
               <div className="absolute bottom-28 font-bold left-1/2 transform space-x-10 -translate-x-1/2">
                 <button
-                  className={`${captureMode === "photo" ? "text-yellow" : "text-gray-500"
-                    }`}
+                  className={`${
+                    captureMode === "photo" ? "text-yellow" : "text-gray-500"
+                  }`}
                   onClick={() => setCaptureMode("photo")}
                 >
                   Photo
                 </button>
                 <button
-                  className={`${captureMode === "video" ? "text-white" : "text-gray-500"
-                    }`}
+                  className={`${
+                    captureMode === "video" ? "text-white" : "text-gray-500"
+                  }`}
                   onClick={() => setCaptureMode("video")}
                 >
                   Video
