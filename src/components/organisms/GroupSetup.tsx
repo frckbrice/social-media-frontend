@@ -9,6 +9,7 @@ import {
   addGroupMembers,
   createRoom,
   uplaodImage,
+  // uploadFileToSupabase,
 } from "@/utils/service/queries";
 import { useAppContext } from "@/app/Context/AppContext";
 
@@ -30,6 +31,7 @@ function GroupSetup({ closeModal }: setupProps) {
     if (groupAvatar) {
       setGroupIcon(groupAvatar);
     }
+    console.log(e.target.files[0]);
   };
 
   //   console.log(file);

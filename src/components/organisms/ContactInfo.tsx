@@ -20,7 +20,7 @@ import ContactCard from "./ContactCard";
 import AddGroupMembers from "./AddGroupMembers";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import AddedMember from "../molecules/AddedMember";
-import { addGroupMembers, getGroupMembers } from "@/utils/service/queries";
+import { addGroupMembers, getGroupMembers, handleDelete } from "@/utils/service/queries";
 import RoundedLoader from "../atoms/RoundedLoader";
 
 type ContactCardProps = {
@@ -58,40 +58,20 @@ const ContactInfo = ({
   const [filteredUsers, setFilteredUsers] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(
-        SITE_URL + `/rooms/${receiver.id}/${sender.user_id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to delete chat");
-      }
-      const data = response.json();
-      console.log("deleted contact", data);
-      localStorage.removeItem("receiver");
-      toast.success("Chat deleted successfully", {
-        position: "top-right",
-        hideProgressBar: true,
-        autoClose: 2000,
-      });
-      router.push("/discussions");
-    } catch (error) {
-      console.error(error);
-    }
-    // await deleteSingleChat(receiver.id, sender.user_id)
-    //   .then((res) => {
-    //     console.log('deleted chat', res)
-    //     localStorage.removeItem('receiver')
-    //     router.push("/discussions")
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
+  const handleDeleteChat = async () => {
+    await handleDelete()
+      .then((res) => {
+        router.push("/discussions");
+      })
+      .catch((err) => {
+        toast.error('Unable to delete discussion', {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 2000,
+        })
+      })
     setOnDelete((prev) => !prev);
-  };
+  }
 
   useEffect(() => {
     if (receiver.isGroup) {
@@ -161,7 +141,7 @@ const ContactInfo = ({
   };
 
   // handleClickContact
-  const handleClickContact = (_user: User) => {};
+  const handleClickContact = (_user: User) => { };
 
   return (
     <div className="w-[45vw] z-20 mobile:max-sm:w-full bg-bgGray ">
@@ -250,7 +230,7 @@ const ContactInfo = ({
               content={""}
               actionText={"Delete chat"}
               onCancel={() => setOnDelete((prev) => !prev)}
-              onAction={() => handleDelete()}
+              onAction={() => handleDeleteChat()}
             />
           </>
         )}
@@ -272,9 +252,8 @@ const ContactInfo = ({
                 </div>
 
                 <div
-                  className={`${
-                    !members.length ? "hidden" : "visble p-4 "
-                  }p-4 flex flex-wrap gap-2 overflow-y-auto  max-h-[80px]`}
+                  className={`${!members.length ? "hidden" : "visble p-4 "
+                    }p-4 flex flex-wrap gap-2 overflow-y-auto  max-h-[80px]`}
                 >
                   {members.map((member: User) => (
                     <AddedMember
@@ -287,9 +266,8 @@ const ContactInfo = ({
                 </div>
 
                 <div
-                  className={`w-full ${
-                    members.length ? "h-[calc(90vh-115px-80px)]" : ""
-                  } h-[calc(90vh-115px)] mobile:max-sm:h-[calc(100vh-115px)]  overflow-x-auto `}
+                  className={`w-full ${members.length ? "h-[calc(90vh-115px-80px)]" : ""
+                    } h-[calc(90vh-115px)] mobile:max-sm:h-[calc(100vh-115px)]  overflow-x-auto `}
                 >
                   {filteredUsers.map((user) => (
                     <ContactCard

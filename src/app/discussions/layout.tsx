@@ -38,6 +38,16 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showCreateGrp, setShowCreateGrp] = useState(false);
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [currentUsers, setCurrentUsers] = useState<Room | null>(
+    (): Room | null => {
+      if (typeof localStorage !== "undefined") {
+        const fromLocalStorage =
+          JSON.parse(localStorage.getItem("sender") as string) || {};
+        if (fromLocalStorage) return fromLocalStorage;
+      }
+      return null;
+    }
+  );
 
   const { currentUser, allUsers, chatRooms, setChatRooms } = useAppContext();
   // const [chatRooms, setChatRooms] = useState<Room[]>([]);
@@ -61,19 +71,23 @@ function Discussion({ children }: { children: React.ReactNode }) {
       label: "Logout",
       function: () => {
         setShowPopup((prev) => !prev);
+
         setShowDropdown((prev) => !prev);
       },
     },
   ];
 
+  // console.log("paramName", paramName);
+
   // HANDLE ALL USERS FILTER
-  const filterAllUsers = (e: any) => {
+  const filterAllUsers = (e: { target: { value: any } }) => {
     const searchName = e.target.value;
     const filteredResults = usersDisplay.filter((user) => {
       return user.name.toLowerCase().includes(searchName.toLowerCase());
     });
     if (!filteredResults.length || !searchName.length) {
-      return setUsersDisplay(allUsers);
+      setUsersDisplay(allUsers);
+      return;
     }
     setUsersDisplay(filteredResults);
     // console.log("filterAllUsers", filteredResults);
@@ -93,8 +107,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
       return;
     }
     setFilterChats(filteredResults);
+    // console.log("FilterChats", filteredResults);
+    // console.log("keyword", e.target.value);
   };
-
   // FETCH CHAT ROOMS
   useEffect(() => {
     setFilterChats(chatRooms);
@@ -175,7 +190,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
               size={4}
               profilePicture={
                 currentUser?.image ||
-                "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+                "https://example.com/default-profile-image.jpg"
               }
             />
 
@@ -265,12 +280,13 @@ function Discussion({ children }: { children: React.ReactNode }) {
               <SearchInput handleFilter={filterAllUsers} />
             </div>
             <DisplayUsers
+              users={!usersDisplay.length ? allUsers : usersDisplay}
               contactClick={handleStartChat}
               goToCreateGrt={() => {
                 setShowAllContacts((prev) => !prev);
                 setShowCreateGrp((prev) => !prev);
               }}
-              users={usersDisplay}
+              // users={usersDisplay}
             />
           </ProfileCard>
         )}

@@ -3,6 +3,7 @@ import { SITE_URL } from "./constant";
 import ApiCall from "./httpClient";
 import { LOCAL_STORAGE } from "./storage";
 import { socket } from "../services";
+import { toast } from "react-toastify";
 
 const apiCall = new ApiCall();
 
@@ -35,7 +36,6 @@ export const createRoom = async (user: Partial<Room>) => {
 // GET ALL ROOMS
 
 export const getAllRooms = async () => {
-  console.log("getallrooms fired");
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
   const res = await fetch(SITE_URL + `/rooms_users/my_dm/${sender?.user_id}`, {
     next: { revalidate: 30 },
@@ -44,7 +44,18 @@ export const getAllRooms = async () => {
   return await res.json();
 };
 
-// UPLOAD IMAGE TO SUPABSE
+//   if (error) {
+//     console.error("Error uploading file to Supabase:", error);
+//   } else {
+//     const fileUrl = supabase.storage
+//       .from("your_bucket_name")
+//       .getPublicUrl(data.path);
+//     console.log("File download URL:", fileUrl);
+//     return fileUrl;
+//   }
+// };
+
+// // UPLOAD IMAGE TO SUPABSE
 export const uplaodImage = async (file: any) => {
   const fileValue = `groupIcon${Date.now()}.png`;
 
@@ -64,23 +75,23 @@ export const uplaodImage = async (file: any) => {
   }
 };
 
-// UPLOAD pdf TO SUPABSE
-export const uplaodPDF = async (file: any) => {
-  const fileValue = `groupIcon${Date.now()}.pdf`;
+
+//upload all file types to supabase 
+export const uploadFileToSupabase = async (file: File) => {
+  const fileName = `file_${Date.now()}.${file.name.split('.').pop()}`;
 
   const { data, error } = await supabase.storage
     .from("whatsapp_avatars/images")
-    .upload(fileValue, file);
+    .upload(fileName, file);
 
   if (error) {
-    console.error("error uploading PDF", error);
+    console.error("Error uploading file to Supabase:", error);
   } else {
-    console.log("PDF data", data);
     const fileUrl = supabase.storage
       .from("whatsapp_avatars/images")
       .getPublicUrl(data.path);
-    console.log("File download url", fileUrl.data.publicUrl);
-    return fileUrl.data.publicUrl;
+    console.log("File download URL:", fileUrl);
+    return fileUrl;
   }
 };
 
@@ -116,4 +127,33 @@ export const updateProfileName = async (
 ) => {
   console.log("id", id);
   return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
+};
+
+// DELETE A CHAT 
+export const handleDelete = async () => {
+  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
+  const receiver = JSON.parse(localStorage.getItem("receiver") || "{}")
+  try {
+    const response = await fetch(
+      SITE_URL + `/rooms/${receiver.id}/${sender.user_id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to delete chat");
+    }
+    const data = response.json();
+    console.log("deleted contact", data);
+    localStorage.removeItem("receiver");
+    toast.success("Chat deleted successfully", {
+      position: "top-right",
+      hideProgressBar: true,
+      autoClose: 2000,
+    });
+    
+  } catch (error) {
+    console.error(error);
+  }
+  // setOnDelete((prev) => !prev);
 };

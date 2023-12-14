@@ -13,7 +13,7 @@ interface CardProps {
   onClick: () => void;
   notification: string | "";
   active: boolean;
-  // updatedAt: string;
+  updatedAt?: string;
   className: string | "";
   user: Room;
 }
