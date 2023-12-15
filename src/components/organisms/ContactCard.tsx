@@ -6,32 +6,14 @@ import Avatar from "../atoms/Avatar";
 import { formatLastMessageTime } from "@/utils/service/format_time";
 
 interface CardProps {
-  // id: number | string;
-  // name: string;
-  // email: string;
-  // image: string | "";
   onClick: () => void;
-  notification: string | "";
   active: boolean;
   updatedAt?: string;
   className: string | "";
   user: Room;
 }
 
-const ContactCard = ({
-  // id,
-  // name,
-  // email,
-  notification,
-  active,
-  // image,
-  onClick,
-  // updatedAt,
-  className,
-  user,
-}: CardProps) => {
-  // const pathname = usePathname();
-  // const paramName = pathname.split("/").slice(-1)[0];
+const ContactCard = ({ active, onClick, className, user }: CardProps) => {
   return (
     <div
       onClick={onClick}
@@ -56,7 +38,7 @@ const ContactCard = ({
           </div>
           <div className="flex justify-between w-full">
             <span className=" text-xs text-primaryText">
-              {user.last_message}
+              {user.last_message ? user.last_message : ""}
             </span>
             <span
               className={`text-white self-center bg-themecolor p-1 rounded-[50%] text-xs ${

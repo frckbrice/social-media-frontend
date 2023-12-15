@@ -74,13 +74,14 @@ export const AppContextProvider = ({ children }: any) => {
     });
 
     // Get all chats rooms
-    getAllRooms().then((res) => {
+    console.log(currentUser.user_id);
+    getAllRooms(currentUser.user_id).then((res) => {
       console.log("theses are chat rooms", res);
       setChatRooms(res);
     });
 
     setCurrentUser(JSON.parse(localStorage.getItem("sender") || "{}"));
-  }, []);
+  }, [currentUser.user_id]);
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

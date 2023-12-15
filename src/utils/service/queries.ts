@@ -34,9 +34,8 @@ export const createRoom = async (user: Partial<Room>) => {
 };
 
 // GET ALL ROOMS
-export const getAllRooms = async () => {
-  const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-  const res = await fetch(SITE_URL + `/rooms_users/my_dm/${sender?.user_id}`, {
+export const getAllRooms = async (id: string) => {
+  const res = await fetch(SITE_URL + `/rooms_users/my_dm/${id}`, {
     cache: "no-store",
   });
 

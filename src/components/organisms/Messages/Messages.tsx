@@ -12,6 +12,7 @@ import SimpleMessage from "./SimpleMessage";
 import { FaFaceGrinWide } from "react-icons/fa6";
 import EmojiMessage from "./EmojiMessage";
 import { socket } from "@/utils/services";
+import { formatLastMessageTime } from "@/utils/service/format_time";
 // export const revalidate = 10;
 
 type Props = {
@@ -81,7 +82,7 @@ const Messages = (props: Props) => {
       return (
         <>
           <div className="flex justify-start items-center" key={messages?.id}>
-            <ReceiverMessages message={messages} />
+            <ReceiverMessages message={messages} classname="box arrow-left" />
             <div className="opacity-0 hover:opacity-100 flex justify-start items-end w-full ">
               <span
                 className=" w-12 h-12  mx-1 p-1 pt-[8px] rounded-full bg-[#a3adb3a7] "
@@ -142,7 +143,7 @@ const Messages = (props: Props) => {
               </span>
             </div>
 
-            <SenderMessages message={messages} />
+            <SenderMessages message={messages} classname="box arrow-right" />
           </div>
           <div className=" w-full flex justify-end items-center">
             {messages?.reaction ? (
@@ -161,13 +162,15 @@ const Messages = (props: Props) => {
       );
     }
   });
-
+  console.log(props.messageList[0]?.createdAt);
   return (
     <div className=" max-w-full flex flex-col bg-green" ref={divMessageRef}>
       <div className=" flex justify-center flex-col items-center pt-10 text-[#54656f] mb-3">
         <span className=" w-fit pt-1 pb-[8px] px-3 bg-white shadow-sm rounded-[8px] mb-4 ">
-          {" "}
-          {props.messageList[0]?.createdAt?.split("T")[0]}
+          {new Date(props.messageList[0]?.createdAt).toLocaleDateString(
+            "en-US",
+            { weekday: "long" }
+          )}
         </span>
         <p className=" bg-[#ffeecd] flex justify-center items-center w-fit text-[12px] text-center p-2 px-4 rounded-[8px] shadow-brie">
           messages are end-to-end encrypted. no one outside of this discussion,

@@ -185,7 +185,7 @@ const Chats = () => {
       setTypingStatus("");
       handleSendMessage();
     }
-    console.log(typingStatus);
+
     socket.emit("typing", {
       room: param.id,
       owner: currentUser?.id,

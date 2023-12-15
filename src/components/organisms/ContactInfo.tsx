@@ -55,7 +55,7 @@ const ContactInfo = ({
     JSON.parse(localStorage.getItem("receiver") || "[]")
   );
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-  console.log("receiver", receiver);
+
   const [members, setMembers] = useState<User[]>([]);
   const { allUsers } = useAppContext();
   const handleDelete = async () => {
@@ -109,11 +109,15 @@ const ContactInfo = ({
 
   useEffect(() => {
     if (receiver.isGroup) {
-      getGroupMembers(receiver.id).then((res) => {
-        setParticipants(res);
-        setFilteredUsers(allUsers);
-        console.log("allParticipants", res);
-      });
+      getGroupMembers(receiver.id)
+        .then((res) => {
+          setParticipants(res);
+          setFilteredUsers(allUsers);
+          console.log("allParticipants", res);
+        })
+        .catch((err) => {
+          if (err instanceof Error) console.log(err);
+        });
     }
   }, [allUsers, receiver.id, receiver.isGroup]);
 
@@ -310,7 +314,6 @@ const ContactInfo = ({
                       user={user}
                       key={user.id}
                       onClick={() => handelAddMember(user)}
-                      notification={""}
                       active={false}
                       className={""}
                     />

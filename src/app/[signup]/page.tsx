@@ -8,6 +8,7 @@ import { LOCAL_STORAGE } from "@/utils/service/storage";
 import { signUp } from "@/utils/service/queries";
 import { SITE_URL } from "@/utils/service/constant";
 import { useAppContext } from "../Context/AppContext";
+import PulseLoader from "@/components/atoms/pulseLoader";
 
 const Signupb = () => {
   const [error, setError] = useState("");
@@ -72,7 +73,7 @@ const Signupb = () => {
             isLoading ? "cursor-not-allowed disabled:cursor-wait" : ""
           } p-4 px-5 text-base font-extrabold bg-themecolor text-white rounded`}
         >
-          {isLoading ? <Pulsation /> : "Agree and Continue"}
+          {isLoading ? <PulseLoader /> : "Agree and Continue"}
         </button>
       ) : (
         <p className="text-2xl mt-6 font-extrabold text-themecolor">

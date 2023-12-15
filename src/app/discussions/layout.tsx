@@ -40,30 +40,21 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [showCreateGrp, setShowCreateGrp] = useState(false);
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [currentUsers, setCurrentUsers] = useState<Room | null>(
-    (): Room | null => {
-      if (typeof localStorage !== "undefined") {
-        const fromLocalStorage =
-          JSON.parse(localStorage.getItem("sender") as string) || {};
-        if (fromLocalStorage) return fromLocalStorage;
-      }
-      return null;
-    }
-  );
 
-  const {
-    currentUser,
-    allUsers,
-    chatRooms,
-    setChatRooms,
-    allGroups,
-    setAllGroups,
-  } = useAppContext();
+  const { currentUser, allUsers, chatRooms, setChatRooms } = useAppContext();
   const [disconnectedUser, setDisconnectedUser] = useState<Room>(chatRooms[0]);
   const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
   const [usersDisplay, setUsersDisplay] = useState<Room[]>(chatRooms);
 
   let olduser: string = chatRooms[0]?.original_dm_roomID as string;
+  const [receiver, setReceiver] = useState<Room | null>((): Room | null => {
+    if (typeof localStorage !== "undefined") {
+      const fromLocalStorage =
+        JSON.parse(localStorage.getItem("receiver") as string) || {};
+      if (fromLocalStorage) return fromLocalStorage;
+    }
+    return null;
+  });
   const handleCloseModal = () => {
     // Implement your logic to handle modal close here
   };
@@ -89,18 +80,18 @@ function Discussion({ children }: { children: React.ReactNode }) {
   // console.log("paramName", paramName);
 
   // HANDLE ALL USERS FILTER
-  const filterAllUsers = (e: { target: { value: any } }) => {
+  const filterAllUsers = (e: any) => {
     const searchName = e.target.value;
-    const filteredResults = usersDisplay.filter((user) => {
-      return user.name.toLowerCase().includes(searchName.toLowerCase());
-    });
+    const filteredResults = usersDisplay.filter((room: any) =>
+      !searchName.toLowerCase().trim()
+        ? room
+        : room.name.toLowerCase().includes(searchName)
+    );
     if (!filteredResults.length || !searchName.length) {
       setUsersDisplay(allUsers);
       return;
     }
     setUsersDisplay(filteredResults);
-    // console.log("filterAllUsers", filteredResults);
-    // console.log("keyword", e.target.value);
   };
 
   // HANDLE FILTER CHAT ROOMS
@@ -108,8 +99,12 @@ function Discussion({ children }: { children: React.ReactNode }) {
     const searchName = e.target.value;
     console.log(searchName);
 
-    const filteredResults = chatRooms.filter((user) => {
-      return user.name.toLowerCase().includes(searchName.toLowerCase());
+    const filteredResults = chatRooms.filter((chatRooms: any) => {
+      return chatRooms?.filter((room: any) =>
+        !searchName.toLowerCase().trim()
+          ? room
+          : room.name.toLowerCase().includes(searchName)
+      );
     });
     if (!filteredResults.length || !searchName.length) {
       setFilterChats(chatRooms);
@@ -125,12 +120,9 @@ function Discussion({ children }: { children: React.ReactNode }) {
     setUsersDisplay(allUsers);
   }, [allUsers, chatRooms]);
   // setTimeout(async () => {
-  //   console.log("timing");
-  //   const data = await revalidateData(currentUser.id);
-  //   const intermediate = data;
-  //   console.log(data);
-  //   setChatRooms(intermediate);
-  // }, 100);
+  //   const rooms = await getAllRooms(currentUser.user_id);
+  //   if (rooms.length) setChatRooms(rooms);
+  // }, 10000);
   // HANDLE START CHAT
   const handleStartChat = async (user: Room) => {
     if (currentUser?.id) {
@@ -257,16 +249,16 @@ function Discussion({ children }: { children: React.ReactNode }) {
               }}
               className="displayChats h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto"
             >
-              {filterChats?.map((user: Room) => (
-                <ContactCard
-                  user={user}
-                  key={user.id}
-                  onClick={() => handleClick(user)}
-                  notification={""}
-                  active={user.unread_count ? true : false}
-                  className={`${paramName === user.id ? "bg-bgGray" : ""}`}
-                />
-              ))}
+              {filterChats.length &&
+                filterChats?.map((user: Room) => (
+                  <ContactCard
+                    user={user}
+                    key={user.id}
+                    onClick={() => handleClick(user)}
+                    active={user.unread_count ? true : false}
+                    className={`${paramName === user.id ? "bg-bgGray" : ""}`}
+                  />
+                ))}
             </div>
           ) : (
             <div className="flex h-[calc(99.8vh-100px)] bigScreen:h-[calc(95vh-100px)] overflow-x-hidden overflow-auto text-center relative">

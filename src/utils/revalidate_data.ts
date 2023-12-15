@@ -69,11 +69,11 @@ export const updateNotifications = (arr1: any[], arr2: any[], me: string) => {
           user_id: item?._doc.user_id,
           my_id: item?._doc.my_id,
           createdAt: item?._doc.createdAt,
-          updatedAt: item?._doc.createdAt,
+          updatedAt: item?._doc.update,
           original_dm_roomID: item?._doc.original_dm_roomID,
           id: item?._doc._id,
-          unread_count: 0,
-          last_message: "",
+          unread_count: item?.unread_count,
+          last_message: item?.last_message,
         };
       else
         return {
@@ -93,7 +93,8 @@ export const updateNotifications = (arr1: any[], arr2: any[], me: string) => {
 };
 
 export async function revalidateData(me: string) {
-  const chats = await getAllRooms();
+  const chats = await getAllRooms(me);
+  console.log(chats);
   const unread_messages = await getUnreadMessages();
   return updateNotifications(unread_messages, chats, me);
 }

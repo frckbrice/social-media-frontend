@@ -3,11 +3,12 @@ import React from "react";
 
 type Props = {
   message: Message;
+  classname: string;
 };
 
-export default function SenderMessages({ message }: Props) {
+export default function SenderMessages({ message, classname }: Props) {
   return (
-    <div className="box arrow-right">
+    <div className={classname}>
       <div className=" py-[3px] px-[5px] w-fit text-[#111b21]">
         <div className=" inline-flex max-w-full text-[12.8px] font-[500] text-[#b4876e] item-center ">
           <span className=" pr-1 min-w-[8ch] flex-1 overflow-ellipsis whitespace-nowrap overflow-hidden before:~ ">
@@ -19,7 +20,7 @@ export default function SenderMessages({ message }: Props) {
         </div>
 
         <div className=" flex flex-col gap-1">
-          <p> {message?.content}</p>
+          <p> {message?.content ? message?.content : ""}</p>
           <span className="flex justify-end">
             {new Date(message?.updatedAt).toLocaleTimeString("en-GB")}{" "}
           </span>
