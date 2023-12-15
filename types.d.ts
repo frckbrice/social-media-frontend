@@ -29,7 +29,7 @@ type RoomUser = {
 };
 
 type Room = {
-  role: string;
+  role?: string;
   id: string;
   image: string;
   isGroup?: boolean;

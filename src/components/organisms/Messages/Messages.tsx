@@ -67,23 +67,25 @@ const Messages = (props: Props) => {
     // setMessageEmoji(false);
   };
 
+  console.log("List of messages", props.messageList);
+
   const listOfMessages = props.messageList?.map((messages, i) => {
     if (
-      (messages.receiver_room_id === props.currentUser.id &&
-        messages.sender_id !== props.currentUser.id) ||
-      (messages.receiver_room_id !== props.currentUser.id &&
-        messages.sender_id !== props.currentUser.id)
+      (messages?.receiver_room_id === props.currentUser.id &&
+        messages?.sender_id !== props.currentUser.id) ||
+      (messages?.receiver_room_id !== props.currentUser.id &&
+        messages?.sender_id !== props.currentUser.id)
     ) {
       // console.log("messages received: ", messages.content);
 
       return (
         <>
-          <div className="flex justify-start items-center" key={messages.id}>
+          <div className="flex justify-start items-center" key={messages?.id}>
             <ReceiverMessages message={messages} />
             <div className="opacity-0 hover:opacity-100 flex justify-start items-end w-full ">
               <span
                 className=" w-12 h-12  mx-1 p-1 pt-[8px] rounded-full bg-[#a3adb3a7] "
-                onClick={() => handleTargetEmoji(messages.id)}
+                onClick={() => handleTargetEmoji(messages?.id)}
               >
                 <FaFaceGrinWide
                   className=" text-white  mr-[5px] mb-[5px] ml-[5px] "
@@ -92,16 +94,16 @@ const Messages = (props: Props) => {
               </span>
             </div>
           </div>
-          {MessageEmoji && messages.id === target && (
+          {MessageEmoji && messages?.id === target && (
             <EmojiMessage
               setEmojie={getEmoji}
               classname="relative transition transform duration-5000 ease-in-out translate-x-[10%] -top-[60px]"
               ref={divEmojiMess}
             />
           )}
-          {messages.reaction ? (
+          {messages?.reaction ? (
             <span className=" w-10 h-10 rounded-full  border border-slate-200  text-[22px] bg-white shadow-sm  flex justify-center items-center p-[5px] transition-transform duration-1000 ease-in-out translate-y-[-20%] translate-x-[30%]">
-              {messages.reaction}
+              {messages?.reaction}
               {/* {emojie} */}
             </span>
           ) : (
@@ -112,14 +114,14 @@ const Messages = (props: Props) => {
     }
 
     if (
-      (messages.receiver_room_id !== props.currentUser.id &&
-        messages.sender_id === props.currentUser.id) ||
-      (messages.receiver_room_id === props.currentUser.id &&
-        messages.sender_id === props.currentUser.id)
+      (messages?.receiver_room_id !== props.currentUser.id &&
+        messages?.sender_id === props.currentUser.id) ||
+      (messages?.receiver_room_id === props.currentUser.id &&
+        messages?.sender_id === props.currentUser.id)
     ) {
       return (
         <>
-          {MessageEmoji && messages.id === target && (
+          {MessageEmoji && messages?.id === target && (
             <EmojiMessage
               setEmojie={getEmoji}
               classname=" relative -right-[60%] top-[50px]"
@@ -127,11 +129,11 @@ const Messages = (props: Props) => {
             />
           )}
 
-          <div className="flex justify-end items-center" key={messages.id}>
+          <div className="flex justify-end items-center" key={messages?.id}>
             <div className="opacity-0 hover:opacity-100 flex justify-end items-start w-full ">
               <span
                 className="w-12 h-12 pt-[5px] flex justify-center items-center  mx-1  rounded-full bg-[#a3adb3a7] cursor-pointer"
-                onClick={() => handleTargetEmoji(messages.id)}
+                onClick={() => handleTargetEmoji(messages?.id)}
               >
                 <FaFaceGrinWide
                   className=" text-white  mr-[5px] mb-[5px] ml-[5px] "
@@ -143,12 +145,12 @@ const Messages = (props: Props) => {
             <SenderMessages message={messages} />
           </div>
           <div className=" w-full flex justify-end items-center">
-            {messages.reaction ? (
+            {messages?.reaction ? (
               <span
                 className=" w-10 h-10 rounded-full  border border-slate-200  text-[22px] bg-white shadow-sm  flex justify-center items-center p-[5px] transition-transform duration-1000 ease-in-out  translate-y-[-10px] translate-x-[-20px]
           "
               >
-                {messages.reaction}
+                {messages?.reaction}
                 {/* {emojie} */}
               </span>
             ) : (

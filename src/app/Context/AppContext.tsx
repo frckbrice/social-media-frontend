@@ -22,8 +22,8 @@ interface DataType {
   setAllUsers: Dispatch<SetStateAction<Room[]>>;
   chatRooms: Room[];
   setChatRooms: Dispatch<SetStateAction<Room[]>>;
-  allGroups: Room[]
-  setAllGroups: Dispatch<SetStateAction<Room[]>>
+  allGroups: Room[];
+  setAllGroups: Dispatch<SetStateAction<Room[]>>;
 }
 
 const initialState: DataType = {
@@ -35,15 +35,14 @@ const initialState: DataType = {
     image: "",
     my_id: "",
     user_id: "",
-    role: "",
   },
-  setCurrentUser: () => { },
+  setCurrentUser: () => {},
   allUsers: [],
   setAllUsers: () => [],
   chatRooms: [],
   setChatRooms: () => [],
   allGroups: [],
-  setAllGroups: () => []
+  setAllGroups: () => [],
 };
 
 const AppContext = createContext<DataType>(initialState);
@@ -55,7 +54,7 @@ export const AppContextProvider = ({ children }: any) => {
   );
   const [allUsers, setAllUsers] = useState<Room[]>([]);
   const [chatRooms, setChatRooms] = useState<Room[]>([]);
-  const [allGroups, setAllGroups] = useState<Room[]>([])
+  const [allGroups, setAllGroups] = useState<Room[]>([]);
 
   const values = {
     currentUser,
@@ -65,7 +64,7 @@ export const AppContextProvider = ({ children }: any) => {
     chatRooms,
     setChatRooms,
     allGroups,
-    setAllGroups
+    setAllGroups,
   };
 
   useEffect(() => {
@@ -76,18 +75,9 @@ export const AppContextProvider = ({ children }: any) => {
 
     // Get all chats rooms
     getAllRooms().then((res) => {
-      console.log('theses are chat rooms', res)
+      console.log("theses are chat rooms", res);
       setChatRooms(res);
     });
-
-    // get all groups per user
-    getAllGroups().then((res) => {
-      console.log("these are all groups", res)
-      setAllGroups(res)
-    })
-
-    // console.log('these are all groups', allGroups)
-    // console.log('these are all chats', chatRooms)
 
     setCurrentUser(JSON.parse(localStorage.getItem("sender") || "{}"));
   }, []);

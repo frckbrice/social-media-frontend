@@ -32,33 +32,64 @@ import { getAllRooms, getUnreadMessages } from "./service/queries";
 // }
 
 export const updateNotifications = (arr1: any[], arr2: any[], me: string) => {
-  return arr1?.reduce(
-    (acc, curr) => {
-      return acc?.map((item: any) => {
-        if (
-          (item?.original_dm_roomID &&
-            item.original_dm_roomID === curr.sender_id.toString() &&
-            curr?.receiver_room_id.toString() === me) ||
-          (item?.isGroup &&
-            curr.receiver_room_id.toString() === item.id.toString())
-        ) {
-          return {
-            ...item,
-            unread_count: curr?.unread_count,
-            last_message: curr?.last_message,
-            updatedAt: curr?.updatedAt,
-          };
-        } else
-          return {
-            ...item,
-            unread_count: 0,
-            last_message: "",
-            updatedAt: item?.updatedAt,
-          };
-      });
-    },
-    [...arr2]
-  );
+  return arr1
+    ?.reduce(
+      (acc, curr) => {
+        return acc?.map((item: any) => {
+          if (
+            (item?.original_dm_roomID &&
+              item.original_dm_roomID === curr.sender_id.toString() &&
+              curr?.receiver_room_id.toString() === me) ||
+            (item?.isGroup &&
+              curr.receiver_room_id.toString() === item.id.toString())
+          ) {
+            return {
+              ...item,
+              unread_count: curr?.unread_count,
+              last_message: curr?.last_message,
+              updatedAt: curr?.updatedAt,
+            };
+          } else
+            return {
+              ...item,
+              unread_count: 0,
+              last_message: "",
+              updatedAt: item?.updatedAt,
+            };
+        });
+      },
+      [...arr2]
+    )
+    ?.map((item: any) => {
+      if (item._doc)
+        return {
+          name: item?._doc.name,
+          image: item?._doc.image,
+          isGroup: item?._doc.isGroup,
+          user_id: item?._doc.user_id,
+          my_id: item?._doc.my_id,
+          createdAt: item?._doc.createdAt,
+          updatedAt: item?._doc.createdAt,
+          original_dm_roomID: item?._doc.original_dm_roomID,
+          id: item?._doc._id,
+          unread_count: 0,
+          last_message: "",
+        };
+      else
+        return {
+          name: item?.name,
+          image: item?.image,
+          isGroup: item?.isGroup,
+          user_id: item?.user_id,
+          my_id: item?.my_id,
+          createdAt: item?.createdAt,
+          updatedAt: item?.updatedAt,
+          original_dm_roomID: item?.original_dm_roomID,
+          id: item?.id,
+          unread_count: item?.unread_count,
+          last_message: item?.last_message,
+        };
+    });
 };
 
 export async function revalidateData(me: string) {

@@ -39,6 +39,7 @@ import Popups from "@/components/atoms/Popups";
 import Overlay from "@/components/atoms/Overlay";
 import { toast } from "react-toastify";
 import { SITE_URL } from "@/utils/service/constant";
+import { revalidateData } from "@/utils/revalidate_data";
 
 // export const revalidate = 0;
 const Chats = () => {
@@ -71,7 +72,6 @@ const Chats = () => {
     return null;
   });
 
-  const inputRef = useRef<HTMLInputElement>(null);
   const divMessageRef = useRef<HTMLDivElement | null>(null);
 
   let oldReceiver: string = "";
@@ -146,7 +146,7 @@ const Chats = () => {
     socket.on("updateMessage", (data) => {
       console.log("update message", data);
       const index = receivedMessages?.findIndex(
-        (msg: Message) => msg.id === data.id
+        (msg: Message) => msg && msg?.id === data?.id
       );
       if (index !== -1) {
         receivedMessages[index].reaction = data.reaction;
@@ -270,13 +270,7 @@ const Chats = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [showDropdown]);
-  // setTimeout(async () => {
-  //   console.log("timing");
-  //   const data = await revalidateData(currentUser.id);
-  //   const intermediate = data;
-  //   console.log(data);
-  //   setReceivedMessages(intermediate);
-  // }, 100);
+
   // console.log(receivedMessages);
   socket.on("notify", (data) => {
     console.log(data);

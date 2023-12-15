@@ -28,6 +28,7 @@ import GroupSetup from "@/components/organisms/GroupSetup";
 import LogOutPopUp from "@/components/molecules/logOutPopup";
 import { socket } from "@/utils/services";
 import { disconnect } from "process";
+import { revalidateData } from "@/utils/revalidate_data";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -123,7 +124,13 @@ function Discussion({ children }: { children: React.ReactNode }) {
     setFilterChats(chatRooms);
     setUsersDisplay(allUsers);
   }, [allUsers, chatRooms]);
-
+  // setTimeout(async () => {
+  //   console.log("timing");
+  //   const data = await revalidateData(currentUser.id);
+  //   const intermediate = data;
+  //   console.log(data);
+  //   setChatRooms(intermediate);
+  // }, 100);
   // HANDLE START CHAT
   const handleStartChat = async (user: Room) => {
     if (currentUser?.id) {
@@ -140,6 +147,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
             : router.push(`/discussions/${res.original_dm_roomID}`);
           localStorage.setItem("receiver", JSON.stringify(res));
           setChatRooms(() =>
+            chatRooms.length &&
             chatRooms?.find((room: Room) => room.id === res.id)
               ? [...chatRooms]
               : [res, ...chatRooms]
