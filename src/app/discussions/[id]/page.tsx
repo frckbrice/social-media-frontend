@@ -40,12 +40,14 @@ import Popups from "@/components/atoms/Popups";
 import Overlay from "@/components/atoms/Overlay";
 import { toast } from "react-toastify";
 import { SITE_URL } from "@/utils/service/constant";
+import EmojiePicker from "@/components/molecules/emogiPicker";
 
 const Chats = () => {
   const [selectedFile, setSelectedFile] = useState<File | string | null>(null);
   const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
   const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [shosenEmojiesup, setShosenEmojiesup] = useState<string[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [rightDropDown, setRightDropDown] = useState(false)
   const [onDelete, setOnDelete] = useState(false)
@@ -119,7 +121,7 @@ const Chats = () => {
     setReceivedMessages([]);
 
     setReceiver(() => JSON.parse(localStorage.getItem("receiver") || "{}"));
-  }, [param.id, currentUser?.name, currentUser?.id]);
+  }, [param.id, currentUser?.name, currentUser?.id, receiver]);
 
   // if (oldReceiver !== receiver?.original_dm_roomID) {
   //   socket.volatile.emit("disconnected", oldReceiver);
@@ -247,7 +249,7 @@ const Chats = () => {
 
   console.log(receivedMessages);
   socket.on("notify", (data) => {
-    console.log(data);
+    // console.log(data);
   });
 
   function handleCloseModal(): void {
@@ -262,7 +264,7 @@ const Chats = () => {
   const handleDeleteChat = async () => {
     await handleDelete()
       .then((err) => {
-        router.push('/discussion')
+        router.push('/discussions')
       })
       .catch((err) => {
         toast.error('Unable to delete discussion', {
@@ -273,6 +275,15 @@ const Chats = () => {
       })
     setOnDelete((prev) => !prev);
   }
+
+  // CHOOSE EMOJI
+  const getShosenEmojieup = (emojie: any) => {
+    if (emojie?.explicitOriginalTarget?.src)
+      setShosenEmojiesup((shosenEmojies) => [
+        ...shosenEmojies,
+        emojie?.explicitOriginalTarget?.src,
+      ]);
+  };
 
   return (
     <>
@@ -379,7 +390,13 @@ const Chats = () => {
             className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
             style={{ transition: "none" }}
           >
-            <AiOutlineSmile className="mr-5 text-myG text-4xl" />
+            {/* <AiOutlineSmile className="mr-5 text-myG text-4xl" /> */}
+            <span className=" my-auto cursor-pointer">
+              <EmojiePicker
+                getShosenEmojie={getShosenEmojieup}
+                placement="topStart"
+              />
+            </span>
             {showDropdown ? (
               <FaTimes
                 className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "

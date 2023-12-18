@@ -12,11 +12,12 @@ type Props = {
 const EmojiePicker = ({ getShosenEmojie, placement }: Props) => {
   const onEmojiClick = (event: any, emojiObject: any) => {
     getShosenEmojie(emojiObject);
+    console.log("this is emoji", emojiObject)
   };
 
   return (
     <>
-      <div className="p-0 m-0 w-full">
+      <div className="px-5 w-full">
         <Whisper
           trigger="click"
           speaker={
