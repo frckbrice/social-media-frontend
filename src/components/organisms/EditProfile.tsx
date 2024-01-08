@@ -54,7 +54,7 @@ const EditProfile = () => {
         toast.success("UserName updated", {
           position: "top-right",
           hideProgressBar: true,
-          autoClose: 2000,
+          autoClose: 2000
         });
         console.log(res);
         setCurrentUser(res);

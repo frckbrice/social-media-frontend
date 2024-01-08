@@ -89,8 +89,6 @@ const Chats = () => {
     {
       label: "Contact info",
       function: () => {
-        // setShowCreateGrp((prev) => !prev);
-        // setShowDropdown((prev) => !prev);
         setShowInfoCard(prev => !prev);
         setRightDropDown(prev => !prev)
       },
