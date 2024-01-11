@@ -99,12 +99,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
     const searchName = e.target.value;
     console.log(searchName);
 
-    const filteredResults = chatRooms.filter((chatRooms: any) => {
-      return chatRooms?.filter((room: any) =>
-        !searchName.toLowerCase().trim()
-          ? room
-          : room.name.toLowerCase().includes(searchName)
-      );
+    const filteredResults = chatRooms.filter((room) => {
+      return searchName.toLowerCase().trim() === ""
+        ? room
+        : room.name.toLowerCase().includes(searchName);
     });
     if (!filteredResults.length || !searchName.length) {
       setFilterChats(chatRooms);
@@ -114,6 +112,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
     // console.log("FilterChats", filteredResults);
     // console.log("keyword", e.target.value);
   };
+
   // FETCH CHAT ROOMS
   useEffect(() => {
     setFilterChats(chatRooms);

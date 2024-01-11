@@ -77,15 +77,17 @@ const Chats = () => {
   let oldReceiver: string = "";
 
   socket.on("message", (data) => {
-    // console.log("message received: ", data);
-    if (Array.isArray(data)) {
-      setReceivedMessages([...receivedMessages, ...data]);
-    } else setReceivedMessages([...receivedMessages, data]);
+    if (data) setReceivedMessages([...receivedMessages, data]);
   });
 
   socket.on("connect_error", (err) => {
     console.log(`connection error due to ${err}`);
     setConnected("");
+    setTimeout(() => socket.connect(), 100);
+  });
+
+  socket.on("disconnect", () => {
+    setTimeout(() => socket.connect(), 100);
   });
 
   socket.on("disconnected", (data) => {
@@ -185,7 +187,6 @@ const Chats = () => {
       setTypingStatus("");
       handleSendMessage();
     }
-
     socket.emit("typing", {
       room: param.id,
       owner: currentUser?.id,

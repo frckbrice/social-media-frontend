@@ -30,7 +30,7 @@ const Signupb = () => {
       LOCAL_STORAGE.save("email", googleUser?.user.email);
       // LOCAL_STORAGE.save("userObject", googleUser?.user);
 
-      await fetch(SITE_URL + "/users", {
+      fetch(SITE_URL + "/users", {
         method: "POST",
         body: JSON.stringify({
           name: googleUser?.user.user_metadata.name,
