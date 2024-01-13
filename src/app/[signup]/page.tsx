@@ -26,7 +26,7 @@ const Signupb = () => {
     );
     const { data } = await supabase.from("user").select("email");
     let res = data?.filter((i) => i.email === googleUser?.user?.email);
-    if (res?.length === 1) {
+    if (res?.length) {
       LOCAL_STORAGE.save("email", googleUser?.user.email);
       // LOCAL_STORAGE.save("userObject", googleUser?.user);
 

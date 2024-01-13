@@ -40,6 +40,7 @@ import Overlay from "@/components/atoms/Overlay";
 import { toast } from "react-toastify";
 import { SITE_URL } from "@/utils/service/constant";
 import { revalidateData } from "@/utils/revalidate_data";
+import EmojiePicker from "@/components/molecules/emogiPicker";
 
 // export const revalidate = 0;
 const Chats = () => {
@@ -47,6 +48,7 @@ const Chats = () => {
   const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
   const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [shosenEmojiesup, setShosenEmojiesup] = useState<string[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [rightDropDown, setRightDropDown] = useState(false);
   const [onDelete, setOnDelete] = useState(false);
@@ -146,7 +148,6 @@ const Chats = () => {
       divMessageRef.current.scrollTo(0, divMessageRef.current.scrollHeight);
     }
     socket.on("updateMessage", (data) => {
-      
       const index = receivedMessages?.findIndex(
         (msg: Message) => msg && msg?.id === data?.id
       );
@@ -302,6 +303,15 @@ const Chats = () => {
     setOnDelete((prev) => !prev);
   };
 
+  // CHOOSE EMOJI
+  const getShosenEmojieup = (emojie: any) => {
+    if (emojie?.explicitOriginalTarget?.src)
+      setShosenEmojiesup((shosenEmojies) => [
+        ...shosenEmojies,
+        emojie?.explicitOriginalTarget?.src,
+      ]);
+  };
+
   return (
     <>
       <div className="w-full flex justify-between">
@@ -419,7 +429,13 @@ const Chats = () => {
             className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
             style={{ transition: "none" }}
           >
-            <AiOutlineSmile className="mr-5 text-myG text-4xl" />
+            {/* <AiOutlineSmile className="mr-5 text-myG text-4xl" /> */}
+            <span className=" my-auto cursor-pointer">
+              <EmojiePicker
+                getShosenEmojie={getShosenEmojieup}
+                placement="topStart"
+              />
+            </span>
             {showDropdown ? (
               <FaTimes
                 className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
