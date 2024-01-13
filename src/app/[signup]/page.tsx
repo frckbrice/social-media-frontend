@@ -66,20 +66,27 @@ const Signupb = () => {
         Agree and Continue to accept the{" "}
         <span className="text-themecolor">Terms of Service</span>
       </h4>
-      {!success ? (
+      <div className=" mx-auto flex justify-center items-center">
         <button
           onClick={() => handleInputChange()}
-          className={`border ${
-            isLoading ? "cursor-not-allowed disabled:cursor-wait" : ""
-          } p-4 px-5 text-base font-extrabold bg-themecolor text-white rounded`}
+          className={`${
+            isLoading ? "border-none" : "border  border-green-400"
+          } p-4 px-5 text-[20px] font-extrabold text-black rounded w-fit h-auto flex justify-center items-center ${
+            success ? "hidden" : ""
+          }`}
         >
-          {isLoading ? <PulseLoader /> : "Agree and Continue"}
+          {isLoading ? <Pulsation /> : "Agree and Continue"}
         </button>
-      ) : (
-        <p className="text-2xl mt-6 font-extrabold text-themecolor">
-          {success}
-        </p>
-      )}
+
+        {success && (
+          <div className="text-2xl mt-6 font-extrabold text-themecolor flex flex-col gap-10">
+            <p>{success} </p>
+            <div>
+              <Pulsation />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

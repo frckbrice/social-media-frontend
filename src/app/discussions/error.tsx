@@ -18,7 +18,7 @@ export default function Error({
 
   return (
     <div className=" flex justify-center items-center mt-64 mx-auto flex-col gap-8 ">
-      <h2>Something went wrong!</h2>
+      <h2 className=" text-red-700">Something went wrong!</h2>
       <button
         className=" py-5 px-10 bg-ctitle/20 rounded-[14px] ring-1 ring-themecolor"
         onClick={

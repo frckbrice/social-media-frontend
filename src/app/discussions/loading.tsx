@@ -6,9 +6,9 @@ type Props = {};
 
 const Loading = (props: Props) => {
   return (
-    <div className=" w-full flex items-center justify-center text-sm text-black m-16">
+    <center className="fixed top-[4vw] left-[60vw]">
       <PulseLoader />
-    </div>
+    </center>
   );
 };
 

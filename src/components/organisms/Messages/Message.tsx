@@ -7,6 +7,8 @@ type Props = {
 };
 
 export default function Message({ message, classname }: Props) {
+  // console.log(new Date().toLocaleTimeString("en-GB"));
+  console.log(message);
   return (
     <div className={classname}>
       <div className=" py-[3px] px-[5px] w-fit text-[#111b21]">
