@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Message from "./Message";
+import Message from "./SenderMessage";
 import ReceiverMessages from "./ReceiverMessage";
 import SimpleMessage from "./SimpleMessage";
 import { FaFaceGrinWide } from "react-icons/fa6";
@@ -105,6 +105,7 @@ const Messages = (props: Props) => {
           {messages?.reaction ? (
             <span className=" w-10 h-10 rounded-full  border border-slate-200  text-[22px] bg-white shadow-sm  flex justify-center items-center p-[5px] transition-transform duration-1000 ease-in-out translate-y-[-20%] translate-x-[30%]">
               {messages?.reaction}
+              {/* {emojie} */}
             </span>
           ) : (
             ""
@@ -130,10 +131,9 @@ const Messages = (props: Props) => {
           )}
 
           <div className="flex justify-end items-center" key={messages?.id}>
-            {/* <div className="opacity-0 hover:opacity-100 flex justify-end items-start w-full "> */}
-            <div className="opacity-100 flex justify-end items-start w-full ">
+            <div className="opacity-0 hover:opacity-100 flex justify-end items-start w-full ">
               <span
-                className="w-12 h-12 p-[5px] flex justify-center items-center  mx-1  rounded-full bg-[#a3adb3a7] cursor-pointer bg-green-800"
+                className="w-12 h-12 pt-[5px] flex justify-center items-center  mx-1  rounded-full bg-[#a3adb3a7] cursor-pointer"
                 onClick={() => handleTargetEmoji(messages?.id)}
               >
                 <FaFaceGrinWide
@@ -152,6 +152,7 @@ const Messages = (props: Props) => {
           "
               >
                 {messages?.reaction}
+                {/* {emojie} */}
               </span>
             ) : (
               ""

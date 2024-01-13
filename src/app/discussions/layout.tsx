@@ -102,7 +102,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
     const filteredResults = chatRooms.filter((room) => {
       return searchName.toLowerCase().trim() === ""
         ? room
-        : room.name.toLowerCase().includes(searchName);
+        : room.name.toLowerCase().includes(searchName.toLowerCase());
     });
     if (!filteredResults.length || !searchName.length) {
       setFilterChats(chatRooms);

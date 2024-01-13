@@ -20,7 +20,7 @@ export const formatLastMessageTime = (date: any) => {
   } else if (hours < 48 && hours > 24) {
     return `yesterday `;
   } else {
-    return timetoformat.toLocaleString("en-US", { weekday: "long" });
+    return timetoformat.toLocaleDateString("en-GB");
   }
 };
 

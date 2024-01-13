@@ -146,7 +146,7 @@ const Chats = () => {
       divMessageRef.current.scrollTo(0, divMessageRef.current.scrollHeight);
     }
     socket.on("updateMessage", (data) => {
-      console.log("update message", data);
+      
       const index = receivedMessages?.findIndex(
         (msg: Message) => msg && msg?.id === data?.id
       );
