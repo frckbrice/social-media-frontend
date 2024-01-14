@@ -8,7 +8,7 @@ type Props = {
 const PulseLoader = ({ text, font }: Props) => {
   return (
     <div className="pulsating-circle w-fit mx-auto">
-      <span className={`${font} " transform -translate-x-5 w-full text-2xl"`}>
+      <span className={`${font} " transform -translate-x-5 w-full "`}>
         {" "}
         {text}...
       </span>

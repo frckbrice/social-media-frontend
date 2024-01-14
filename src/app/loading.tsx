@@ -7,7 +7,7 @@ type Props = {};
 const Loading = (props: Props) => {
   return (
     <center className="fixed top-[10vw] left-[50vw]">
-      <PulseLoader text="charging" />
+      <PulseLoader text="charging" font="text-[18px]" />
     </center>
   );
 };

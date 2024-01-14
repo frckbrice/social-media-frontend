@@ -80,7 +80,7 @@ const Signupb = () => {
         </button>
 
         {success && (
-          <div className="text-2xl mt-6 font-extrabold text-themecolor flex flex-col gap-10">
+          <div className="text-2xl mt-6 font-extrabold text-themecolor flex flex-col gap-10 justify-center items-center">
             <p>{success} </p>
             <div className=" w-full">
               <PulseLoader text=" redirection" font="text-black" />
