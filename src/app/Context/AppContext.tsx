@@ -18,6 +18,8 @@ import React, {
 interface DataType {
   currentUser: Room;
   setCurrentUser: Dispatch<SetStateAction<Room>>;
+  showAllUserscontacts: boolean;
+  setShowAllUsercontacts: Dispatch<SetStateAction<boolean>>;
   allUsers: Room[];
   setAllUsers: Dispatch<SetStateAction<Room[]>>;
   chatRooms: Room[];
@@ -36,6 +38,8 @@ const initialState: DataType = {
     my_id: "",
     user_id: "",
   },
+  showAllUserscontacts: false,
+  setShowAllUsercontacts: (showAllcontacts) => !showAllcontacts,
   setCurrentUser: () => {},
   allUsers: [],
   setAllUsers: () => [],
@@ -55,6 +59,8 @@ export const AppContextProvider = ({ children }: any) => {
   const [allUsers, setAllUsers] = useState<Room[]>([]);
   const [chatRooms, setChatRooms] = useState<Room[]>([]);
   const [allGroups, setAllGroups] = useState<Room[]>([]);
+  const [showAllUserscontacts, setShowAllUsercontacts] =
+    useState<boolean>(false);
 
   const values = {
     currentUser,
@@ -65,6 +71,8 @@ export const AppContextProvider = ({ children }: any) => {
     setChatRooms,
     allGroups,
     setAllGroups,
+    showAllUserscontacts,
+    setShowAllUsercontacts,
   };
 
   useEffect(() => {
