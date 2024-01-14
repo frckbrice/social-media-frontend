@@ -1,9 +1,17 @@
 import React from "react";
 
-const PulseLoader = () => {
+type Props = {
+  text: string;
+  font?: string;
+};
+
+const PulseLoader = ({ text, font }: Props) => {
   return (
     <div className="pulsating-circle w-full mx-auto">
-      <span className=" transform -translate-x-50 text-white"> Loading...</span>
+      <span className={`${font} " transform -translate-x-50 text-white"`}>
+        {" "}
+        {text}...
+      </span>
     </div>
   );
 };

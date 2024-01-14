@@ -75,14 +75,14 @@ const Signupb = () => {
             success ? "hidden" : ""
           }`}
         >
-          {isLoading ? <Pulsation /> : "Agree and Continue"}
+          {isLoading ? <PulseLoader text="loading" /> : "Agree and Continue"}
         </button>
 
         {success && (
           <div className="text-2xl mt-6 font-extrabold text-themecolor flex flex-col gap-10">
             <p>{success} </p>
             <div>
-              <Pulsation />
+              <PulseLoader text="waiting for redirection" />
             </div>
           </div>
         )}
