@@ -28,7 +28,6 @@ const SelectFile = ({
   const [isHovered, setIsHovered] = useState(false);
 
   const [isOpen, setIsOpen] = useState(true);
-  const inputRef = useRef<HTMLInputElement | null>();
 
   const handleCaptureImage = () => {
     const capturedImage = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...";
