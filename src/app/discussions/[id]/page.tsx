@@ -1,6 +1,10 @@
 "use client";
 
-import { handleDelete, uploadFileToSupabase } from "@/utils/service/queries";
+import {
+  getDocsUrlAndSendToDB,
+  handleDelete,
+  uploadFileToSupabase,
+} from "@/utils/service/queries";
 import { useDropzone } from "react-dropzone";
 import Webcam from "react-webcam";
 import ContactInfo from "@/components/organisms/ContactInfo";
@@ -68,7 +72,7 @@ const Chats = () => {
   const [typingStatus, setTypingStatus] = useState("");
   const [connected, setConnected] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-  const { currentUser } = useAppContext();
+  const { currentUser, setShowAllUsercontacts } = useAppContext();
   const [disconnectedUser, setDisconnectedUser] = useState<string>("");
 
   const [receiver, setReceiver] = useState<Room | null>((): Room | null => {
@@ -88,7 +92,6 @@ const Chats = () => {
 
   socket.on("message", (data) => {
     if (data) {
-      console.log("messages: ", data);
       if (Array.isArray(data) && data.length) {
         setReceivedMessages(data);
       } else setReceivedMessages([...receivedMessages, data]);
@@ -195,7 +198,7 @@ const Chats = () => {
 
   const sendCapturefile = (captureFile: File | string | null, text: string) => {
     let messageObject: Partial<Message> = {
-      content: captureFile as string,
+      content: `${captureFile as string}/textcontent/${text}`,
       sender_id: currentUser?.id as string,
       receiver_room_id: param.id as string,
       sender_name: currentUser?.name,
@@ -205,22 +208,18 @@ const Chats = () => {
     };
 
     socket.emit("sendMessage", messageObject);
-    messageObject = {};
-    if (!text) return;
-    else {
-      messageObject = {
-        content: text,
-        sender_id: currentUser?.id as string,
-        receiver_room_id: param.id as string,
-        sender_name: currentUser?.name,
-        sender_phone: currentUser?.phone,
-        reaction: "",
-        is_read: false,
-      };
+  };
 
-      socket.emit("sendMessage", messageObject);
-      messageObject = {};
-    }
+  const sendDocsToDB = () => {
+    let messageObject: Partial<Message> = {
+      sender_id: currentUser?.id as string,
+      receiver_room_id: param.id as string,
+      sender_name: currentUser?.name,
+      sender_phone: currentUser?.phone,
+      reaction: "",
+      is_read: false,
+    };
+    getDocsUrlAndSendToDB(messageObject);
   };
 
   const handleAvatarClick = () => {
@@ -293,7 +292,9 @@ const Chats = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleFileSelect,
     multiple: false,
-    // accept: "application/pdf",
+    accept: {
+      "image/*": [".jpeg", ".png"],
+    },
   });
 
   const handleCloseSelectFile = () => {
@@ -552,7 +553,9 @@ const Chats = () => {
             >
               <input {...getInputProps()} />
               <FaFileInvoice className="text-purple-500 text-mdl" />
-              <span className="text-gray-600">Document</span>
+              <span className="text-gray-600" onClick={sendDocsToDB}>
+                Document
+              </span>
             </div>
 
             <div
@@ -561,7 +564,9 @@ const Chats = () => {
             >
               <input {...getInputProps()} />
               <FaPhotoVideo className="text-blue-600" />
-              <span className="text-gray-600">Photos & V.</span>
+              <span className="text-gray-600" onClick={sendDocsToDB}>
+                Photos
+              </span>
             </div>
 
             <div
@@ -575,7 +580,12 @@ const Chats = () => {
 
             <div className="flex items-center pt-5 space-x-3 text-[18px] cursor-pointer">
               <FaUser className="text-blue-400 " />
-              <span className="text-gray-600">Contact</span>
+              <span
+                className="text-gray-600"
+                onClick={() => setShowAllUsercontacts((prev) => !prev)}
+              >
+                Contact
+              </span>
             </div>
           </div>
         </DropdownModal>

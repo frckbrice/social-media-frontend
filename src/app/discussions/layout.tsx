@@ -9,7 +9,6 @@ import { MdMessage } from "react-icons/md";
 import SearchInput from "@/components/atoms/SearchInput";
 import { BiMenuAltRight } from "react-icons/bi";
 import ContactCard from "@/components/organisms/ContactCard";
-import { UserData } from "../../../mock-data";
 
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,15 +19,11 @@ import DropdownModal from "@/components/atoms/DropdownModal";
 import DisplayUsers from "@/components/organisms/DisplayUsers";
 import AddGroupMembers from "@/components/organisms/AddGroupMembers";
 import { useAppContext } from "../Context/AppContext";
-import { createRoom, getAllRooms, shuffleArr } from "@/utils/service/queries";
-import { json } from "node:stream/consumers";
-import { LOCAL_STORAGE } from "@/utils/service/storage";
-import { SITE_URL } from "@/utils/service/constant";
+import { createRoom } from "@/utils/service/queries";
+
 import GroupSetup from "@/components/organisms/GroupSetup";
 import LogOutPopUp from "@/components/molecules/logOutPopup";
 import { socket } from "@/utils/services";
-import { disconnect } from "process";
-import { revalidateData } from "@/utils/revalidate_data";
 
 function Discussion({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -41,7 +36,13 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const [openGroupSetup, setOpenGroupSetup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  const { currentUser, allUsers, chatRooms, setChatRooms } = useAppContext();
+  const {
+    currentUser,
+    allUsers,
+    chatRooms,
+    setChatRooms,
+    showAllUserscontacts,
+  } = useAppContext();
   const [disconnectedUser, setDisconnectedUser] = useState<Room>(chatRooms[0]);
   const [filterChats, setFilterChats] = useState<Room[]>(chatRooms);
   const [usersDisplay, setUsersDisplay] = useState<Room[]>(chatRooms);
@@ -161,7 +162,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
       sender_id: currentUser?.id,
       receiver_room_id: user.isGroup ? user.id : user.original_dm_roomID,
     };
-    console.log(data);
+
     socket.emit("roomMessages", data);
 
     user.isGroup
@@ -184,7 +185,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const handleSort = (filterChatRoom: Room[]): Room[] => {
     return filterChatRoom;
   };
-
+  console.log(showAllUserscontacts);
   return (
     <>
       <LogOutPopUp visible={showPopup} onClose={() => handleClose()} />
@@ -289,25 +290,26 @@ function Discussion({ children }: { children: React.ReactNode }) {
             <EditProfile />
           </ProfileCard>
         )}
-        {showAllContacts && (
-          <ProfileCard
-            title="New chat"
-            clickToClose={() => setShowAllContacts((prev) => !prev)}
-          >
-            <div className="p-3">
-              <SearchInput handleFilter={filterAllUsers} />
-            </div>
-            <DisplayUsers
-              users={!usersDisplay.length ? allUsers : usersDisplay}
-              contactClick={handleStartChat}
-              goToCreateGrt={() => {
-                setShowAllContacts((prev) => !prev);
-                setShowCreateGrp((prev) => !prev);
-              }}
-              // users={usersDisplay}
-            />
-          </ProfileCard>
-        )}
+        {showAllContacts ||
+          (showAllUserscontacts && (
+            <ProfileCard
+              title="New chat"
+              clickToClose={() => setShowAllContacts((prev) => !prev)}
+            >
+              <div className="p-3">
+                <SearchInput handleFilter={filterAllUsers} />
+              </div>
+              <DisplayUsers
+                users={!usersDisplay.length ? allUsers : usersDisplay}
+                contactClick={handleStartChat}
+                goToCreateGrt={() => {
+                  setShowAllContacts((prev) => !prev);
+                  setShowCreateGrp((prev) => !prev);
+                }}
+                // users={usersDisplay}
+              />
+            </ProfileCard>
+          ))}
         {showCreateGrp && (
           <ProfileCard
             title="Add group members"

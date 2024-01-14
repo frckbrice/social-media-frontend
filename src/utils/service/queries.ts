@@ -4,6 +4,7 @@ import ApiCall from "./httpClient";
 import { LOCAL_STORAGE } from "./storage";
 import { socket } from "../services";
 import { toast } from "react-toastify";
+import * as pdfjs from "pdfjs-dist";
 
 const apiCall = new ApiCall();
 
@@ -172,3 +173,45 @@ export const handleDelete = async () => {
   }
   // setOnDelete((prev) => !prev);
 };
+
+export const getDocsUrlAndSendToDB = (data: Partial<Message>) => {
+  //get the docs from pc
+  // send to supabase and get the url
+  //send to server as message
+
+  const input = document.createElement("input") as HTMLInputElement;
+  input.type = "file";
+  let dataUrl: any;
+  input.addEventListener("change", async (e: any) => {
+    const newFile = e.target.files[0];
+    dataUrl = await uploadFileToSupabase(newFile);
+    console.log("dataRUrl: " + dataUrl.data.publicUrl);
+
+    socket.emit("sendMessage", {
+      ...data,
+      content: dataUrl.data.publicUrl,
+    });
+  });
+
+  input.click();
+};
+
+// //get the cover image of a pdf document
+// const getcoverImageOfPDFFile = async (pdfURL: string) => {
+//   // Load the PDF document from the provided URL
+//   const pdf = pdfjs.getDocument(pdfURL);
+//   // Retrieve the first page of the document
+//   const page = await pdf._transport();
+//   // Extract the cover image from the page
+//   const coverImage = await page.getImage({
+//     format: "png",
+//     width: 200,
+//     height: 200,
+//   });
+//   // Convert the image data to base64 for display
+//   const base64Data = coverImage.toDataURL("image/png");
+//   // Display the cover image in the chat message thread
+//   const imageElement = document.createElement("img");
+//   imageElement.src = base64Data;
+//   document.body.appendChild(imageElement);
+// };
