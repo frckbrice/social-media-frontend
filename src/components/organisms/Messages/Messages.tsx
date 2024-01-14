@@ -8,13 +8,9 @@ import React, {
   useState,
 } from "react";
 import Message from "./Message";
-import ReceiverMessages from "./ReceiverMessage";
-import SimpleMessage from "./SimpleMessage";
 import { FaFaceGrinWide } from "react-icons/fa6";
 import EmojiMessage from "./EmojiMessage";
 import { socket } from "@/utils/services";
-import { formatLastMessageTime } from "@/utils/service/format_time";
-// export const revalidate = 10;
 
 type Props = {
   messageList: any[];
