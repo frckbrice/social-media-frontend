@@ -3,15 +3,12 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/client";
-import Pulsation from "./component/PulseLoader";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
-import { signUp } from "@/utils/service/queries";
 import { SITE_URL } from "@/utils/service/constant";
 import { useAppContext } from "../Context/AppContext";
 import PulseLoader from "@/components/atoms/pulseLoader";
 
 const Signupb = () => {
-  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
