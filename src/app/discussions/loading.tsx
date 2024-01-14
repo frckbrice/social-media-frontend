@@ -6,8 +6,8 @@ type Props = {};
 
 const Loading = (props: Props) => {
   return (
-    <center className="fixed top-[4vw] left-[60vw]">
-      <PulseLoader text="waiting for data" />
+    <center className="fixed top-[4vw] left-[60vw] w-full">
+      <PulseLoader text="waiting for data" font="text-black " />
     </center>
   );
 };
