@@ -7,7 +7,13 @@ import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
 import SelectFile from "@/components/organisms/SelectFile";
 
-import React, { useState, ChangeEvent, useEffect, useRef } from "react";
+import React, {
+  useState,
+  ChangeEvent,
+  useEffect,
+  useRef,
+  DialogHTMLAttributes,
+} from "react";
 import { useRouter } from "next/navigation";
 
 import Avatar from "@/components/atoms/Avatar";
@@ -74,12 +80,19 @@ const Chats = () => {
     return null;
   });
 
+  const [inputMessageFromCapture, setInputMessageFromCapture] = useState("");
+
   const divMessageRef = useRef<HTMLDivElement | null>(null);
 
-  let oldReceiver: string = "";
+  console.log("from page", shosenEmojiesup);
 
   socket.on("message", (data) => {
-    if (data) setReceivedMessages([...receivedMessages, data]);
+    if (data) {
+      console.log("messages: ", data);
+      if (Array.isArray(data) && data.length) {
+        setReceivedMessages(data);
+      } else setReceivedMessages([...receivedMessages, data]);
+    }
   });
 
   socket.on("connect_error", (err) => {
@@ -147,6 +160,7 @@ const Chats = () => {
     if (divMessageRef && divMessageRef.current) {
       divMessageRef.current.scrollTo(0, divMessageRef.current.scrollHeight);
     }
+
     socket.on("updateMessage", (data) => {
       const index = receivedMessages?.findIndex(
         (msg: Message) => msg && msg?.id === data?.id
@@ -177,6 +191,36 @@ const Chats = () => {
 
     socket.emit("sendMessage", messageObject);
     setMessage("");
+  };
+
+  const sendCapturefile = (captureFile: File | string | null, text: string) => {
+    let messageObject: Partial<Message> = {
+      content: captureFile as string,
+      sender_id: currentUser?.id as string,
+      receiver_room_id: param.id as string,
+      sender_name: currentUser?.name,
+      sender_phone: currentUser?.phone,
+      reaction: "",
+      is_read: false,
+    };
+
+    socket.emit("sendMessage", messageObject);
+    messageObject = {};
+    if (!text) return;
+    else {
+      messageObject = {
+        content: text,
+        sender_id: currentUser?.id as string,
+        receiver_room_id: param.id as string,
+        sender_name: currentUser?.name,
+        sender_phone: currentUser?.phone,
+        reaction: "",
+        is_read: false,
+      };
+
+      socket.emit("sendMessage", messageObject);
+      messageObject = {};
+    }
   };
 
   const handleAvatarClick = () => {
@@ -320,7 +364,7 @@ const Chats = () => {
             showInfoCard ? "hidden" : "visible"
           }`}
         >
-          <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
+          <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-ful">
             <div className="flex items-center hover:cursor-ponter">
               <>
                 <button
@@ -354,12 +398,9 @@ const Chats = () => {
               </div>
             </div>
 
-            <div className="flex items-center text-gray-500 text-xl">
-              <FaSearch className="mr-8" />
-              <FaEllipsisV
-                onClick={handleAvatarClick}
-                className="mr-2 hover:cursor-pointer"
-              />
+            <div className="flex items-center text-gray-500 text-[22px] mr-5">
+              <FaSearch className="mr-8 cursor-not-allowed" />
+
               <button>
                 <FaEllipsisV
                   onClick={() => handleOpenDropdown()}
@@ -368,7 +409,7 @@ const Chats = () => {
               </button>
             </div>
             {rightDropDown && (
-              <div className="absolute z-40 top-10 right-4">
+              <div className="absolute z-40 top-10 right-4 ">
                 <DropdownModal onClose={handleCloseModal}>
                   <ul className="py-2 w-full flex. flex-col gap-4">
                     {dropDownLIst.map((item, index) => (
@@ -421,6 +462,8 @@ const Chats = () => {
               file={selectedFile}
               onCaptureImage={handleCaptureImage}
               onClose={handleCloseSelectFile}
+              sendCapturefile={sendCapturefile}
+              setInputMessageFromCapture={setInputMessageFromCapture}
             />
           )}
 
@@ -430,22 +473,28 @@ const Chats = () => {
             style={{ transition: "none" }}
           >
             {/* <AiOutlineSmile className="mr-5 text-myG text-4xl" /> */}
-            <span className=" my-auto cursor-pointer">
+            <div className="mt-1 cursor-pointer">
               <EmojiePicker
                 getShosenEmojie={getShosenEmojieup}
                 placement="topStart"
               />
-            </span>
+            </div>
             {showDropdown ? (
-              <FaTimes
-                className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
-                onClick={handlePlusIconClick}
-              />
+              <span>
+                {" "}
+                <FaTimes
+                  className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
+                  onClick={handlePlusIconClick}
+                />
+              </span>
             ) : (
-              <FaPlus
-                className="text-gray-500 cursor-pointer"
-                onClick={handlePlusIconClick}
-              />
+              <span>
+                {" "}
+                <FaPlus
+                  className="text-gray-500 cursor-pointer"
+                  onClick={handlePlusIconClick}
+                />
+              </span>
             )}
             <input
               type="text"
@@ -496,36 +545,36 @@ const Chats = () => {
 
       {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
-          <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
+          <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg flex flex-col justify-center items-center">
             <div
               {...getRootProps()}
-              className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
+              className="dropzone flex items-center space-x-3 text-[18px] cursor-pointer"
             >
               <input {...getInputProps()} />
-              <FaFileInvoice className="text-purple-500 text-2xl" />
+              <FaFileInvoice className="text-purple-500 text-mdl" />
               <span className="text-gray-600">Document</span>
             </div>
 
             <div
               {...getRootProps()}
-              className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
+              className="flex items-center py-5 space-x-3 text-[18px] cursor-pointer"
             >
               <input {...getInputProps()} />
-              <FaPhotoVideo className="text-blue-600 text-2xl" />
-              <span className="text-gray-600">Photos & Videos</span>
+              <FaPhotoVideo className="text-blue-600" />
+              <span className="text-gray-600">Photos & V.</span>
             </div>
 
             <div
               {...getRootProps()}
-              className="flex items-center space-x-3 text-lg cursor-pointer"
+              className="flex items-center space-x-3 text-[18px] cursor-pointer"
               onClick={() => setIsCameraOpen(true)}
             >
-              <FaCamera className="text-pink-600 text-2xl" />
+              <FaCamera className="text-pink-600 text-md" />
               <span className="text-gray-600">Camera</span>
             </div>
 
-            <div className="flex items-center pt-5 space-x-3 text-lg cursor-pointer">
-              <FaUser className="text-blue-400 text-2xl" />
+            <div className="flex items-center pt-5 space-x-3 text-[18px] cursor-pointer">
+              <FaUser className="text-blue-400 " />
               <span className="text-gray-600">Contact</span>
             </div>
           </div>

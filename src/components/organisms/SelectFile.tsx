@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useRef } from "react";
 
 import { useDropzone } from "react-dropzone";
 import { FaPlus, FaTimes, FaPaperPlane, FaFile } from "react-icons/fa";
@@ -11,19 +11,24 @@ interface SelectFileProps {
   file: File | string;
   onCaptureImage: (image: string) => void;
   onClose: () => void;
+  sendCapturefile: (captureFile: File | string | null, text: string) => void;
+  setInputMessageFromCapture: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SelectFile: React.FC<SelectFileProps> = ({
+// eslint-disable-next-line react/display-name
+const SelectFile = ({
   file,
   onCaptureImage,
   onClose,
-}) => {
-  const [message, setMessage] = useState("");
+  sendCapturefile,
+  setInputMessageFromCapture,
+}: SelectFileProps) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-
+  const [message, setMessage] = useState<string>("");
   const [isHovered, setIsHovered] = useState(false);
 
   const [isOpen, setIsOpen] = useState(true);
+  const inputRef = useRef<HTMLInputElement | null>();
 
   const handleCaptureImage = () => {
     const capturedImage = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...";
@@ -45,6 +50,7 @@ const SelectFile: React.FC<SelectFileProps> = ({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
+    setInputMessageFromCapture(e.target.value);
   };
 
   const handleFileDrop = (acceptedFiles: File[]) => {
@@ -69,6 +75,7 @@ const SelectFile: React.FC<SelectFileProps> = ({
 
   const renderPreview = () => {
     if (typeof file === "string") {
+      console.log("file is string");
       return (
         <Image
           src={file}
@@ -79,6 +86,7 @@ const SelectFile: React.FC<SelectFileProps> = ({
         />
       );
     } else if (file) {
+      console.log("file isn't string");
       return (
         <Image
           src={URL.createObjectURL(file)}
@@ -91,6 +99,12 @@ const SelectFile: React.FC<SelectFileProps> = ({
     } else {
       return <p className="text-2xl text-gray-400">No preview available</p>;
     }
+  };
+
+  const sendCaptureFileToDB = () => {
+    if (!file) return;
+    sendCapturefile(file, message);
+    handleClear();
   };
 
   return (
@@ -121,12 +135,15 @@ const SelectFile: React.FC<SelectFileProps> = ({
               <AiOutlineSmile className="mr-5 text-myG text-4xl" />
             </div>
             <div className="bg-themecolor rounded-full w-12 h-12 cursor-pointer flex items-center justify-center">
-              <FaPaperPlane className="text-2xl text-white" />
+              <FaPaperPlane
+                className="text-2xl text-white"
+                onClick={sendCaptureFileToDB}
+              />
             </div>
           </div>
           <p className=" border-b border-gray-300 my-6"></p>
 
-          <div className="flex space-x-4 justify-center">
+          {/* <div className="flex space-x-4 justify-center bg-red-6000">
             {uploadedFiles.map((_, index) => (
               <div
                 key={index}
@@ -154,13 +171,14 @@ const SelectFile: React.FC<SelectFileProps> = ({
                   <FaPlus className="cursor-pointer text-2xl text-myG" />
                 </div>
               )}
-              {/* {isHovered && <span className=" bg-gray-300 text-sm px-2 py-1">Add file</span>} */}
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </>
   );
 };
 
-export default SelectFile;
+// SelectFile.displayName = SelectFile;
+
+export default React.memo(SelectFile);

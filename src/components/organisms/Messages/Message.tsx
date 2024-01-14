@@ -7,8 +7,26 @@ type Props = {
 };
 
 export default function Message({ message, classname }: Props) {
-  // console.log(new Date().toLocaleTimeString("en-GB"));
-  console.log(message);
+  let content;
+  if (!message.content) content = <></>;
+  else {
+    const mimeType = message.content.split(",")[0].split(":")[1];
+
+    if (mimeType) {
+      const imageData = message.content.split(",")[1];
+      const buffer = Buffer.from(imageData, "base64");
+      const blob = new Blob([buffer], { type: mimeType });
+      content = (
+        <Image
+          src={URL.createObjectURL(blob)}
+          alt=""
+          width={300}
+          height={300}
+        />
+      );
+    } else content = message?.content;
+  }
+
   return (
     <div className={classname}>
       <div className=" py-[3px] px-[5px] w-fit text-[#111b21]">
@@ -22,7 +40,7 @@ export default function Message({ message, classname }: Props) {
         </div>
 
         <div className=" flex flex-col gap-1">
-          <p> {message?.content ? message?.content : ""}</p>
+          <p> {message?.content ? content : ""}</p>
           <span className="flex justify-end">
             {new Date(message?.updatedAt).toLocaleTimeString("en-GB")}{" "}
           </span>

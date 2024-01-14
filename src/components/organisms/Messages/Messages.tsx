@@ -2,6 +2,7 @@ import Image from "next/image";
 import React, {
   MouseEventHandler,
   forwardRef,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -49,28 +50,41 @@ const Messages = (props: Props) => {
     setMessageId(id);
   };
 
-  const getEmoji = async (emoji: string) => {
-    setEmojie(emoji);
+  const getEmoji = useCallback(
+    async (emoji: string) => {
+      {
+        setEmojie(emoji);
 
-    socket.emit("updateMessage", {
+        socket.emit("updateMessage", {
+          messageId,
+          updateValue: emoji,
+          room: props.receiver?.isGroup
+            ? props.receiver?.id
+            : props.receiver?.original_dm_roomID,
+        });
+        const values = {
+          sender_id: props.currentUser?.id,
+          receiver_room_id: props.receiver?.id,
+        };
+
+        socket.emit("roomMessages", values);
+        // setMessageEmoji(false);
+      }
+    },
+    [
       messageId,
-      updateValue: emoji,
-      room: props.receiver?.isGroup
-        ? props.receiver.id
-        : props.receiver.original_dm_roomID,
-    });
-    const values = {
-      sender_id: props.currentUser?.id,
-      receiver_room_id: props.receiver.id,
-    };
+      props.currentUser?.id,
+      props.receiver?.id,
+      props.receiver?.isGroup,
+      props.receiver?.original_dm_roomID,
+    ]
+  );
 
-    socket.emit("roomMessages", values);
-    // setMessageEmoji(false);
-  };
+  useEffect(() => {
+    getEmoji(emojie);
+  }, [getEmoji, emojie]);
 
-  console.log("List of messages", props.messageList);
-
-  const listOfMessages = props.messageList?.map((message, i) => {
+  const listOfMessages = props.messageList?.flat().map((message, i) => {
     if (
       (message?.receiver_room_id === props.currentUser.id &&
         message?.sender_id !== props.currentUser.id) ||
@@ -152,7 +166,6 @@ const Messages = (props: Props) => {
           "
               >
                 {message?.reaction}
-                {/* {emojie} */}
               </span>
             ) : (
               ""
@@ -162,7 +175,7 @@ const Messages = (props: Props) => {
       );
     }
   });
-  console.log(props.messageList[0]?.createdAt);
+
   return (
     <div className=" max-w-full flex flex-col bg-green" ref={divMessageRef}>
       <div className=" flex justify-center flex-col items-center pt-10 text-[#54656f] mb-3">

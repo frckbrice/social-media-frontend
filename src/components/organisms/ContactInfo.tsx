@@ -75,7 +75,7 @@ const ContactInfo = ({
         throw new Error("Failed to delete chat");
       }
       const data = response.json();
-      console.log("deleted contact", data);
+      // console.log("deleted contact", data);
       localStorage.removeItem("receiver");
       toast.success("Chat deleted successfully", {
         position: "top-right",
@@ -182,7 +182,7 @@ const ContactInfo = ({
   const handleClickContact = (_user: User) => {};
 
   return (
-    <div className="w-[45vw] z-20 mobile:max-sm:w-full bg-bgGray ">
+    <div className="w-[45vw] z-20 mobile:max-sm:w-full bg-bgGray transition duration-20000 ease-in-out">
       <div className="flex items-center gap-5 p-4 border-l border-l-slate-300">
         <button onClick={onClose}>
           <IoClose size={25} />

@@ -7,7 +7,7 @@ type Props = {
 
 const Emojis = ["🙏", "❤️", "😂", "😮", "😥", "👍"];
 
-// const EmojiMessage = (props: Props) => {
+// eslint-disable-next-line react/display-name
 const EmojiMessage = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const [target, setTarget] = useState("");
   const handleEmojie = async (emoji: string) => {
@@ -38,7 +38,7 @@ const EmojiMessage = forwardRef<HTMLDivElement, Props>((props, ref) => {
     </div>
   );
 });
-//eslint-disable next-line
-EmojiMessage.displayName = EmojiMessage;
+
+// EmojiMessage.displayName = EmojiMessage;
 
 export default React.memo(EmojiMessage);

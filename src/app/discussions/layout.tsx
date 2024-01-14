@@ -181,6 +181,10 @@ function Discussion({ children }: { children: React.ReactNode }) {
     //  socket.emit("updateMessage", {});
   };
 
+  const handleSort = (filterChatRoom: Room[]): Room[] => {
+    return filterChatRoom;
+  };
+
   return (
     <>
       <LogOutPopUp visible={showPopup} onClose={() => handleClose()} />
@@ -234,10 +238,14 @@ function Discussion({ children }: { children: React.ReactNode }) {
               </div>
             )}
           </div>
-          <div className="flex items-center px-4 py-2 gap-5 border-b border-b-bgGray">
+          <div className="flex items-center px-4 py-2 gap-5 border-b border-b-bgGray bg-themecolor">
             <SearchInput handleFilter={filterChatRoom} />
             <button className="text-slate-400">
-              <BiMenuAltRight size={20} />
+              <BiMenuAltRight
+                size={20}
+                className="text-white"
+                onClick={handleSort}
+              />
             </button>
           </div>
           {chatRooms?.length ? (
