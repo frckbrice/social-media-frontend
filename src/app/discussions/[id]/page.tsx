@@ -238,7 +238,6 @@ const Chats = () => {
   };
 
   socket.on("typingResponse", (data) => {
-    console.log(data);
     setTypingStatus(data);
   });
 

@@ -145,7 +145,6 @@ function Discussion({ children }: { children: React.ReactNode }) {
               : [res, ...chatRooms]
           );
           setShowAllContacts((prev) => !prev);
-          console.log("room created", res);
         }
       });
     }
@@ -290,26 +289,27 @@ function Discussion({ children }: { children: React.ReactNode }) {
             <EditProfile />
           </ProfileCard>
         )}
-        {showAllContacts ||
-          (showAllUserscontacts && (
-            <ProfileCard
-              title="New chat"
-              clickToClose={() => setShowAllContacts((prev) => !prev)}
-            >
-              <div className="p-3">
-                <SearchInput handleFilter={filterAllUsers} />
-              </div>
-              <DisplayUsers
-                users={!usersDisplay.length ? allUsers : usersDisplay}
-                contactClick={handleStartChat}
-                goToCreateGrt={() => {
-                  setShowAllContacts((prev) => !prev);
-                  setShowCreateGrp((prev) => !prev);
-                }}
-                // users={usersDisplay}
-              />
-            </ProfileCard>
-          ))}
+        {showAllUserscontacts || showAllContacts ? (
+          <ProfileCard
+            title="New chat"
+            clickToClose={() => setShowAllContacts((prev) => !prev)}
+          >
+            <div className="p-3">
+              <SearchInput handleFilter={filterAllUsers} />
+            </div>
+            <DisplayUsers
+              users={!usersDisplay.length ? allUsers : usersDisplay}
+              contactClick={handleStartChat}
+              goToCreateGrt={() => {
+                setShowAllContacts((prev) => !prev);
+                setShowCreateGrp((prev) => !prev);
+              }}
+              // users={usersDisplay}
+            />
+          </ProfileCard>
+        ) : (
+          ""
+        )}
         {showCreateGrp && (
           <ProfileCard
             title="Add group members"
