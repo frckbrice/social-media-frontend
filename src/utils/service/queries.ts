@@ -78,7 +78,7 @@ export const uplaodImage = async (file: any) => {
     const imageUrl = supabase.storage
       .from("whatsapp_avatars/images")
       .getPublicUrl(data.path);
-    console.log("group icon download url", imageUrl.data.publicUrl);
+
     return imageUrl.data.publicUrl;
   }
 };
@@ -97,7 +97,7 @@ export const uploadFileToSupabase = async (file: File) => {
     const fileUrl = supabase.storage
       .from("whatsapp_avatars/images")
       .getPublicUrl(data.path);
-    console.log("File download URL:", fileUrl);
+
     return fileUrl;
   }
 };
@@ -105,23 +105,28 @@ export const uploadFileToSupabase = async (file: File) => {
 // Add Group Members
 export const addGroupMembers = async (members: string[], room_id: string) => {
   const sender = JSON.parse(localStorage.getItem("sender") || "{}");
-
-  return Promise.all(
-    members.map((memberId) => {
-      apiCall.POST(SITE_URL + "/rooms_users", {
-        user_id: memberId,
-        room_id,
-        role: `${memberId === sender.user_id ? "admin" : "member"}`,
-      });
-
-      // socket.emit("connected", { room: room_id, owner: memberId });
-    })
-  );
+  try {
+    return Promise.all(
+      members.map((memberId) => {
+        apiCall.POST(SITE_URL + "/rooms_users", {
+          user_id: memberId,
+          room_id,
+          role: `${memberId === sender.user_id ? "admin" : "member"}`,
+        });
+      })
+    );
+  } catch (error) {
+    console.error("Error adding group members in room-users:", error);
+  }
 };
 
 // GET GROUP MEMBERS BY GROUP ID
 export const getGroupMembers = async (id: string) => {
-  return apiCall.GET(SITE_URL + `/rooms_users/all_participants/${id}`);
+  try {
+    return apiCall.GET(SITE_URL + `/rooms_users/all_participants/${id}`);
+  } catch (error) {
+    console.error("Error getting room-users:", error);
+  }
 };
 
 // Update profile name
@@ -132,8 +137,11 @@ export const updateProfileName = async (
     image?: string;
   }
 ) => {
-  console.log("id", id);
-  return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
+  try {
+    return apiCall.PUT(SITE_URL + `/rooms/${id}`, update);
+  } catch (error) {
+    console.error("Error updating file from rooms:", error);
+  }
 };
 
 // function that mixed up two arrays
@@ -168,7 +176,33 @@ export const handleDelete = async () => {
       autoClose: 2000,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error deleting file from room:", error);
   }
   // setOnDelete((prev) => !prev);
+};
+
+export const getDocsUrlAndSendToDB = (data: Partial<Message>) => {
+  //get the docs from pc
+  // send to supabase and get the url
+  //send to server as message
+
+  const input = document.createElement("input") as HTMLInputElement;
+  input.type = "file";
+  let dataUrl: any;
+  input.addEventListener("change", async (e: any) => {
+    const newFile = e.target.files[0];
+    dataUrl = await uploadFileToSupabase(newFile);
+    console.log("dataRUrl: " + dataUrl.data.publicUrl);
+
+    try {
+      socket.emit("sendMessage", {
+        ...data,
+        content: dataUrl.data.publicUrl,
+      });
+    } catch (error) {
+      console.log("error emitting message file", error);
+    }
+  });
+
+  input.click();
 };

@@ -33,7 +33,6 @@ const DisplayUsers = ({ contactClick, goToCreateGrt, users }: Props) => {
           user={user}
           key={user.id}
           onClick={() => contactClick(user)}
-          notification={""}
           active={false}
           className={""}
           updatedAt={""}
