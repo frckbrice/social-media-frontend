@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import { saveAs } from "file-saver";
 
 type Props = {
   message: Message;
