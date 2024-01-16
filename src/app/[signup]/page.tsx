@@ -3,15 +3,12 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/client";
-import Pulsation from "./component/PulseLoader";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
-import { signUp } from "@/utils/service/queries";
 import { SITE_URL } from "@/utils/service/constant";
 import { useAppContext } from "../Context/AppContext";
 import PulseLoader from "@/components/atoms/pulseLoader";
 
 const Signupb = () => {
-  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -75,14 +72,18 @@ const Signupb = () => {
             success ? "hidden" : ""
           }`}
         >
-          {isLoading ? <Pulsation /> : "Agree and Continue"}
+          {isLoading ? (
+            <PulseLoader text="loading" font="text-black" />
+          ) : (
+            "Agree and Continue"
+          )}
         </button>
 
         {success && (
-          <div className="text-2xl mt-6 font-extrabold text-themecolor flex flex-col gap-10">
+          <div className="text-2xl mt-6 font-extrabold text-themecolor flex flex-col gap-10 justify-center items-center">
             <p>{success} </p>
-            <div>
-              <Pulsation />
+            <div className=" w-full">
+              <PulseLoader text=" redirection" font="text-black" />
             </div>
           </div>
         )}
