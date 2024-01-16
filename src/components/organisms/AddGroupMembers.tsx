@@ -95,7 +95,6 @@ const AddGroupMembers = ({ users, onClickNext }: Props) => {
             user={user}
             key={user.id}
             onClick={() => handelAddMembers(user)}
-            notification={""}
             active={false}
             className={""}
           />
