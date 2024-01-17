@@ -22,13 +22,13 @@ import PulseLoader from "./pulseLoader";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA4CpOZdTqrxw62FORoREA_RtJI-b__pNU",
-  authDomain: "whatsapp-clone-406006.firebaseapp.com",
-  projectId: "whatsapp-clone-406006",
-  storageBucket: "whatsapp-clone-406006.appspot.com",
-  messagingSenderId: "743181202305",
-  appId: "1:743181202305:web:8d17e1cf52fcae40fcee80",
-  measurementId: "G-0FYF095SSJ",
+  apiKey: "AIzaSyC73FnITqt7fn2of5u4B-42g6XzdXE7_xw",
+  authDomain: "wclone-612c3.firebaseapp.com",
+  projectId: "wclone-612c3",
+  storageBucket: "wclone-612c3.appspot.com",
+  messagingSenderId: "871948916366",
+  appId: "1:871948916366:web:eedd04dc95d8f9be6ddbdf",
+  measurementId: "G-CY7XT9KQLR",
 };
 
 const app = initializeApp(firebaseConfig);
