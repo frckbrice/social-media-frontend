@@ -141,37 +141,6 @@ const SelectFile = ({
             </div>
           </div>
           <p className=" border-b border-gray-300 my-6"></p>
-
-          {/* <div className="flex space-x-4 justify-center bg-red-6000">
-            {uploadedFiles.map((_, index) => (
-              <div
-                key={index}
-                className="border-4 border-themecolor flex-col p-8 w-16 h-16 relative cursor-pointer rounded-md bg-white hover:bg-gray-300 "
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                <button
-                  onClick={() => handleRemoveFile(index)}
-                  className="text-lg text-white absolute top-0 right-0 p-1"
-                >
-                  {isHovered && <FaTimes />}
-                </button>
-
-                <FaFile className="text-4xl text-myG absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-              </div>
-            ))}
-
-            <div {...getRootProps()} className="dropzone">
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <p>Drop the files here...</p>
-              ) : (
-                <div className="border-2 p-4 w-16 h-16 flex items-center justify-center rounded-md">
-                  <FaPlus className="cursor-pointer text-2xl text-myG" />
-                </div>
-              )}
-            </div>
-          </div> */}
         </div>
       )}
     </>
