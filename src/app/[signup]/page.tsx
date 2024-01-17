@@ -19,38 +19,33 @@ const Signupb = () => {
   const handleInputChange = async () => {
     setIsLoading(true);
     const googleUser = JSON.parse(
-      localStorage.getItem("sb-xkwspfurbsmpwwazlkmu-auth-token") || "{}"
+      //   localStorage.getItem("sb-xkwspfurbsmpwwazlkmu-auth-token") || "{}"
+      // );
+      localStorage.getItem("user") || "{}"
     );
-    const { data } = await supabase.from("user").select("email");
-    let res = data?.filter((i) => i.email === googleUser?.user?.email);
-    if (res?.length) {
-      LOCAL_STORAGE.save("email", googleUser?.user.email);
-      // LOCAL_STORAGE.save("userObject", googleUser?.user);
 
-      fetch(SITE_URL + "/users", {
-        method: "POST",
-        body: JSON.stringify({
-          name: googleUser?.user.user_metadata.name,
-          email: googleUser?.user.email,
-          image: googleUser?.user.user_metadata.picture,
-          phone: googleUser?.user.phone,
-        }),
-        headers: {
-          "content-type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (!data.message) {
-            setCurrentUser(data);
-            LOCAL_STORAGE.save("sender", data);
-            console.log(data);
-            setSuccess(`Welcome ${data.name} 🙂`);
-            router.push("/discussions");
-            setIsLoading(false);
-          }
-        });
-    }
+    fetch(SITE_URL + "/users", {
+      method: "POST",
+      body: JSON.stringify({
+        name: googleUser?.displayName,
+        email: googleUser?.email,
+        image: googleUser?.photoURL,
+      }),
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data.message) {
+          setCurrentUser(data);
+          LOCAL_STORAGE.save("sender", data);
+          console.log(data);
+          setSuccess(`Welcome ${data.name} 🙂`);
+          router.push("/discussions");
+          setIsLoading(false);
+        }
+      });
   };
 
   return (

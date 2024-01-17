@@ -184,7 +184,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
   const handleSort = (filterChatRoom: Room[]): Room[] => {
     return filterChatRoom;
   };
-  console.log(showAllUserscontacts);
+
   return (
     <>
       <LogOutPopUp visible={showPopup} onClose={() => handleClose()} />
@@ -204,7 +204,7 @@ function Discussion({ children }: { children: React.ReactNode }) {
               size={4}
               profilePicture={
                 currentUser?.image ||
-                "https://example.com/default-profile-image.jpg"
+                "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
               }
             />
 

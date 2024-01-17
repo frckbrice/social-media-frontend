@@ -206,3 +206,22 @@ export const getDocsUrlAndSendToDB = (data: Partial<Message>) => {
 
   input.click();
 };
+
+export const registerUserToDB = async (data: {
+  name: string;
+  email: string;
+  image: string;
+}) => {
+  try {
+    const resp = await fetch(SITE_URL + "/users", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    if (resp.ok) return resp.json();
+  } catch (error) {
+    console.log("error registering user");
+  }
+};
