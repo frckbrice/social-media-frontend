@@ -3,19 +3,13 @@ import React, { useState, useRef } from "react";
 import Dp from "../molecules/ProfilePicture";
 
 // context import
-import { AppContext } from "next/app";
 import { useAppContext } from "@/app/Context/AppContext";
 
-// Icons Import
-import { MdEmojiEmotions } from "react-icons/md";
 import { BsCheck2 } from "react-icons/bs";
 import { RiPencilFill } from "react-icons/ri";
 import { updateProfileName, uplaodImage } from "@/utils/service/queries";
 import { IoMdClose } from "react-icons/io";
-import { SITE_URL } from "@/utils/service/constant";
 import { toast } from "react-toastify";
-
-import { TbHourglassEmpty } from "react-icons/tb";
 
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
@@ -54,7 +48,7 @@ const EditProfile = () => {
         toast.success("UserName updated", {
           position: "top-right",
           hideProgressBar: true,
-          autoClose: 2000
+          autoClose: 2000,
         });
         console.log(res);
         setCurrentUser(res);
