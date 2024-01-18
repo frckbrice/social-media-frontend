@@ -4,26 +4,28 @@ This document outlines the structure, setup and functionalities of Waxchat app. 
 # Project Overview
 Name: waxchat
 
-**Description**: An online Application that reproduce the core functionning of the web.whatsapp.com app.
+**Description**: An online Application that reproduce the core functionality of the web.whatsapp.com app.
 **Target audience**: Developers, programmers, students, and anyone interested in learning and practicing coding.
 **Tech stack**: Full stack application.
 
 ## About
 
-This app reproduce the core functionning of the whatsapp web app. that involve the realtime communication between two users or amongst members or a group. This includes also the sending of document like text file and image files.
-
+This app reproduce the core functionning of the whatsapp web app. This involve the realtime communication between two users, or a group of users as members of that group. 
+This includes also the sending of document like text files and image files. This app is alse fully responsive  PWA app.
 
 ## App
 
-![home](./assets/tasktrec_home.png)
-![dashboard](./assets/tasktrec_dashboard.png)
+![home](/public/waxchathomepage.png)
+![dashboard](/public/dashbordwaxchat.png)
+![pwa](/public/whaxchatpwa.png)
+![uploadFile](/public/uploadfilewaxchat.png)
 
 ## Build with
 This project was built using the following technologies;
 
-Frontend: ReactJs with JavaScript
-Backend: ExpressJs with NodeJs, JavaScript and Sequelize-ORM
-Database: MySQL
+Frontend: NextJs, TypeScript, TailwindCss, Firebase-auth
+Backend: NestJs, NestJs-Gateway, Mongoose-ODM, 
+Database: MongoDB-atlas
 Assets: Storing images, icons, and other static files
 
 ### Prerequisites
@@ -44,35 +46,28 @@ Knowledge about JS:
 
 ## Command line steps
 
-- $ git clone `$ git@github.com:frckbrice/TMS-app-frontend.git`
-- $ `cd frontend-tasktrec `
+- $ git clone `$ git@github.com:frckbrice/whatsapp-clonefrontend.git`
+- $ `cd Frontend-Waxchat `
 - $ `git checkout feature/[name_of_the _feature]
-
-
-# Setup and installation:
-Install dependencies: Use the following command line tool to install required libraries and frameworks;
 
 ## Start App
 
 - run `npm install`
-- run `npm run start` or `npm start` in your command line
+- run `npm run dev` in your command line
 
 
 # Key functionalities
-- Create Project by the project manager
-- divide project into tasks by the project manager
-- invite members
--  When a member join the project, assign task to a member
--  monitor the progresses and updates of the task made by the member of the project.
--  update the task status ("todo", "in progress", "ready to review", "done"). there possibility to add statuses.
--  set the task as "done" of the project as "finished/ended"
--  receive notification for the invite for the member already in the system
--  update profile info for the user of the app
--  see projects created, projects in which you are involved
+- add DM user from your list of contact
+- create group of user
+- realtime communication using websocket
+- send text message between you and your DM or in the group
+- send image  and text files
+- update user info and image.
+- order by last image received
   
 ## Live Site
 
-[Link](https://tms-app-frontend.vercel.app)
+[Link](https://wclone.vercel.app)
 
 ## Author
 
