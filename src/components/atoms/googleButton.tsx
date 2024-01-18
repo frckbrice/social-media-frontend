@@ -7,7 +7,6 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { SITE_URL } from "@/utils/service/constant";
 import {
-  getAuth,
   onAuthStateChanged,
   signInWithRedirect,
   GoogleAuthProvider,
@@ -20,24 +19,7 @@ import RoundedLoader from "./RoundedLoader";
 import { registerUserToDB } from "@/utils/service/queries";
 import PulseLoader from "./pulseLoader";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyC73FnITqt7fn2of5u4B-42g6XzdXE7_xw",
-  authDomain: "wclone-612c3.firebaseapp.com",
-  projectId: "wclone-612c3",
-  storageBucket: "wclone-612c3.appspot.com",
-  messagingSenderId: "871948916366",
-  appId: "1:871948916366:web:eedd04dc95d8f9be6ddbdf",
-  measurementId: "G-CY7XT9KQLR",
-};
-
-const app = initializeApp(firebaseConfig);
-let analytics = () => {
-  if (typeof window === "undefined") return;
-  return getAnalytics(app);
-};
-
-const auth = getAuth(app);
+import { auth } from "@/utils/firebase/firebase";
 
 const GoogleButton = () => {
   const [isLoading, setIsLoading] = useState<Boolean>(false);
@@ -47,29 +29,28 @@ const GoogleButton = () => {
   const handleGoogleSignin = async () => {
     setIsLoading(true);
     try {
-      signInWithPopup(auth, new GoogleAuthProvider());
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          const userData = {
-            name: user?.displayName as string,
-            email: user?.email as string,
-            image: user?.photoURL as string,
-          };
-          const registerUser = await registerUserToDB(userData);
-          if (registerUser) {
-            LOCAL_STORAGE.save("sender", registerUser);
-            console.log("user registered: ", registerUser);
-            setSuccess(`Welcome ${registerUser.name} 🙂`);
-            setIsLoading(false);
-            setTimeout(() => router.push("/discussions"), 1000);
-          }
-        } else {
-          // User is signed out
-          // ...
-          console.log("User is no more connected: ");
-          signOut(auth);
+      const res = await signInWithPopup(auth, new GoogleAuthProvider());
+
+      if (res) {
+        const userData = {
+          name: res.user?.displayName as string,
+          email: res.user?.email as string,
+          image: res.user?.photoURL as string,
+        };
+        const registerUser = await registerUserToDB(userData);
+        if (registerUser) {
+          LOCAL_STORAGE.save("sender", registerUser);
+          console.log("user registered: ", registerUser);
+          setSuccess(`Welcome ${registerUser.name} 🙂`);
+          setIsLoading(false);
+          setTimeout(() => router.push("/discussions"), 1000);
         }
-      });
+      } else {
+        // User is signed out
+        // ...
+        console.log("User is no more connected: ");
+        signOut(auth);
+      }
     } catch (error) {
       console.log("error signing with redirect");
     }
