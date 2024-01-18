@@ -57,6 +57,8 @@ Knowledge about JS:
 
 
 # Key functionalities
+
+- User authentication: One tap authentication using google Oauth, log in, and log out.
 - add DM user from your list of contact
 - create group of user
 - realtime communication using websocket
