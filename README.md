@@ -64,6 +64,7 @@ Knowledge about JS:
 - send image  and text files
 - update user info and image.
 - order by last image received
+- add a user to an existing group
   
 ## Live Site
 
