@@ -77,8 +77,8 @@ Knowledge about JS:
 👤 **avom Brice**
 
 - GitHub: [@frckbrice](https://github.com/frckbrice)
-- Twitter: [@johndoe](https://twitter.com/evaristeavom)
-- LinkedIn: [John Doe](https://www.linkedin.com/in/avom-brice/)
+- Twitter: [@evaristeavom](https://twitter.com/evaristeavom)
+- LinkedIn: [avom evariste](https://www.linkedin.com/in/avom-brice/)
 
 ## 🤝 Contributing
 
